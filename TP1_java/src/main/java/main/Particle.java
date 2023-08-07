@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Particle {
-    private final int id;
+    private final String id;
     private final List<Particle> neighbours = new ArrayList<>();
     private final double x;
     private final double y;
     private final double radio;
 
-    public Particle(int id,double x,double y, double radio ){
+    public Particle(String id,double x,double y, double radio ){
         this.id = id;
         this.x = x;
         this.y = y;
@@ -22,8 +22,8 @@ public class Particle {
         neighbours.add(particle);
     }
 
-    public List<Particle> getNeighbours(){
-        return neighbours;
+    public String getId() {
+        return id;
     }
 
     public double getX(){
@@ -34,15 +34,24 @@ public class Particle {
         return y;
     }
 
-    public boolean isNeighbour(Particle otherParticle,double Rc){
+    public String getNeighbours() {
+        StringBuilder n = new StringBuilder();
+        for (Particle particle : neighbours){
+            n.append(particle.id);
+            n.append(", ");
+        }
+        return n.toString();
+    }
+
+    public boolean isNeighbour(Particle otherParticle, double Rc){
         double x1 = otherParticle.getX();
         double y1 = otherParticle.getY();
-        return Math.sqrt(Math.pow(x - x1, 2) + Math.pow(y - y1, 2)) <= Rc;
+        return Math.sqrt(Math.pow(x - x1, 2) + Math.pow(y - y1, 2))-radio- otherParticle.radio <= Rc;
     }
 
     public boolean isNeighbour(Particle otherParticle,double Rc, double correctionX, double correctionY){
         double x1 = otherParticle.getX();
         double y1 = otherParticle.getY();
-        return Math.sqrt(Math.pow(x - (x1 - correctionX), 2) + Math.pow(y - (y1 - correctionY, 2)) <= Rc;
+        return Math.sqrt(Math.pow((x-correctionX) - x1, 2) + Math.pow((y-correctionY)-y1,2))-radio- otherParticle.radio <= Rc;
     }
 }
