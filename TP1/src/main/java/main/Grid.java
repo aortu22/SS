@@ -170,14 +170,14 @@ public class Grid {
             FileWriter fw = new FileWriter(file);
             BufferedWriter bw = new BufferedWriter(fw);
             //Escribo el titulo
-            bw.write( "id de la partícula \"i\" \t id's de las partículas cuya distancia borde-borde es menos de rc \n");
+            bw.write( "id de la partícula \"i\" \t-\t id's de las partículas cuya distancia borde-borde es menos de rc \n");
             //Escribo la información de las particulas
             for(int i=0;i< rows;i++){
                 for (int j=0;j<columns;j++) {
                     StringBuilder particleInfo = new StringBuilder();
                     Set<Particle> particles = grid[i][j].getParticles();
                     for (Particle particle : particles){
-                        particleInfo.append(particle.getId()).append("\t").append(particle.getNeighbours()).append("\n");
+                        particleInfo.append(particle.getId()).append("\t-\t").append(particle.getNeighbours()).append("\n");
                     }
                     bw.write(particleInfo.toString());
                 }
