@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0ab8a197-6fc8-4bfa-9388-6a5289bcb3d1" name="Changes" comment="" />
+    <list default="true" id="0ab8a197-6fc8-4bfa-9388-6a5289bcb3d1" name="Changes" comment="Changes">
+      <change beforePath="$PROJECT_DIR$/TP1/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TP1/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TP1/src/main/java/main/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/src/main/java/main/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TP1_java/src/main/java/main/static.json" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/src/main/java/main/static.json" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,25 +26,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "ignore.virus.scanning.warn.message": "true",
-    "jdk.selected.JAVA_MODULE": "1.8",
-    "last_opened_file_path": "C:/Users/Mateo/Documents/ITBA/2023S2/SS/SS/TP1_java",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.0",
-    "vue.rearranger.settings.migration": "true"
-  }
-}]]></component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\assert\Desktop\Agustina\ITBA\SS\TP1\src\main\java\main" />
+      <recent name="C:\Users\assert\Desktop\Agustina\ITBA\SS\TP1\src\main" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="SS" />
@@ -65,10 +64,22 @@
       <updated>1691413983374</updated>
       <workItem from="1691413985388" duration="748000" />
       <workItem from="1691414751283" duration="49000" />
+      <workItem from="1691514634983" duration="63000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
