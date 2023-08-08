@@ -1,9 +1,11 @@
 package main;
 
-import com.sun.xml.internal.ws.wsdl.writer.document.Part;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.IOException;
@@ -12,6 +14,34 @@ import java.nio.file.Paths;
 
 public class App
 {
+
+
+
+    public static void bruteGetOutput(List<Particle> particles){
+
+        try {
+            String output = "output.txt";
+            File file = new File(output);
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter fw = new FileWriter(file);
+            BufferedWriter bw = new BufferedWriter(fw);
+            //Escribo el titulo
+            bw.write( "id de la partícula \"i\" \t-\t id's de las partículas cuya distancia borde-borde es menos de rc \n");
+            //Escribo la información de las particulas
+            for(Particle particle : particles) {
+                StringBuilder particleInfo = new StringBuilder();
+                particleInfo.append(particle.getId()).append("\t-\t").append(particle.getNeighbours()).append("\n");
+                bw.write(particleInfo.toString());
+            }
+            bw.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void bruteForceMethod(List<Particle> particles, double rc, boolean sphere, double length, int n){
         int i=0;
@@ -22,18 +52,20 @@ public class App
                     if(sphere){
                         if(particle1.isNeighbour(particle2, rc) || particle1.isNeighbour(particle2, rc, length, length) || particle1.isNeighbour(particle2, rc, length, 0) || particle1.isNeighbour(particle2, rc, 0, length)){
                             particle1.addNeighbour(particle2);
+                            particle2.addNeighbour(particle1);
                         }
                     }else{
                         if(particle1.isNeighbour(particle2, rc)){
                             particle1.addNeighbour(particle2);
+                            particle2.addNeighbour(particle1);
                         }
                     }
                 }
             }
             i++;
         }
+        bruteGetOutput(particles);
     }
-    
 
     public static void main( String[] args )
     {
@@ -84,6 +116,7 @@ public class App
             grid.getOutput();
         }else{
             bruteForceMethod(particleList, Rc, sphere, L,N);
+
         }
 
 

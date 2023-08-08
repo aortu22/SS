@@ -158,7 +158,7 @@ public class Grid {
         return ret;
     }
 
-    public File getOutput(){
+    public void getOutput(){
 
         try {
             String output = "output.txt";
@@ -183,11 +183,8 @@ public class Grid {
                 }
             }
             bw.close();
-            return file;
-
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
         }
     }
 
