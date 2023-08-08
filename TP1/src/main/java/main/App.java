@@ -17,7 +17,7 @@ public class App
 
 
 
-    public static void bruteGetOutput(List<Particle> particles){
+    public static void bruteGetOutput(List<Particle> particles, long time){
 
         try {
             String output = "output.txt";
@@ -36,6 +36,8 @@ public class App
                 particleInfo.append(particle.getId()).append("\t-\t").append(particle.getNeighbours()).append("\n");
                 bw.write(particleInfo.toString());
             }
+            String timeString = "Execution time in milliseconds: " + time;
+            bw.write(timeString);
             bw.close();
 
         } catch (Exception e) {
@@ -43,7 +45,7 @@ public class App
         }
     }
 
-    public static void bruteForceMethod(List<Particle> particles, double rc, boolean sphere, double length, int n){
+    public static void bruteForceMethod(List<Particle> particles, double rc, boolean sphere, double length, int n, long startTime){
         int i=0;
         for(Particle particle1 : particles){
             for(int j=i+1; j < n; j++){
@@ -64,11 +66,13 @@ public class App
             }
             i++;
         }
-        bruteGetOutput(particles);
+        long endTime = System.currentTimeMillis() - startTime;
+        bruteGetOutput(particles, endTime);
     }
 
     public static void main( String[] args )
     {
+        long startTime = System.currentTimeMillis();
         String jsonFilePath = "src/main/java/main/static.json"; // Cambia esto con la ruta del archivo JSON
         Grid grid;
         List<Particle> particleList = new ArrayList<>();
@@ -113,10 +117,10 @@ public class App
                 grid.addToCell(particle);
             }
             grid.setNeighbours(Rc);
-            grid.getOutput();
+            long endTime = System.currentTimeMillis() - startTime;
+            grid.getOutput(endTime);
         }else{
-            bruteForceMethod(particleList, Rc, sphere, L,N);
-
+            bruteForceMethod(particleList, Rc, sphere, L,N, startTime);
         }
 
 

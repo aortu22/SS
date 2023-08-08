@@ -158,7 +158,7 @@ public class Grid {
         return ret;
     }
 
-    public void getOutput(){
+    public void getOutput(long time){
 
         try {
             String output = "output.txt";
@@ -182,6 +182,8 @@ public class Grid {
                     bw.write(particleInfo.toString());
                 }
             }
+            String timeString = "Execution time in milliseconds: " + time;
+            bw.write(timeString);
             bw.close();
         } catch (Exception e) {
             e.printStackTrace();
