@@ -68,14 +68,15 @@ public class Grid {
                         Set<Particle> particles = cell.getParticles();
                         if(cell.getRow()<i && cell.getCol()<j){
                             for (Particle particle2 : particles){
-                                if(particle.isNeighbour(particle2, rc, length, length)){
-
+                                if(!particle.equals(particle2) && particle.isNeighbour(particle2, rc, length, length)){
+                                    particle.addNeighbour(particle2);
+                                    particle2.addNeighbour(particle);
                                 }
                             }
                         }else if(cell.getRow() <i){
                             for (Particle particle2 :particles
                             ) {
-                                if(particle.isNeighbour(particle2,rc,0,length)){
+                                if(!particle.equals(particle2) && particle.isNeighbour(particle2,rc,0,length)){
                                     particle.addNeighbour(particle2);
                                     particle2.addNeighbour(particle);
                                 }
@@ -83,7 +84,7 @@ public class Grid {
                         }else if(cell.getCol() >j){
                             for (Particle particle2 :particles
                             ) {
-                                if(particle.isNeighbour(particle2,rc, length, 0)){
+                                if(!particle.equals(particle2) && particle.isNeighbour(particle2,rc, length, 0)){
                                     particle.addNeighbour(particle2);
                                     particle2.addNeighbour(particle);
                                 }
@@ -92,7 +93,7 @@ public class Grid {
                         else{
                             for (Particle particle2 :particles
                             ) {
-                                if(particle.isNeighbour(particle2,rc)){
+                                if(!particle.equals(particle2) && particle.isNeighbour(particle2,rc)){
                                     particle.addNeighbour(particle2);
                                     particle2.addNeighbour(particle);
                                 }
@@ -107,7 +108,9 @@ public class Grid {
                 if(rc>Math.sqrt(Math.pow(cellLength,2)*2)){
                     for(Particle particle: gridParticles){
                         for (Particle particle2: gridParticles){
-                            particle.addNeighbour(particle2);
+                            if(!particle.equals(particle2)){
+                                particle.addNeighbour(particle2);
+                            }
                         }
                     }
                 }else{
@@ -115,7 +118,7 @@ public class Grid {
 //                    particlesArray = gridParticles.toArray();
                     for(int k=0;k<gridParticles.size();k++){
                         for(int t=k;t<gridParticles.size();t++){
-                            if(particlesArray.get(k).isNeighbour(particlesArray.get(t),rc)){
+                            if(!particlesArray.get(k).equals(particlesArray.get(t)) && particlesArray.get(k).isNeighbour(particlesArray.get(t),rc)){
                                 particlesArray.get(k).addNeighbour(particlesArray.get(t));
                                 particlesArray.get(t).addNeighbour(particlesArray.get(k));
                             }
