@@ -2,7 +2,7 @@
   "method" : "Cell Index Method",
   "L": 10,
   "N": 8,
-  "Rc": 1.2,
+  "Rc": 5,
   "sphere":true,
   "particles": [{
       "id" : "p0",

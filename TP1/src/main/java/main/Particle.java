@@ -19,7 +19,9 @@ public class Particle {
     }
 
     public void addNeighbour(Particle particle){
-        neighbours.add(particle);
+        if (!neighbours.contains(particle)) {
+            neighbours.add(particle);
+        }
     }
 
     public String getId() {
