@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 public class App
 {
 
-    public static void bruteForceMethod(List<Particle> particles, double rc, boolean sphere, int length, int n){
+    public static void bruteForceMethod(List<Particle> particles, double rc, boolean sphere, double length, int n){
         int i=0;
         for(Particle particle1 : particles){
             for(int j=i+1; j < n; j++){
@@ -37,7 +37,7 @@ public class App
 
     public static void main( String[] args )
     {
-        String jsonFilePath = "static.json"; // Cambia esto con la ruta del archivo JSON
+        String jsonFilePath = "src/main/java/main/static.json"; // Cambia esto con la ruta del archivo JSON
         Grid grid;
         List<Particle> particleList = new ArrayList<>();
         double maxR = 0.0;

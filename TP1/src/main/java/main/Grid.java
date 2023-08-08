@@ -56,7 +56,7 @@ public class Grid {
     public void setNeighbours(double rc){
         List<Cell> adjacent;
         Set<Particle> gridParticles;
-        Particle[] particlesArray;
+        List<Particle> particlesArray = new ArrayList<>();
         for(int i=0;i< rows;i++){
             for (int j=0;j<columns;j++) {
                 adjacent=getAdjacentCells(i,j);
@@ -111,12 +111,13 @@ public class Grid {
                         }
                     }
                 }else{
-                    particlesArray= (Particle[]) gridParticles.toArray();
+                    particlesArray.addAll(gridParticles);
+//                    particlesArray = gridParticles.toArray();
                     for(int k=0;k<gridParticles.size();k++){
                         for(int t=k;t<gridParticles.size();t++){
-                            if(particlesArray[k].isNeighbour(particlesArray[t],rc)){
-                                particlesArray[k].addNeighbour(particlesArray[t]);
-                                particlesArray[t].addNeighbour(particlesArray[k]);
+                            if(particlesArray.get(k).isNeighbour(particlesArray.get(t),rc)){
+                                particlesArray.get(k).addNeighbour(particlesArray.get(t));
+                                particlesArray.get(t).addNeighbour(particlesArray.get(k));
                             }
                         }
                     }
@@ -157,7 +158,7 @@ public class Grid {
     public File getOutput(){
 
         try {
-            String output = "/output.txt";
+            String output = "output.txt";
             File file = new File(output);
             // Si el archivo no existe es creado
             if (!file.exists()) {
