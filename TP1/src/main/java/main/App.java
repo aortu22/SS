@@ -17,7 +17,7 @@ public class App
     public static void bruteGetOutput(List<Particle> particles, long time){
 
         try {
-            String output = "output.txt";
+            String output = "src/main/python/brute_output.txt";
             File file = new File(output);
             // Si el archivo no existe es creado
             if (!file.exists()) {
@@ -33,7 +33,7 @@ public class App
                 particleInfo.append(particle.getId()).append("\t-\t").append(particle.getNeighbours()).append("\n");
                 bw.write(particleInfo.toString());
             }
-            String timeString = "Execution time in milliseconds: " + time;
+            String timeString = "Execution time in milliseconds\t-\t" + time;
             bw.write(timeString);
             bw.close();
 
