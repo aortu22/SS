@@ -28,10 +28,15 @@ def get_particles_data(file_name):
         M = int(math.floor(L / (Rc + 2 * maxR)))
         return particleArray, L, N, M
 
+def getParticle(particle, particles):
+    for p in particles:
+        if p.id == particle:
+            return p
 
 def main():
-    particles,L,N,M = get_particles_data("static.json")
-    time=0
+    id_particle = 'p1'
+    particles, L, N, M = get_particles_data("static.json")
+    time = 0
     with open('output.txt') as particles_data:
         next(particles_data)  # Skip first line
         particle_reader = csv.reader(particles_data, delimiter='\t')
@@ -41,7 +46,6 @@ def main():
                 time = particle[1]
             else:
                 particle_neighbours = particle[1].split(', ')
-                print (particle_neighbours)
                 for particle_object in particles:
                     if particle_object.id == particle[0]:
                         particle_object.add_neighbours(particle_neighbours[:-1])
@@ -60,8 +64,16 @@ def main():
         ax.add_patch(circle)
 
     # Highlight neighbors
-    for particle in particles[particles[1].id].neighbours:
-        plt.Circle((particle.x, particle.y), particle.r, color='red', fill=True)
+    index = 0
+    for particle in particles:
+        if particle.id == id_particle:
+            break
+        else:
+            index += 1
+    for particle in particles[index].neighbours:
+        p = getParticle(particle, particles)
+        plt.Circle((p.x, p.y), p.r, color='red', fill=True)
+
 
 if __name__ == "__main__":
     main()
