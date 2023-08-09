@@ -56,4 +56,12 @@ public class Particle {
         double y1 = otherParticle.getY();
         return Math.sqrt(Math.pow((x-correctionX) - x1, 2) + Math.pow((y-correctionY)-y1,2))-radio- otherParticle.radio <= Rc;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Particle particle = (Particle) o;
+        return id.equals(particle.id);
+    }
 }

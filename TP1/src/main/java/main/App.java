@@ -14,9 +14,6 @@ import java.nio.file.Paths;
 
 public class App
 {
-
-
-
     public static void bruteGetOutput(List<Particle> particles, long time){
 
         try {
