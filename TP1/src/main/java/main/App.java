@@ -67,10 +67,12 @@ public class App
         bruteGetOutput(particles, endTime);
     }
 
+
     public static void main( String[] args )
     {
         long startTime = System.currentTimeMillis();
-        String jsonFilePath = "src/main/java/main/static.json"; // Cambia esto con la ruta del archivo JSON
+        String jsonFilePathStatic = "src/main/java/main/static.json"; // Cambia esto con la ruta del archivo JSON
+        String jsonFilePathDynamic = "src/main/java/main/dynamic.json";
         Grid grid;
         List<Particle> particleList = new ArrayList<>();
         double maxR = 0.0;
@@ -80,7 +82,7 @@ public class App
         boolean sphere = false;
         String method = "";
         try {
-            String jsonContent = new String(Files.readAllBytes(Paths.get(jsonFilePath)));
+            String jsonContent = new String(Files.readAllBytes(Paths.get(jsonFilePathStatic)));
             JSONObject jsonObject = new JSONObject(jsonContent);
 
             L = jsonObject.getDouble("L");
@@ -93,20 +95,37 @@ public class App
             for (int i = 0; i < particlesArray.length(); i++) {
                 JSONObject particleObj = particlesArray.getJSONObject(i);
                 String id = particleObj.getString("id");
-                double x = particleObj.getDouble("x");
-                double y = particleObj.getDouble("y");
                 double r = particleObj.getDouble("r");
                 if (r > maxR){
                     maxR = r;
                 }
 
-                Particle particle = new Particle(id, x, y, r);
+                Particle particle = new Particle(id, r);
                 particleList.add(particle);
 
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        try {
+            String jsonContent = new String(Files.readAllBytes(Paths.get(jsonFilePathDynamic)));
+            JSONObject jsonObject = new JSONObject(jsonContent);
+
+            JSONArray particlesArray = jsonObject.getJSONArray("particles");
+            for (int i = 0; i < particlesArray.length(); i++) {
+                JSONObject particleObj = particlesArray.getJSONObject(i);
+                String id = particleObj.getString("id");
+                double x = particleObj.getDouble("x");
+                double y = particleObj.getDouble("y");
+                particleList.get(i).setPosition(x,y);
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
         if (method.equals("Cell Index Method")){
             int M = (int)Math.floor(L / (Rc + 2*maxR));
             grid = new Grid(L,M,sphere);

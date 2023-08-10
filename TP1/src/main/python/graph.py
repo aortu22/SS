@@ -7,8 +7,8 @@ import math
 from particle import Particle
 
 
-def get_particles_data(file_name):
-    with open(file_name, 'r') as config_file:
+def get_particles_data(static_file_name,dynamic_file_name):
+    with open(static_file_name, 'r') as config_file:
         data = json.load(config_file)
         config_file.close()
         particles = data["particles"]
@@ -24,9 +24,20 @@ def get_particles_data(file_name):
             r = particle["r"]
             if maxR >= r:
                 maxR = r
-            particleArray.append(Particle(particle_id, x, y, r))
+            particleArray.append(Particle(particle_id, r))
         M = int(math.floor(L / (Rc + 2 * maxR)))
-        return particleArray, L, N, M
+    with open(dynamic_file_name, 'r') as config_file:
+        data = json.load(config_file)
+        config_file.close()
+        particles = data["particles"]
+        maxR = 0
+        for particle in particles:
+            particle_id = particle["id"]
+            x = particle["x"]
+            y = particle["y"]
+            getParticle(particle_id,particleArray).set_postion(x,y)
+
+    return particleArray, L, N, M
 
 def getParticle(particle, particles):
     for p in particles:
@@ -35,7 +46,7 @@ def getParticle(particle, particles):
 
 def main():
     id_particle = 'p2'
-    particles, L, N, M = get_particles_data("static.json")
+    particles, L, N, M = get_particles_data("../java/main/static.json","../java/main/dynamic.json")
     print(particles)
     print(L)
     print(N)

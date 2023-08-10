@@ -11,11 +11,14 @@ public class Particle {
     private final double y;
     private final double radio;
 
-    public Particle(String id,double x,double y, double radio ){
+    public Particle(String id, double radio ){
         this.id = id;
+        this.radio = radio;
+    }
+
+    public void setPosition(double x,double y){
         this.x = x;
         this.y = y;
-        this.radio = radio;
     }
 
     public void addNeighbour(Particle particle){

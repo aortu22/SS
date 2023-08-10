@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0ab8a197-6fc8-4bfa-9388-6a5289bcb3d1" name="Changes" comment="Changes">
-      <change beforePath="$PROJECT_DIR$/TP1/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TP1/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TP1/src/main/java/main/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/src/main/java/main/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TP1_java/src/main/java/main/static.json" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/src/main/java/main/static.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,28 +28,18 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../POD/thread-safety" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.language" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\assert\Desktop\Agustina\ITBA\SS\TP1\src\main\java\main" />
       <recent name="C:\Users\assert\Desktop\Agustina\ITBA\SS\TP1\src\main" />
     </key>
-  </component>
-  <component name="RunManager">
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="SS" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="SS" />
-      <option name="filePath" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -65,6 +52,11 @@
       <workItem from="1691413985388" duration="748000" />
       <workItem from="1691414751283" duration="49000" />
       <workItem from="1691514634983" duration="63000" />
+      <workItem from="1691605514257" duration="424000" />
+      <workItem from="1691605962144" duration="223000" />
+      <workItem from="1691606214730" duration="14000" />
+      <workItem from="1691606285905" duration="1238000" />
+      <workItem from="1691615806061" duration="21000" />
     </task>
     <servers />
   </component>
@@ -81,5 +73,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
