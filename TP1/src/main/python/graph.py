@@ -1,41 +1,42 @@
 import matplotlib.pyplot as plt
 # import numpy as np
 import csv
-import json
 import math
 
 from particle import Particle
 
 
 def get_particles_data(static_file_name,dynamic_file_name):
+    particleArray = []
+    L = 0.0
+    N = 0
+    Rc = 0.0
+    maxR = 0
     with open(static_file_name, 'r') as config_file:
-        data = json.load(config_file)
-        config_file.close()
-        particles = data["particles"]
-        particleArray = []
-        L = data["L"]
-        N = data["N"]
-        Rc = data["Rc"]
-        maxR = 0
-        for particle in particles:
-            particle_id = particle["id"]
-            x = particle["x"]
-            y = particle["y"]
-            r = particle["r"]
+        L = float(next(config_file))
+        N = int(next(config_file))
+        Rc = float(next(config_file))
+        
+        i = 0
+        for linea in config_file:
+            particle_id = i
+            r = float(linea.split()[0])
             if maxR >= r:
                 maxR = r
             particleArray.append(Particle(particle_id, r))
-        M = int(math.floor(L / (Rc + 2 * maxR)))
+            i += 1
+    M = int(math.floor(L / (Rc + 2 * maxR)))
     with open(dynamic_file_name, 'r') as config_file:
-        data = json.load(config_file)
-        config_file.close()
-        particles = data["particles"]
-        maxR = 0
-        for particle in particles:
-            particle_id = particle["id"]
-            x = particle["x"]
-            y = particle["y"]
+        # Ignorar la primera línea
+        next(config_file)
+        i = 0
+        for linea in config_file:
+            valores = linea.split()
+            particle_id = i
+            x = float(valores[0])
+            y = float(valores[1])
             getParticle(particle_id,particleArray).set_postion(x,y)
+            i += 1
 
     return particleArray, L, N, M
 
@@ -46,7 +47,7 @@ def getParticle(particle, particles):
 
 def main():
     id_particle = 'p2'
-    particles, L, N, M = get_particles_data("../java/main/static.json","../java/main/dynamic.json")
+    particles, L, N, M = get_particles_data("../java/main/static.txt","../java/main/dynamic.txt")
     print(particles)
     print(L)
     print(N)

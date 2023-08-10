@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Particle {
-    private final String id;
+    private final int id;
     private final List<Particle> neighbours = new ArrayList<>();
     private final double x;
     private final double y;
     private final double radio;
 
-    public Particle(String id, double radio ){
+    public Particle(id id, double radio ){
         this.id = id;
         this.radio = radio;
     }
@@ -27,7 +27,7 @@ public class Particle {
         }
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -65,6 +65,6 @@ public class Particle {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Particle particle = (Particle) o;
-        return id.equals(particle.id);
+        return id == particle.id;
     }
 }

@@ -14,6 +14,10 @@ import java.nio.file.Paths;
 
 public class App
 {
+    public static String method = "Cell Index Method";
+    public static boolean sphere = true;
+
+
     public static void bruteGetOutput(List<Particle> particles, long time){
 
         try {
@@ -71,55 +75,59 @@ public class App
     public static void main( String[] args )
     {
         long startTime = System.currentTimeMillis();
-        String jsonFilePathStatic = "src/main/java/main/static.json"; // Cambia esto con la ruta del archivo JSON
-        String jsonFilePathDynamic = "src/main/java/main/dynamic.json";
+        String jsonFilePathStatic = "src/main/java/main/static.txt"; // Cambia esto con la ruta del archivo JSON
+        String jsonFilePathDynamic = "src/main/java/main/dynamic.txt";
         Grid grid;
         List<Particle> particleList = new ArrayList<>();
         double maxR = 0.0;
         double L = 0.0;
         int N = 0;
         double Rc = 0.0;
-        boolean sphere = false;
-        String method = "";
         try {
-            String jsonContent = new String(Files.readAllBytes(Paths.get(jsonFilePathStatic)));
-            JSONObject jsonObject = new JSONObject(jsonContent);
+            BufferedReader br = new BufferedReader(new FileReader(archivo));
+            String linea;
 
-            L = jsonObject.getDouble("L");
-            N = jsonObject.getInt("N");
-            Rc = jsonObject.getDouble("Rc");
-            sphere = jsonObject.getBoolean("sphere");
-            method = jsonObject.getString("method");
+            // Leer las primeras 3 líneas y guardarlas en variables especiales
+            double L = Double.parseDouble(br.readLine());
+            int N = Integer.parseInt(br.readLine());
+            double Rc = Double.parseDouble(br.readLine());
 
-            JSONArray particlesArray = jsonObject.getJSONArray("particles");
-            for (int i = 0; i < particlesArray.length(); i++) {
-                JSONObject particleObj = particlesArray.getJSONObject(i);
-                String id = particleObj.getString("id");
-                double r = particleObj.getDouble("r");
+            // Leer y retornar solo el primer valor de cada par de valores
+            int i = 0;
+            while ((linea = br.readLine()) != null) {
+                String[] valores = linea.split(" ");
+                double r = Double.parseDouble(valores[0]);
+                
+                System.out.println("Primer Valor: " + primerValor);
                 if (r > maxR){
                     maxR = r;
                 }
 
                 Particle particle = new Particle(id, r);
                 particleList.add(particle);
-
+                i++;
             }
+
+            br.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            String jsonContent = new String(Files.readAllBytes(Paths.get(jsonFilePathDynamic)));
-            JSONObject jsonObject = new JSONObject(jsonContent);
+            BufferedReader br = new BufferedReader(new FileReader(archivo));
+            String linea;
 
-            JSONArray particlesArray = jsonObject.getJSONArray("particles");
-            for (int i = 0; i < particlesArray.length(); i++) {
-                JSONObject particleObj = particlesArray.getJSONObject(i);
-                String id = particleObj.getString("id");
-                double x = particleObj.getDouble("x");
-                double y = particleObj.getDouble("y");
+            // Saltar la primera línea
+            br.readLine();
+            int i = 0;
+            while ((linea = br.readLine()) != null) {
+                String[] valores = linea.split(" ");
+                double x = Double.parseDouble(valores[0]);
+                double y = Double.parseDouble(valores[1]);
                 particleList.get(i).setPosition(x,y);
-
+                i++;
             }
+
+            br.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
