@@ -54,7 +54,7 @@ public class Grid {
     }
 
     public void setNeighbours(double rc){
-        List<Cell> adjacent;
+        List<AdjacentCell> adjacent;
         Set<Particle> gridParticles;
         List<Particle> particlesArray;
         for(int i=0;i< rows;i++){
@@ -62,48 +62,18 @@ public class Grid {
                 adjacent=getAdjacentCells(i,j);
                 gridParticles=grid[i][j].getParticles();
                 //checking if particles in different cells are neighbours
-                for (Particle particle:gridParticles
-                     ) {
-                    for(Cell cell : adjacent){
-                        Set<Particle> particles = cell.getParticles();
-                        if(cell.getRow()<i && cell.getCol()<j){
-                            for (Particle particle2 : particles){
-                                if(!particle.equals(particle2) && particle.isNeighbour(particle2, rc, length, length)){
-                                    particle.addNeighbour(particle2);
-                                    particle2.addNeighbour(particle);
-                                }
-                            }
-                        }else if(cell.getRow() <i){
-                            for (Particle particle2 :particles
-                            ) {
-                                if(!particle.equals(particle2) && particle.isNeighbour(particle2,rc,0,length)){
-                                    particle.addNeighbour(particle2);
-                                    particle2.addNeighbour(particle);
-                                }
-                            }
-                        }else if(cell.getCol() <j){
-                            for (Particle particle2 :particles
-                            ) {
-                                if(!particle.equals(particle2) && particle.isNeighbour(particle2,rc, length, 0)){
-                                    particle.addNeighbour(particle2);
-                                    particle2.addNeighbour(particle);
-                                }
-                            }
-                        }
-                        else{
-                            for (Particle particle2 :particles
-                            ) {
-                                if(!particle.equals(particle2) && particle.isNeighbour(particle2,rc)){
-                                    particle.addNeighbour(particle2);
-                                    particle2.addNeighbour(particle);
-                                }
-                            }
-                        }
-                        // si lo agarre por sphericla hago el isNeighbour 2, sino el comun
-
+                for(AdjacentCell cell : adjacent){
+                    Set<Particle> particles = cell.cell.getParticles();
+                    for (Particle particle2 : particles){
+                        for (Particle particle:gridParticles
+                        ) {
+                        if(!particle.equals(particle2) && particle.isNeighbour(particle2, rc, cell.correctionX, cell.correctionY)){
+                            particle.addNeighbour(particle2);
+                            particle2.addNeighbour(particle);
+                        }}
                     }
-
                 }
+
                 //checking if particles in same cell are neighbours
                 if(rc>Math.sqrt(Math.pow(cellLength,2)*2)){
                     for(Particle particle: gridParticles){
@@ -138,43 +108,43 @@ public class Grid {
             }
         }
     }
-    public List<Cell> getAdjacentCells(int row, int col){
-        List<Cell> ret =new ArrayList<>();
+    public List<AdjacentCell> getAdjacentCells(int row, int col){
+        List<AdjacentCell> ret =new ArrayList<>();
         if (row<rows-1 && col<columns-1){
-            ret.add(grid[row+1][col]);
-            ret.add(grid[row][col+1]);
-            ret.add(grid[row+1][col+1]);
+            ret.add(new AdjacentCell(grid[row+1][col],0,0));
+            ret.add(new AdjacentCell(grid[row][col+1],0,0));
+            ret.add(new AdjacentCell(grid[row+1][col+1],0,0));
         }
-        else if(row==rows-1 && columns < columns -1){
+        else if(row==rows-1 && col < columns -1){
             if(spherical){
-                ret.add(grid[0][col]);
-                ret.add(grid[0][col+1]);
+                ret.add(new AdjacentCell(grid[0][col],0,length));
+                ret.add(new AdjacentCell(grid[0][col+1],0,length));
             }
-            ret.add(grid[row][col+1]);
-        } else if (rows< rows-1) {
+            ret.add(new AdjacentCell(grid[row][col+1],0,0));
+        } else if (row< rows-1) {
             if(spherical){
-                ret.add(grid[row][0]);
-                ret.add(grid[row+1][0]);
+                ret.add(new AdjacentCell(grid[row][0],length,0));
+                ret.add(new AdjacentCell(grid[row+1][0],length,0));
             }
-            ret.add(grid[row+1][col]);
+            ret.add(new AdjacentCell(grid[row+1][col],0,0));
         }
         else{
             if(spherical){
-                ret.add(grid[0][0]);
-                ret.add(grid[row][0]);
-                ret.add(grid[0][col]);
+                ret.add(new AdjacentCell(grid[0][0],length,length));
+                ret.add(new AdjacentCell(grid[row][0],length,0));
+                ret.add(new AdjacentCell(grid[0][col],0,length));
             }
         }
         if(row>0 && col<columns-1){
-            ret.add(grid[row-1][col+1]);
+            ret.add(new AdjacentCell(grid[row-1][col+1],0,0));
         }
         else if(row == 0 && col <columns-1){
             if(spherical){
-                ret.add(grid[rows-1][col+1]);
+                ret.add(new AdjacentCell(grid[rows-1][col+1],0,-length));
             }
         }
         else if(spherical){
-            ret.add(grid[rows-1][0]);
+            ret.add(new AdjacentCell(grid[rows-1][0],length,-length));
         }
         return ret;
     }

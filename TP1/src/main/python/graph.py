@@ -21,7 +21,7 @@ def get_particles_data(static_file_name, dynamic_file_name):
         for linea in config_file:
             particle_id = i
             r = float(linea.split()[0])
-            if maxR >= r:
+            if maxR <= r:
                 maxR = r
             particleArray.append(Particle(particle_id, r))
             i += 1

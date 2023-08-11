@@ -26,9 +26,6 @@ public class Cell {
         this.l=l;
     }
      public void addParticle(Particle particle){
-        if( particleList.size() == 0){
-            heads = particle;
-        }
         particleList.add(particle);
      }
      public int getRow(){
