@@ -152,37 +152,6 @@ public class Grid {
                 }
             }
         }
-//        else if(row==rows-1 && col < columns -1){
-//            if(spherical){
-//                ret.add(new AdjacentCell(grid[0][col],0,length));
-//                ret.add(new AdjacentCell(grid[0][col+1],0,length));
-//            }
-//            ret.add(new AdjacentCell(grid[row][col+1],0,0));
-//        } else if (row< rows-1) {
-//            if(spherical){
-//                ret.add(new AdjacentCell(grid[row][0],length,0));
-//                ret.add(new AdjacentCell(grid[row+1][0],length,0));
-//            }
-//            ret.add(new AdjacentCell(grid[row+1][col],0,0));
-//        }
-//        else{
-//            if(spherical){
-//                ret.add(new AdjacentCell(grid[0][0],length,length));
-//                ret.add(new AdjacentCell(grid[row][0],length,0));
-//                ret.add(new AdjacentCell(grid[0][col],0,length));
-//            }
-//        }
-//        if(row>0 && col<columns-1){
-//            ret.add(new AdjacentCell(grid[row-1][col+1],0,0));
-//        }
-//        else if(row == 0 && col <columns-1){
-//            if(spherical){
-//                ret.add(new AdjacentCell(grid[rows-1][col+1],0,-length));
-//            }
-//        }
-//        else if(spherical){
-//            ret.add(new AdjacentCell(grid[rows-1][0],length,-length));
-//        }
         return ret;
     }
 
