@@ -110,17 +110,26 @@ public class Grid {
                         for (Particle particle2: gridParticles){
                             if(!particle.equals(particle2)){
                                 particle.addNeighbour(particle2);
+                                particle2.addNeighbour(particle);
                             }
                         }
                     }
                 }else{
                     particlesArray.addAll(gridParticles);
-//                    particlesArray = gridParticles.toArray();
                     for(int k=0;k<gridParticles.size();k++){
                         for(int t=k;t<gridParticles.size();t++){
-                            if(!particlesArray.get(k).equals(particlesArray.get(t)) && particlesArray.get(k).isNeighbour(particlesArray.get(t),rc)){
-                                particlesArray.get(k).addNeighbour(particlesArray.get(t));
-                                particlesArray.get(t).addNeighbour(particlesArray.get(k));
+                            if(!particlesArray.get(k).equals(particlesArray.get(t))){
+                                if(spherical){
+                                    if(particlesArray.get(k).isNeighbour(particlesArray.get(t), rc) || particlesArray.get(k).isNeighbour(particlesArray.get(t), rc, length, length) || particlesArray.get(k).isNeighbour(particlesArray.get(t), rc, length, 0) || particlesArray.get(k).isNeighbour(particlesArray.get(t), rc, 0, length)){
+                                        particlesArray.get(k).addNeighbour(particlesArray.get(t));
+                                        particlesArray.get(t).addNeighbour(particlesArray.get(k));
+                                    }
+                                }else{
+                                    if(particlesArray.get(k).isNeighbour(particlesArray.get(t), rc)){
+                                        particlesArray.get(k).addNeighbour(particlesArray.get(t));
+                                        particlesArray.get(t).addNeighbour(particlesArray.get(k));
+                                    }
+                                }
                             }
                         }
                     }

@@ -7,11 +7,11 @@ import java.util.List;
 public class Particle {
     private final int id;
     private final List<Particle> neighbours = new ArrayList<>();
-    private final double x;
-    private final double y;
+    private double x = 0;
+    private double y = 0;
     private final double radio;
 
-    public Particle(id id, double radio ){
+    public Particle(int id, double radio ){
         this.id = id;
         this.radio = radio;
     }

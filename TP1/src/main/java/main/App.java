@@ -1,21 +1,17 @@
 package main;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.*;
 
 public class App
 {
     public static String method = "Cell Index Method";
-    public static boolean sphere = true;
+//    public static String method = "Brute Method";
+    public static boolean sphere = false;
 
 
     public static void bruteGetOutput(List<Particle> particles, long time){
@@ -33,9 +29,7 @@ public class App
             bw.write( "id de la partícula \"i\" \t-\t id's de las partículas cuya distancia borde-borde es menos de rc \n");
             //Escribo la información de las particulas
             for(Particle particle : particles) {
-                StringBuilder particleInfo = new StringBuilder();
-                particleInfo.append(particle.getId()).append("\t-\t").append(particle.getNeighbours()).append("\n");
-                bw.write(particleInfo.toString());
+                bw.write(particle.getId() + "\t-\t" + particle.getNeighbours() + "\n");
             }
             String timeString = "Execution time in milliseconds\t-\t" + time;
             bw.write(timeString);
@@ -84,13 +78,13 @@ public class App
         int N = 0;
         double Rc = 0.0;
         try {
-            BufferedReader br = new BufferedReader(new FileReader(archivo));
+            BufferedReader br = new BufferedReader(new FileReader(jsonFilePathStatic));
             String linea;
 
             // Leer las primeras 3 líneas y guardarlas en variables especiales
-            double L = Double.parseDouble(br.readLine());
-            int N = Integer.parseInt(br.readLine());
-            double Rc = Double.parseDouble(br.readLine());
+            L = Double.parseDouble(br.readLine());
+            N = Integer.parseInt(br.readLine());
+            Rc = Double.parseDouble(br.readLine());
 
             // Leer y retornar solo el primer valor de cada par de valores
             int i = 0;
@@ -98,12 +92,11 @@ public class App
                 String[] valores = linea.split(" ");
                 double r = Double.parseDouble(valores[0]);
                 
-                System.out.println("Primer Valor: " + primerValor);
                 if (r > maxR){
                     maxR = r;
                 }
 
-                Particle particle = new Particle(id, r);
+                Particle particle = new Particle(i, r);
                 particleList.add(particle);
                 i++;
             }
@@ -112,8 +105,9 @@ public class App
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         try {
-            BufferedReader br = new BufferedReader(new FileReader(archivo));
+            BufferedReader br = new BufferedReader(new FileReader(jsonFilePathDynamic));
             String linea;
 
             // Saltar la primera línea
