@@ -115,6 +115,7 @@ public class Grid {
                         }
                     }
                 }else{
+                    particlesArray = new ArrayList<>();
                     particlesArray.addAll(gridParticles);
                     for(int k=0;k<gridParticles.size();k++){
                         for(int t=k;t<gridParticles.size();t++){
@@ -139,20 +140,18 @@ public class Grid {
     }
     public List<Cell> getAdjacentCells(int row, int col){
         List<Cell> ret =new ArrayList<>();
-        if (row==rows-1 && col==columns-1){
-            if(spherical){
-                ret.add(grid[0][0]);
-                ret.add(grid[row][0]);
-                ret.add(grid[0][col]);
-            }
+        if (row<rows-1 && col<columns-1){
+            ret.add(grid[row+1][col]);
+            ret.add(grid[row][col+1]);
+            ret.add(grid[row+1][col+1]);
         }
-        else if(row==rows-1){
+        else if(row==rows-1 && columns < columns -1){
             if(spherical){
                 ret.add(grid[0][col]);
                 ret.add(grid[0][col+1]);
             }
             ret.add(grid[row][col+1]);
-        } else if (col==columns-1) {
+        } else if (rows< rows-1) {
             if(spherical){
                 ret.add(grid[row][0]);
                 ret.add(grid[row+1][0]);
@@ -160,9 +159,11 @@ public class Grid {
             ret.add(grid[row+1][col]);
         }
         else{
-            ret.add(grid[row+1][col]);
-            ret.add(grid[row][col+1]);
-            ret.add(grid[row+1][col+1]);
+            if(spherical){
+                ret.add(grid[0][0]);
+                ret.add(grid[row][0]);
+                ret.add(grid[0][col]);
+            }
         }
         return ret;
     }
