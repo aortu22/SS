@@ -1,9 +1,6 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -54,7 +51,7 @@ public class Grid {
     }
 
     public void setNeighbours(double rc){
-        List<Cell> adjacent;
+        Map<Cell, String> adjacent;
         Set<Particle> gridParticles;
         List<Particle> particlesArray;
         for(int i=0;i< rows;i++){
@@ -64,45 +61,49 @@ public class Grid {
                 //checking if particles in different cells are neighbours
                 for (Particle particle:gridParticles
                      ) {
-                    for(Cell cell : adjacent){
-                        Set<Particle> particles = cell.getParticles();
-                        if(cell.getRow()<i && cell.getCol()<j){
-                            for (Particle particle2 : particles){
-                                if(!particle.equals(particle2) && particle.isNeighbour(particle2, rc, length, length)){
-                                    particle.addNeighbour(particle2);
-                                    particle2.addNeighbour(particle);
-                                }
-                            }
-                        }else if(cell.getRow() <i){
-                            for (Particle particle2 :particles
-                            ) {
-                                if(!particle.equals(particle2) && particle.isNeighbour(particle2,rc,0,length)){
-                                    particle.addNeighbour(particle2);
-                                    particle2.addNeighbour(particle);
-                                }
-                            }
-                        }else if(cell.getCol() <j){
-                            for (Particle particle2 :particles
-                            ) {
-                                if(!particle.equals(particle2) && particle.isNeighbour(particle2,rc, length, 0)){
-                                    particle.addNeighbour(particle2);
-                                    particle2.addNeighbour(particle);
-                                }
+                    for (Map.Entry<Cell, String> cell : adjacent.entrySet()) {
+                        for(Particle particle1 : cell.getKey().getParticles()){
+                            switch (cell.getValue()) {
+                                case "right":
+                                    if (!particle.equals(particle1) && particle.isNeighbour(particle1, rc, length, 0)) {
+                                        particle.addNeighbour(particle1);
+                                        particle1.addNeighbour(particle);
+                                    }
+                                    break;
+                                case "down":
+                                    if (!particle.equals(particle1) && particle.isNeighbour(particle1, rc, 0, length)) {
+                                        particle.addNeighbour(particle1);
+                                        particle1.addNeighbour(particle);
+                                    }
+                                    break;
+                                case "up":
+                                    if (!particle.equals(particle1) && particle.isNeighbour(particle1, rc, 0, -length)) {
+                                        particle.addNeighbour(particle1);
+                                        particle1.addNeighbour(particle);
+                                    }
+                                    break;
+                                case "corner_down":
+                                    if (!particle.equals(particle1) && particle.isNeighbour(particle1, rc, length, length)) {
+                                        particle.addNeighbour(particle1);
+                                        particle1.addNeighbour(particle);
+                                    }
+                                    break;
+                                case "corner_up":
+                                    if (!particle.equals(particle1) && particle.isNeighbour(particle1, rc, length, -length)) {
+                                        particle.addNeighbour(particle1);
+                                        particle1.addNeighbour(particle);
+                                    }
+                                    break;
+                                default:
+//                                sin correción
+                                    if (!particle.equals(particle1) && particle.isNeighbour(particle1, rc)) {
+                                        particle.addNeighbour(particle1);
+                                        particle1.addNeighbour(particle);
+                                    }
+                                    break;
                             }
                         }
-                        else{
-                            for (Particle particle2 :particles
-                            ) {
-                                if(!particle.equals(particle2) && particle.isNeighbour(particle2,rc)){
-                                    particle.addNeighbour(particle2);
-                                    particle2.addNeighbour(particle);
-                                }
-                            }
-                        }
-                        // si lo agarre por sphericla hago el isNeighbour 2, sino el comun
-
                     }
-
                 }
                 //checking if particles in same cell are neighbours
                 if(rc>Math.sqrt(Math.pow(cellLength,2)*2)){
@@ -138,45 +139,56 @@ public class Grid {
             }
         }
     }
-    public List<Cell> getAdjacentCells(int row, int col){
+    public Map<Cell, String> getAdjacentCells(int row, int col){
+        Map<Cell, String> cellStringMap = new HashMap<>();
         List<Cell> ret =new ArrayList<>();
-        if (row<rows-1 && col<columns-1){
-            ret.add(grid[row+1][col]);
-            ret.add(grid[row][col+1]);
-            ret.add(grid[row+1][col+1]);
+        if(row < rows - 1 && col < columns - 1 && row > 0){
+            cellStringMap.put(grid[row - 1][col], "");
+            cellStringMap.put(grid[row - 1][col + 1], "");
+            cellStringMap.put(grid[row][col + 1], "");
+            cellStringMap.put(grid[row + 1][col + 1], "");
         }
-        else if(row==rows-1 && columns < columns -1){
-            if(spherical){
-                ret.add(grid[0][col]);
-                ret.add(grid[0][col+1]);
+        else if(col == columns - 1){
+            if(row < rows - 1 && row > 0){
+                cellStringMap.put(grid[row - 1][col], "");
+                if(spherical){
+                    cellStringMap.put(grid[row - 1][0], "right");
+                    cellStringMap.put(grid[row][0], "right");
+                    cellStringMap.put(grid[row + 1][0], "right");
+                }
+            }else if (row == rows - 1){
+                cellStringMap.put(grid[row - 1][col], "");
+                if(spherical){
+                    cellStringMap.put(grid[row - 1][0], "right");
+                    cellStringMap.put(grid[row][0], "right");
+                    cellStringMap.put(grid[0][0], "corner_down");
+                }
+            }else if (row == 0 && spherical){
+                cellStringMap.put(grid[rows-1][col], "up");
+                cellStringMap.put(grid[rows-1][0], "corner_up");
+                cellStringMap.put(grid[row][0], "right");
+                cellStringMap.put(grid[row + 1][0], "right");
             }
-            ret.add(grid[row][col+1]);
-        } else if (rows< rows-1) {
-            if(spherical){
-                ret.add(grid[row][0]);
-                ret.add(grid[row+1][0]);
+        } else if (row == rows - 1){
+            if(col < columns - 1){
+                cellStringMap.put(grid[row - 1][col], "");
+                cellStringMap.put(grid[row - 1][col + 1], "");
+                cellStringMap.put(grid[row][col + 1], "");
+                if(spherical){
+                    cellStringMap.put(grid[0][col + 1],"down");
+                }
             }
-            ret.add(grid[row+1][col]);
-        }
-        else{
-            if(spherical){
-                ret.add(grid[0][0]);
-                ret.add(grid[row][0]);
-                ret.add(grid[0][col]);
-            }
-        }
-        if(row>0 && col<columns-1){
-            ret.add(grid[row-1][col+1]);
-        }
-        else if(row == 0 && col <columns-1){
-            if(spherical){
-                ret.add(grid[rows-1][col+1]);
+        } else if (row == 0){
+            if(col < columns - 1) {
+                cellStringMap.put(grid[row][col + 1], "");
+                cellStringMap.put(grid[row + 1][col + 1], "");
+                if(spherical){
+                    cellStringMap.put(grid[rows - 1][col], "up");
+                    cellStringMap.put(grid[rows - 1][col + 1], "up");
+                }
             }
         }
-        else if(spherical){
-            ret.add(grid[rows-1][0]);
-        }
-        return ret;
+        return cellStringMap;
     }
 
     public void getOutput(long time){

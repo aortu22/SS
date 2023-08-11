@@ -67,4 +67,13 @@ public class Particle {
         Particle particle = (Particle) o;
         return id == particle.id;
     }
+
+    @Override
+    public String toString() {
+        return "Particle{" +
+                "id=" + id +
+                ", x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }
