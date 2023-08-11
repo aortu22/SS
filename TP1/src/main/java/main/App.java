@@ -9,8 +9,8 @@ import java.io.*;
 
 public class App
 {
-    public static String method = "Cell Index Method";
-//    public static String method = "Brute Method";
+//    public static String method = "Cell Index Method";
+    public static String method = "Brute Method";
     public static boolean sphere = true;
 
 
@@ -68,7 +68,6 @@ public class App
 
     public static void main( String[] args )
     {
-        long startTime = System.currentTimeMillis();
         String jsonFilePathStatic = "src/main/java/main/static.txt"; // Cambia esto con la ruta del archivo JSON
         String jsonFilePathDynamic = "src/main/java/main/dynamic.txt";
         Grid grid;
@@ -127,7 +126,7 @@ public class App
         }
 
 
-
+        long startTime = System.currentTimeMillis();
         if (method.equals("Cell Index Method")){
             int M = (int)Math.floor(L / (Rc + 2*maxR));
             grid = new Grid(L,M,sphere);

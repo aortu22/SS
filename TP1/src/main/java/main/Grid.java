@@ -81,7 +81,7 @@ public class Grid {
                                     particle2.addNeighbour(particle);
                                 }
                             }
-                        }else if(cell.getCol() >j){
+                        }else if(cell.getCol() <j){
                             for (Particle particle2 :particles
                             ) {
                                 if(!particle.equals(particle2) && particle.isNeighbour(particle2,rc, length, 0)){
