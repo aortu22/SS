@@ -83,8 +83,8 @@ def main():
 
     # Draw grid
     for i in range(M + 1):
-        ax.axhline(i * L, color='gray', linewidth=0.5)
-        ax.axvline(i * L, color='gray', linewidth=0.5)
+        ax.axhline(i * L /M, color='gray', linewidth=0.5)
+        ax.axvline(i * L/M, color='gray', linewidth=0.5)
 
     # Plot particles as dots
     for i in range(len(particles)):
@@ -97,8 +97,8 @@ def main():
         ax.add_patch(circle)
 
     # Customize the plot
-    plt.xlim(0, M * L)
-    plt.ylim(0, M * L)
+    plt.xlim(0, L)
+    plt.ylim(0, L)
     plt.title("Particles and Neighbors")
     plt.xlabel("X")
     plt.ylabel("Y")
