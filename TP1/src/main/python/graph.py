@@ -55,7 +55,12 @@ def belongsTo(particle, id):
 
 
 def main():
-    id_particle = 1
+    while True:
+        try:
+            id_particle = int(input("Please enter id of the particle: "))
+            break  # Exit the loop if input is a valid integer
+        except ValueError:
+            print("Invalid input. Please enter a valid integer.")
     particles, L, N, M = get_particles_data("../java/main/static.txt", "../java/main/dynamic.txt")
     print(L)
     print(N)
