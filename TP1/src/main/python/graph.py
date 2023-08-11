@@ -55,7 +55,7 @@ def belongsTo(particle, id):
 
 
 def main():
-    id_particle = 0
+    id_particle = 1
     particles, L, N, M = get_particles_data("../java/main/static.txt", "../java/main/dynamic.txt")
     print(L)
     print(N)
