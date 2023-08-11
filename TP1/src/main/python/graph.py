@@ -57,7 +57,6 @@ def belongsTo(particle, id):
 def main():
     id_particle = 0
     particles, L, N, M = get_particles_data("../java/main/static.txt", "../java/main/dynamic.txt")
-    print(particles)
     print(L)
     print(N)
     print(M)
@@ -77,7 +76,7 @@ def main():
                         for n in particle_neighbours[:-1]:
                             neighbours.append(particles[int(n)])
                         particle_object.add_neighbours(neighbours)
-                        print(particle_object.neighbours)
+
 
     # Create a figure and axis
     fig, ax = plt.subplots()
