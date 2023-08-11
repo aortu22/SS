@@ -55,12 +55,13 @@ def belongsTo(particle, id):
 
 
 def main():
-    id_particle = 1
+    id_particle = 29
     particles, L, N, M = get_particles_data("../java/main/static.txt", "../java/main/dynamic.txt")
     print(L)
     print(N)
     print(M)
     time = 0
+    # with open('brute_output.txt') as particles_data:
     with open('output.txt') as particles_data:
         next(particles_data)  # Skip first line
         particle_reader = csv.reader(particles_data, delimiter='\t')

@@ -11,7 +11,7 @@ public class App
 {
     public static String method = "Cell Index Method";
 //    public static String method = "Brute Method";
-    public static boolean sphere = false;
+    public static boolean sphere = true;
 
 
     public static void bruteGetOutput(List<Particle> particles, long time){
