@@ -56,7 +56,7 @@ public class Grid {
     public void setNeighbours(double rc){
         List<Cell> adjacent;
         Set<Particle> gridParticles;
-        List<Particle> particlesArray = new ArrayList<>();
+        List<Particle> particlesArray;
         for(int i=0;i< rows;i++){
             for (int j=0;j<columns;j++) {
                 adjacent=getAdjacentCells(i,j);
@@ -164,6 +164,17 @@ public class Grid {
                 ret.add(grid[row][0]);
                 ret.add(grid[0][col]);
             }
+        }
+        if(row>0 && col<columns-1){
+            ret.add(grid[row-1][col+1]);
+        }
+        else if(row == 0 && col <columns-1){
+            if(spherical){
+                ret.add(grid[rows-1][col+1]);
+            }
+        }
+        else if(spherical){
+            ret.add(grid[rows-1][0]);
         }
         return ret;
     }
