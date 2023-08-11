@@ -8,22 +8,17 @@ import java.util.List;
 import java.util.Set;
 
 public class Cell {
-    private final int id;
     private final int row;
     private final int col;
     private final double l;
-    private Particle heads;
+    private final int m;
     private final Set<Particle> particleList = new HashSet<>();
-    private final boolean isRightSide;
-    private final boolean isBottomSide;
 
-    public Cell(int row, int col, int id, int m, double l){
-        this.id = id;
+    public Cell(int row, int col, int m, double l){
         this.row = row;
         this.col = col;
-        this.isRightSide = col == (l / m - 1);
-        this.isBottomSide = row == (l / m - 1);
         this.l=l;
+        this.m=m;
     }
      public void addParticle(Particle particle){
         particleList.add(particle);
@@ -37,22 +32,11 @@ public class Cell {
      public Set<Particle> getParticles(){
         return particleList;
      }
-
-     public Particle getHeads(){
-        return heads;
-     }
-
-     public boolean isCellRightSide(){
-        return isRightSide;
-     }
-
-     public boolean isCellBottomSide(){
-        return isBottomSide;
-     }
+     public int getId(){return row*m+col;}
 
     @Override
     public String toString(){
-        return String.valueOf(id);
+        return String.valueOf(row*m+col);
     }
 
 }
