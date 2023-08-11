@@ -1,6 +1,8 @@
 package main;
 
 
+import com.sun.xml.internal.ws.wsdl.writer.document.Part;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +48,9 @@ public class Particle {
             n.append(", ");
         }
         return n.toString();
+    }
+    public boolean isSomeNeighbour(Particle otherParticle, double Rc, double length){
+        return isNeighbour(otherParticle, Rc) || isNeighbour(otherParticle, Rc, 0, length) || isNeighbour(otherParticle, Rc, 0, -length) || isNeighbour(otherParticle, Rc, length, length) || isNeighbour(otherParticle, Rc, length, -length) || isNeighbour(otherParticle, Rc, length, 0);
     }
 
     public boolean isNeighbour(Particle otherParticle, double Rc){

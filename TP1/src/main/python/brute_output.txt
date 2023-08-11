@@ -1535,4 +1535,4 @@ id de la partícula "i" 	-	 id's de las partículas cuya distancia borde-borde e
 1533	-	0, 23, 239, 281, 297, 301, 444, 449, 506, 568, 578, 643, 680, 785, 823, 927, 936, 941, 1036, 1039, 1045, 1172, 1196, 1206, 1214, 1234, 1263, 1265, 1314, 1422, 1429, 1460, 1499, 
 1534	-	249, 759, 938, 1109, 1139, 1169, 1236, 1484, 1507, 
 1535	-	
-Execution time in milliseconds	-	58
+Execution time in milliseconds	-	100

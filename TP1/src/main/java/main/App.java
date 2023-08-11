@@ -9,8 +9,8 @@ import java.io.*;
 
 public class App
 {
-    //public static String method = "Cell Index Method";
-    public static String method = "Brute Method";
+    public static String method = "Cell Index Method";
+//    public static String method = "Brute Method";
     public static boolean sphere = true;
 
 
