@@ -6,7 +6,7 @@ import math
 from particle import Particle
 
 
-def get_particles_data(static_file_name,dynamic_file_name):
+def get_particles_data(static_file_name, dynamic_file_name):
     particleArray = []
     L = 0.0
     N = 0
@@ -16,7 +16,7 @@ def get_particles_data(static_file_name,dynamic_file_name):
         L = float(next(config_file))
         N = int(next(config_file))
         Rc = float(next(config_file))
-        
+
         i = 0
         for linea in config_file:
             particle_id = i
@@ -35,19 +35,28 @@ def get_particles_data(static_file_name,dynamic_file_name):
             particle_id = i
             x = float(valores[0])
             y = float(valores[1])
-            getParticle(particle_id,particleArray).set_postion(x,y)
+            getParticle(particle_id, particleArray).set_postion(x, y)
             i += 1
 
     return particleArray, L, N, M
+
 
 def getParticle(particle, particles):
     for p in particles:
         if p.id == particle:
             return p
 
+
+def belongsTo(particle, id):
+    for p in particle.neighbours:
+        if p.id == id:
+            return True
+    return False
+
+
 def main():
-    id_particle = 'p2'
-    particles, L, N, M = get_particles_data("../java/main/static.txt","../java/main/dynamic.txt")
+    id_particle = 0
+    particles, L, N, M = get_particles_data("../java/main/static.txt", "../java/main/dynamic.txt")
     print(particles)
     print(L)
     print(N)
@@ -63,8 +72,12 @@ def main():
             else:
                 particle_neighbours = particle[1].split(', ')
                 for particle_object in particles:
-                    if particle_object.id == particle[0]:
-                        particle_object.add_neighbours(particle_neighbours[:-1])
+                    if particle_object.id == int(particle[0]):
+                        neighbours = []
+                        for n in particle_neighbours[:-1]:
+                            neighbours.append(particles[int(n)])
+                        particle_object.add_neighbours(neighbours)
+                        print(particle_object.neighbours)
 
     # Create a figure and axis
     fig, ax = plt.subplots()
@@ -73,27 +86,17 @@ def main():
     for i in range(M + 1):
         ax.axhline(i * L, color='gray', linewidth=0.5)
         ax.axvline(i * L, color='gray', linewidth=0.5)
-    index = 0
-    for particle in particles:
-        if particle.id == id_particle:
-            print("found")
-            break
-        else:
-            index += 1
+
     # Plot particles as dots
     for i in range(len(particles)):
-        if (index==i):
-            circle = plt.Circle((particles[i].x, particles[i].y), particles[i].r, color='black', fill=True) 
+        if id_particle == i:
+            circle = plt.Circle((particles[i].x, particles[i].y), particles[i].r, color='black', fill=True)
+        elif belongsTo(particles[id_particle], i):
+            circle = plt.Circle((particles[i].x, particles[i].y), particles[i].r, color='green', fill=True)
         else:
-            circle = plt.Circle((particles[i].x, particles[i].y), particles[i].r, color='blue', fill=True) 
+            circle = plt.Circle((particles[i].x, particles[i].y), particles[i].r, color='red', fill=True)
         ax.add_patch(circle)
 
-    # Highlight neighbors
-    for particle in particles[index].neighbours:
-        p = getParticle(particle, particles)
-        print(p.r)
-        circle =plt.Circle((p.x, p.y), p.r, color='red', fill=True)
-        ax.add_patch(circle)
     # Customize the plot
     plt.xlim(0, M * L)
     plt.ylim(0, M * L)
@@ -104,6 +107,7 @@ def main():
 
     # Show the plot
     plt.show()
+
 
 if __name__ == "__main__":
     main()
