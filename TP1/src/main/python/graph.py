@@ -66,6 +66,7 @@ def main():
     print(N)
     print(M)
     time = 0
+    # with open('brute_output.txt') as particles_data:
     with open('output.txt') as particles_data:
         next(particles_data)  # Skip first line
         particle_reader = csv.reader(particles_data, delimiter='\t')
