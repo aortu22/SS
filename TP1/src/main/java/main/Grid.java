@@ -23,8 +23,7 @@ public class Grid {
         grid = new Cell[m][m];
         for (int row = 0; row < m; row++) {
             for (int col = 0; col < m; col++) {
-                int id = col + row * m;
-                grid[row][col] = new Cell(row, col, id, m, length);
+                grid[row][col] = new Cell(row, col, m, length);
             }
         }
     }
