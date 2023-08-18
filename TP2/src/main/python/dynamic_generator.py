@@ -6,7 +6,8 @@ def generar_archivo(nombre_archivo, n, L):
         for _ in range(n):
             valor1 = round(random.uniform(0, L), 2)
             valor2 = round(random.uniform(0, L), 2)
-            f.write(f"{valor1} {valor2}\n")
+            valor3 = round(random.uniform(0, 360), 2)
+            f.write(f"{valor1} {valor2} {valor3}\n")
 
 def main():
     L = 0.0

@@ -6,17 +6,52 @@ import java.io.*;
 public class App
 {
 
+    public static final int iterations = 101;
+
+    public static void saveOrderStat(List<Double> orderStatList){
+        
+        try {
+            String output = "src/main/python/order.txt";
+            File file = new File(output);
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter fw = new FileWriter(file);
+            BufferedWriter bw = new BufferedWriter(fw);
+            //Escribo el titulo
+            bw.write( "Order segun el T\n");
+            //Escribo la información de las particulas
+            for (Double order : orderStatList) {
+                bw.write(order.toString() + "\n");
+            }
+            bw.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteOutput(){
+        String output = "src/main/python/output.txt";
+        File fileOutput = new File(output);
+        if (fileOutput.exists()) {
+            fileOutput.delete();
+        }
+    }
     public static void main( String[] args )
     {
 
-        String jsonFilePathStatic = "src/main/java/main/static.txt"; // Cambia esto con la ruta del archivo JSON
+        String jsonFilePathStatic = "src/main/java/main/static.txt";
         String jsonFilePathDynamic = "src/main/java/main/dynamic.txt";
+        List<Double> orderStatList = new ArrayList<>();
         Grid grid;
-        List<Particle> particleList = new ArrayList<>();
+        List<Bird> birdList = new ArrayList<>();
         double maxR = 0.0;
         double L = 0.0;
         int N = 0;
         double Rc = 0.0;
+        double n = 0.0;
+        double dT = 0.0;
         try {
             BufferedReader br = new BufferedReader(new FileReader(jsonFilePathStatic));
             String linea;
@@ -25,19 +60,15 @@ public class App
             L = Double.parseDouble(br.readLine());
             N = Integer.parseInt(br.readLine());
             Rc = Double.parseDouble(br.readLine());
-
+            n = Double.parseDouble(br.readLine());
+            dT = Double.parseDouble(br.readLine());
             // Leer y retornar solo el primer valor de cada par de valores
             int i = 0;
             while ((linea = br.readLine()) != null) {
                 String[] valores = linea.split(" ");
-                double r = Double.parseDouble(valores[0]);
-
-                if (r > maxR){
-                    maxR = r;
-                }
-
-                Particle particle = new Particle(i, r);
-                particleList.add(particle);
+                double v = 0.03; //desp lo pedimos por input o algo
+                Bird bird = new Bird(i, v);
+                birdList.add(bird);
                 i++;
             }
 
@@ -57,7 +88,9 @@ public class App
                 String[] valores = linea.split(" ");
                 double x = Double.parseDouble(valores[0]);
                 double y = Double.parseDouble(valores[1]);
-                particleList.get(i).setPosition(x,y);
+                double t = Double.parseDouble(valores[2]);
+                birdList.get(i).setPosition(x,y);
+                birdList.get(i).setTheta(t);
                 i++;
             }
 
@@ -69,13 +102,21 @@ public class App
 
         long startTime = System.currentTimeMillis();
         int M = (int)Math.floor(L / (Rc + 2*maxR));
-        grid = new Grid(L,M,sphere);
-        for (Particle particle : particleList) {
-            grid.addToCell(particle);
+        // Always spherical because i want the particle to move from top to back (traspass)
+        boolean spherical = true;
+        grid = new Grid(L,M,spherical);
+        deleteOutput();
+        grid.updateOutput();
+        for (Bird bird : birdList) {
+            grid.addToCell(bird);
         }
-        grid.setNeighbours(Rc);
-        long endTime = System.currentTimeMillis() - startTime;
-        grid.getOutput(endTime);
-
+        int i = 1;
+        while( i < iterations){
+            grid.setNeighbours(Rc);
+            orderStatList.add(grid.evolveBirdsT(n,dT,N));
+            grid.updateDynamicAndOutput(i,N);
+            i++;
+        }
+        saveOrderStat(orderStatList);
     }
 }

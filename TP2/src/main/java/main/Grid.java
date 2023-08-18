@@ -1,10 +1,11 @@
 package main;
 
+import java.io.*;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.*;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Grid {
     private final int rows;
@@ -13,6 +14,7 @@ public class Grid {
     private final double cellLength;
     private final double length;
     private final boolean spherical;
+
 
     public Grid(double length, int  m,  boolean spherical){
         this.rows = m;
@@ -154,8 +156,79 @@ public class Grid {
         return ret;
     }
 
-    public void getOutput(long time){
+    public void updateOutput(){
+        try {
+            String output = "src/main/python/output.txt";
+            String dynamic = "src/main/java/main/dynamic.txt";
+            File fileOutput = new File(output);
+            if (!fileOutput.exists()) {
+                fileOutput.createNewFile();
+            }
+            // Parameter true to append to what the file already has
+            FileWriter fwOutput = new FileWriter(fileOutput, true);
+            BufferedWriter bwOutput = new BufferedWriter(fwOutput);
 
+            BufferedReader reader = new BufferedReader(new FileReader(dynamic));
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                // Escribir cada línea en el archivo destino
+                bwOutput.write(linea);
+                bwOutput.write(System.lineSeparator()); // Agregar un salto de línea
+            }
+            bwOutput.write('\n');
+
+            // Cerrar archivos
+            reader.close();
+            bwOutput.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+    public void updateDynamicAndOutput(Integer t, int N){
+        Locale locale = new Locale("en", "US");
+        try {
+            String dynamic = "src/main/java/main/dynamic.txt";
+            File file = new File(dynamic);
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            // Parameter false make us write stepping in the information
+            FileWriter fw = new FileWriter(file, false);
+            BufferedWriter bw = new BufferedWriter(fw);
+
+            bw.write( t.toString() + '\n');
+
+            // Ordering particles with id
+            List<Particle> allParticles = new ArrayList<>();
+            for(int i=0;i< rows;i++){
+                for (int j=0;j<columns;j++) {
+                    allParticles.addAll(grid[i][j].getParticles());
+                }
+            }
+            Collections.sort(allParticles);
+
+            // Writting particles information
+            StringBuilder particleInfo = new StringBuilder();
+            DecimalFormat df = new DecimalFormat("0.00", new DecimalFormatSymbols(locale));
+            for (Particle particle: allParticles) {
+                particleInfo.append(df.format(particle.getX())).append(' ').append(df.format(particle.getY()));
+                if(particle instanceof Bird bird){
+                    particleInfo.append(' ').append(df.format(bird.getTheta()));
+                }
+                particleInfo.append('\n');
+            }
+            bw.write(particleInfo.toString());
+            bw.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        updateOutput();
+    }
+    public void getOutput(long time){
         try {
             String output = "src/main/python/output.txt";
             File file = new File(output);
@@ -184,6 +257,30 @@ public class Grid {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public double evolveBirdsT(double error,double delta_time,int N){
+        Set<Particle> cellParticules;
+        double orderSumatory = 0.0;
+        for (int i=0; i < rows;i++){
+            for(int j=0; j < columns;j++){
+                cellParticules = grid[i][j].getParticles();
+                for (Particle particle: cellParticules) {
+                    ((Bird) particle).updateAngles(error);
+                    ((Bird) particle).setNextPosition(this.length, delta_time);
+                    orderSumatory += 1.0;
+                }
+            }
+        }
+        for (int i=0; i < rows;i++){
+            for(int j=0; j < columns;j++){
+                cellParticules = grid[i][j].getParticles();
+                for (Particle particle: cellParticules) {
+                    ((Bird) particle).setFutureAngle();
+                }
+            }
+        }
+        return Math.abs(orderSumatory)/N;
     }
 
 }

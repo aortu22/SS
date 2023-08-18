@@ -3,21 +3,20 @@ package main;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Particle {
+public class Particle implements Comparable<Particle> {
     private final int id;
     private final List<Particle> neighbours = new ArrayList<>();
-    private double x = 0;
-    private double y = 0;
-//    private final double radio;
+    private Position position = new Position(0,0);
 
-    public Particle(int id){
+    private final double radio;
+
+    public Particle(int id, double radio){
         this.id = id;
-//        this.radio = radio;
+        this.radio = radio;
     }
 
     public void setPosition(double x,double y){
-        this.x = x;
-        this.y = y;
+        position.setPosition(x,y);
     }
 
     public void addNeighbour(Particle particle){
@@ -31,11 +30,15 @@ public class Particle {
     }
 
     public double getX(){
-        return x;
+        return position.getX();
     }
 
     public double getY(){
-        return y;
+        return position.getY();
+    }
+
+    public List<Particle> getListNeighbours(){
+        return this.neighbours;
     }
 
     public String getNeighbours() {
@@ -53,15 +56,13 @@ public class Particle {
     public boolean isNeighbour(Particle otherParticle, double Rc){
         double x1 = otherParticle.getX();
         double y1 = otherParticle.getY();
-        return Math.sqrt(Math.pow(x - x1, 2) + Math.pow(y - y1, 2)) <= Rc;
-//        return Math.sqrt(Math.pow(x - x1, 2) + Math.pow(y - y1, 2))-radio- otherParticle.radio <= Rc;
+        return Math.sqrt(Math.pow(getX() - x1, 2) + Math.pow(getY() - y1, 2))-radio- otherParticle.radio <= Rc;
     }
 
     public boolean isNeighbour(Particle otherParticle,double Rc, double correctionX, double correctionY){
         double x1 = otherParticle.getX();
         double y1 = otherParticle.getY();
-        return Math.sqrt(Math.pow((x-correctionX) - x1, 2) + Math.pow((y-correctionY)-y1,2))<= Rc;
-//        return Math.sqrt(Math.pow((x-correctionX) - x1, 2) + Math.pow((y-correctionY)-y1,2))-radio- otherParticle.radio <= Rc;
+        return Math.sqrt(Math.pow((getX()-correctionX) - x1, 2) + Math.pow((getY()-correctionY)-y1,2))-radio- otherParticle.radio <= Rc;
     }
 
     @Override
@@ -76,8 +77,14 @@ public class Particle {
     public String toString() {
         return "Particle{" +
                 "id=" + id +
-                ", x=" + x +
-                ", y=" + y +
+                ", x=" + getX() +
+                ", y=" + getY() +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Particle other) {
+        // Implementa la lógica de comparación basada en el campo 'value'
+        return Integer.compare(this.id, other.id);
     }
 }
