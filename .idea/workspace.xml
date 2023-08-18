@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0ab8a197-6fc8-4bfa-9388-6a5289bcb3d1" name="Changes" comment="Changes">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="0ab8a197-6fc8-4bfa-9388-6a5289bcb3d1" name="Changes" comment="Changes" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -33,11 +30,12 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/Usuario/Desktop/Agus/ITBA/SS/SS/TP1",
+    "last_opened_file_path": "C:/Users/Usuario/Desktop/Agus/ITBA/SS/SS/TP2",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
@@ -45,6 +43,9 @@
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Usuario\Desktop\Agus\ITBA\SS\SS\TP2" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\assert\Desktop\Agustina\ITBA\SS\TP1\src\main\java\main" />
       <recent name="C:\Users\assert\Desktop\Agustina\ITBA\SS\TP1\src\main" />
@@ -71,6 +72,7 @@
       <workItem from="1691977028106" duration="438000" />
       <workItem from="1691977494855" duration="529000" />
       <workItem from="1691978047662" duration="434000" />
+      <workItem from="1692364396705" duration="241000" />
     </task>
     <servers />
   </component>
