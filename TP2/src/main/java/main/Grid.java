@@ -43,7 +43,15 @@ public class Grid {
     }
 
     public void addToCell(Particle particle){
-        grid[(int) Math.floor(particle.getY() / cellLength)][(int) Math.floor(particle.getX() / cellLength)].addParticle(particle);
+        int i = (int) Math.floor(particle.getY() / cellLength);
+        int j = (int) Math.floor(particle.getX() / cellLength);
+        if(i==grid.length){
+            i=0;
+        }
+        if(j==grid[0].length){
+            j=0;
+        }
+        grid[i][j].addParticle(particle);
     }
 
 

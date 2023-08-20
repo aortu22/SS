@@ -6,7 +6,7 @@ import java.io.*;
 public class App
 {
 
-    public static final int iterations = 101;
+    public static final int iterations = 501;
 
     public static void saveOrderStat(List<Double> orderStatList){
         
@@ -65,7 +65,7 @@ public class App
             // Leer y retornar solo el primer valor de cada par de valores
             int i = 0;
             while ((linea = br.readLine()) != null) {
-                String[] valores = linea.split(" ");
+//                String[] valores = linea.split(" "); Descomentar si ponemos v por cada particula en el static
                 double v = 0.03; //desp lo pedimos por input o algo
                 Bird bird = new Bird(i, v);
                 birdList.add(bird);

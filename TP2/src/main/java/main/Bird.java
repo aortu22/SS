@@ -35,8 +35,8 @@ public class Bird extends Particle{
     }
 
     public void updateAngles(double error){
-        double sinProm = getThetaNeighbours(true);
-        double cosProm = getThetaNeighbours(false);
+        double sinProm = getThetaNeighboursProm(true);
+        double cosProm = getThetaNeighboursProm(false);
 
         Random random = new Random();
         double minValue = -error/2;
@@ -59,7 +59,7 @@ public class Bird extends Particle{
         this.futureAngle = 0;
     }
 
-    private double getThetaNeighbours(boolean isSin){
+    private double getThetaNeighboursProm(boolean isSin){
         double prom = 0;
         // Including the given particle
         if(isSin){
