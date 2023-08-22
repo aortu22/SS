@@ -270,6 +270,8 @@ public class Grid {
     public double evolveBirdsT(double error,double delta_time,int N){
         Set<Particle> cellParticules;
         Double[] orderSumatory = new Double[2];
+        orderSumatory[0] = 0.0;
+        orderSumatory[1] = 0.0;
         for (int i=0; i < rows;i++){
             for(int j=0; j < columns;j++){
                 cellParticules = grid[i][j].getParticles();
