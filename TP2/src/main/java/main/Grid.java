@@ -269,14 +269,15 @@ public class Grid {
 
     public double evolveBirdsT(double error,double delta_time,int N){
         Set<Particle> cellParticules;
-        double orderSumatory = 0.0;
+        Double[] orderSumatory = new Double[2];
         for (int i=0; i < rows;i++){
             for(int j=0; j < columns;j++){
                 cellParticules = grid[i][j].getParticles();
                 for (Particle particle: cellParticules) {
                     ((Bird) particle).updateAngles(error);
                     ((Bird) particle).setNextPosition(this.length, delta_time);
-                    orderSumatory += 1.0;
+                    orderSumatory[0] += ((Bird) particle).getV() * Math.sin(((Bird) particle).getTheta());
+                    orderSumatory[1] += ((Bird) particle).getV() * Math.cos(((Bird) particle).getTheta());
                 }
             }
         }
@@ -288,7 +289,9 @@ public class Grid {
                 }
             }
         }
-        return Math.abs(orderSumatory)/N;
+        orderSumatory[0] = orderSumatory[0]/N;
+        orderSumatory[1] = orderSumatory[1]/N;
+        return Math.sqrt(Math.pow(orderSumatory[0],2) + Math.pow(orderSumatory[1],2));
     }
 
 }
