@@ -80,8 +80,8 @@ public class Bird extends Particle{
     }
     
     public void setNextPosition(double gridSize,double deltaTime){
-        double x=getX()+v*deltaTime*+Math.cos(Math.toRadians(theta));
-        double y=getY()+v*deltaTime*+Math.sin(Math.toRadians(theta));
+        double x=getX()+v*deltaTime*+Math.cos(theta);
+        double y=getY()+v*deltaTime*+Math.sin(theta);
         setPosition(x>gridSize?x-gridSize:(x<0?x+gridSize:x),y>gridSize?y-gridSize:(y<0?y+gridSize:y));
     }
 
