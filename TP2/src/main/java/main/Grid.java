@@ -42,6 +42,14 @@ public class Grid {
         return grid[row][column];
     }
 
+    public void cleanCells(){
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < columns; col++) {
+                grid[row][col].cleanCell();
+            }
+        }
+    }
+
     public void addToCell(Particle particle){
         int i = (int) Math.floor(particle.getY() / cellLength);
         int j = (int) Math.floor(particle.getX() / cellLength);
@@ -263,14 +271,21 @@ public class Grid {
                 }
             }
         }
+        List<Bird> updatedBirds = new ArrayList<>();
         for (int i=0; i < rows;i++){
             for(int j=0; j < columns;j++){
                 cellParticules = grid[i][j].getParticles();
                 for (Particle particle: cellParticules) {
                     ((Bird) particle).setFutureAngle();
+                    updatedBirds.add((Bird) particle);
                 }
             }
         }
+        cleanCells();
+        for (Bird bird : updatedBirds) {
+            addToCell(bird);
+        }
+
         orderSumatory[0] = orderSumatory[0]/N;
         orderSumatory[1] = orderSumatory[1]/N;
         return Math.sqrt(Math.pow(orderSumatory[0],2) + Math.pow(orderSumatory[1],2));

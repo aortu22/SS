@@ -53,8 +53,6 @@ public class Bird extends Particle{
 
 //    Update the variables with futures vals and clean to start again
     public void setFutureAngle() {
-//        super.setPosition(this.futurePosition.getX(), this.futurePosition.getY());
-//        this.futurePosition =  new Position(0,0);
         this.theta = this.futureAngle;
         this.futureAngle = 0;
     }

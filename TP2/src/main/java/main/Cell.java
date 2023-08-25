@@ -25,6 +25,10 @@ public class Cell {
     public int getCol(){
         return col;
     }
+
+    public void cleanCell(){
+        particleList.clear();
+    }
      public Set<Particle> getParticles(){
         return particleList;
      }

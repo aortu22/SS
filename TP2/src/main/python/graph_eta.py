@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 def main():
+    density = 0.16
     n40_file = './order40.txt'
     n100_file = './order100.txt'
     # n400_file = './order400.txt'
@@ -11,7 +12,7 @@ def main():
            3.0, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9,
            4.0, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9, 5.0]
 
-    N = [30, 100, 300, 3000]
+    N = [40, 100, 400, 4000]
 
     n40_vec = []
     n100_vec = []
@@ -99,7 +100,7 @@ def main():
     # Customize the plot
     plt.xlabel("η")
     plt.ylabel("Va")
-    plt.title("Va variation according to η")
+    plt.title("Va variation according to η with density " + density)
     plt.xlim(0, 5.0)
     plt.ylim(0, 0.03)
     plt.legend()
