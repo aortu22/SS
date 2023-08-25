@@ -33,8 +33,6 @@ def main():
                     if prev != "\n":
                         break
                 else:
-                    # print(line)
-                    # print("n = " + str(eta[i]))
                     n_vec[i, j] = float(line[:-1].replace(",", "."))
                     j += 1
                 prev = line
@@ -42,8 +40,6 @@ def main():
     plt.figure(figsize=(10, 6))
     i = 0
     numbers = [i for i in range(1501)]
-
-    print(n_vec)
 
     while i < len(eta):
         if(i==0 or i==10 or i==20 or i==30 or i==40 or i==50):
