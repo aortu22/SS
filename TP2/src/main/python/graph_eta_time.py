@@ -12,7 +12,7 @@ def main():
            3.0, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9,
            4.0, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9, 5.0]
 
-    n_vec = np.full((len(eta), 1501), 0)
+    n_vec = np.zeros((len(eta), 1501), dtype=float)
     # i = 0
     # while i < len(eta):
     #     n_vec[i]=np.array([])
@@ -25,7 +25,7 @@ def main():
         while i < len(eta):
             j = 0
             while True:
-                line = n100_file.readline() # Jump n = eta in file
+                line = n100_file.readline()  # Jump n = eta in file
                 line = n100_file.readline()
                 if not line:  # If readline() returns an empty string, we've reached the end of the file
                     break
@@ -33,31 +33,34 @@ def main():
                     if prev != "\n":
                         break
                 else:
-                    print(line)
+                    # print(line)
                     # print("n = " + str(eta[i]))
-                    n_vec[i][j] = float(line[:-1].replace(",", "."))
-                    j+=1
+                    n_vec[i, j] = float(line[:-1].replace(",", "."))
+                    j += 1
                 prev = line
             i += 1
     plt.figure(figsize=(10, 6))
     i = 0
     numbers = [i for i in range(1501)]
 
+    print(n_vec)
+
     while i < len(eta):
-        label = "η=" + str(eta[i])
-        plt.plot(numbers, n_vec[i], label=label)
+        if(i==0 or i==10 or i==20 or i==30 or i==40 or i==50):
+            label = "η=" + str(eta[i])
+            plt.plot(numbers, n_vec[i], label=label)
         i += 1
 
-    # Create boxes of info for N values
-    for n in eta:
-        plt.text(5.1, 0.25 * n, f"η={n}", verticalalignment="center")
+    # # Create boxes of info for N values
+    # for n in eta:
+    #     plt.text(5.1, 0.25 * n, f"η={n}", verticalalignment="center")
 
     # Customize the plot
-    plt.xlabel("η")
-    plt.ylabel("t")
+    plt.ylabel("Va")
+    plt.xlabel("t")
     plt.title("Time and Va variation according to η with density " + str(density))
-    plt.xlim(0, 1)
-    plt.ylim(0, 1501)
+    plt.ylim(0, 1)
+    plt.xlim(0, 1501)
     plt.legend()
 
     # Show the plot

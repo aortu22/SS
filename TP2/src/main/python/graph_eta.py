@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 def main():
     density = 0.16
-    n40_file = './order40.txt'
+    # n40_file = './order40.txt'
     n100_file = './order100.txt'
     # n400_file = './order400.txt'
     # n4000_file = './order4000.txt'
@@ -19,20 +19,20 @@ def main():
     n400_vec = []
     n4000_vec = []
 
-    with open(n40_file, 'r') as n40_file:
-        value_for_eta = ''
-        prev = ''
-        for n in eta:
-            while True:
-                line = n40_file.readline()
-                if not line:  # If readline() returns an empty string, we've reached the end of the file
-                    break
-                if line == "\n":
-                    if prev != "\n":
-                        value_for_eta = prev[:-1].replace(",", ".")
-                        break
-                prev = line
-            n40_vec.append(float(value_for_eta))
+    # with open(n40_file, 'r') as n40_file:
+    #     value_for_eta = ''
+    #     prev = ''
+    #     for n in eta:
+    #         while True:
+    #             line = n40_file.readline()
+    #             if not line:  # If readline() returns an empty string, we've reached the end of the file
+    #                 break
+    #             if line == "\n":
+    #                 if prev != "\n":
+    #                     value_for_eta = prev[:-1].replace(",", ".")
+    #                     break
+    #             prev = line
+    #         n40_vec.append(float(value_for_eta))
 
     with open(n100_file, 'r') as n100_file:
         value_for_eta = ''
@@ -88,7 +88,7 @@ def main():
     plt.figure(figsize=(10, 6))
 
     # Create lines for the vectors
-    plt.plot(eta, n40_vec, label="N=40")
+    # plt.plot(eta, n40_vec, label="N=40")
     plt.plot(eta, n100_vec, label="N=100")
     # plt.plot(eta, n400_vec, label="N=400")
     # plt.plot(eta, n4000_vec, label="N=4000")
@@ -100,9 +100,9 @@ def main():
     # Customize the plot
     plt.xlabel("η")
     plt.ylabel("Va")
-    plt.title("Va variation according to η with density " + density)
+    plt.title("Va variation according to η with density " + str(density))
     plt.xlim(0, 5.0)
-    plt.ylim(0, 0.03)
+    plt.ylim(0, 1)
     plt.legend()
 
     # Show the plot
