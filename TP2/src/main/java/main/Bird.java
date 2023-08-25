@@ -63,16 +63,16 @@ public class Bird extends Particle{
         double prom = 0;
         // Including the given particle
         if(isSin){
-            prom+=Math.sin(this.theta);
+            prom+=Math.sin(Math.toRadians(this.theta));
         }else{
-            prom+=Math.cos(this.theta);
+            prom+=Math.cos(Math.toRadians(this.theta));
         }
         // And its neighbours
         for (Bird n: neighbours) {
             if(isSin){
-                prom+=Math.sin(n.theta);
+                prom+=Math.sin(Math.toRadians(n.theta));
             }else{
-                prom+=Math.cos(n.theta);
+                prom+=Math.cos(Math.toRadians(n.theta));
             }
         }
 
@@ -80,8 +80,8 @@ public class Bird extends Particle{
     }
     
     public void setNextPosition(double gridSize,double deltaTime){
-        double x=getX()+v*deltaTime*+Math.cos(theta);
-        double y=getY()+v*deltaTime*+Math.sin(theta);
+        double x=getX()+v*deltaTime*+Math.cos(Math.toRadians(futureAngle));
+        double y=getY()+v*deltaTime*+Math.sin(Math.toRadians(futureAngle));
         setPosition(x>gridSize?x-gridSize:(x<0?x+gridSize:x),y>gridSize?y-gridSize:(y<0?y+gridSize:y));
     }
 

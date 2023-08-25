@@ -278,8 +278,8 @@ public class Grid {
                 for (Particle particle: cellParticules) {
                     ((Bird) particle).updateAngles(error);
                     ((Bird) particle).setNextPosition(this.length, delta_time);
-                    orderSumatory[0] += ((Bird) particle).getV() * Math.sin(((Bird) particle).getTheta());
-                    orderSumatory[1] += ((Bird) particle).getV() * Math.cos(((Bird) particle).getTheta());
+                    orderSumatory[0] += ((Bird) particle).getV() * Math.sin(Math.toRadians(((Bird) particle).getTheta()));
+                    orderSumatory[1] += ((Bird) particle).getV() * Math.cos(Math.toRadians(((Bird) particle).getTheta()));
                 }
             }
         }
