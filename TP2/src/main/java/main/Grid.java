@@ -224,38 +224,38 @@ public class Grid {
 
         updateOutput();
     }
-    public void getOutput(long time){
-        try {
-            String output = "src/main/python/output.txt";
-            File file = new File(output);
-            // Si el archivo no existe es creado
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            FileWriter fw = new FileWriter(file);
-            BufferedWriter bw = new BufferedWriter(fw);
-            //Escribo el titulo
-            bw.write( "id de la partícula \"i\" \t-\t id's de las partículas cuya distancia borde-borde es menos de rc \n");
-            //Escribo la información de las particulas
-            for(int i=0;i< rows;i++){
-                for (int j=0;j<columns;j++) {
-                    StringBuilder particleInfo = new StringBuilder();
-                    Set<Particle> particles = grid[i][j].getParticles();
-                    for (Particle particle : particles){
-                        particleInfo.append(particle.getId()).append("\t-\t").append(particle.getNeighbours()).append("\n");
-                    }
-                    bw.write(particleInfo.toString());
-                }
-            }
-            String timeString = "Execution time in milliseconds\t-\t" + time;
-            bw.write(timeString);
-            bw.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    public void getOutput(long time){
+//        try {
+//            String output = "src/main/python/output.txt";
+//            File file = new File(output);
+//            // Si el archivo no existe es creado
+//            if (!file.exists()) {
+//                file.createNewFile();
+//            }
+//            FileWriter fw = new FileWriter(file);
+//            BufferedWriter bw = new BufferedWriter(fw);
+//            //Escribo el titulo
+//            bw.write( "id de la partícula \"i\" \t-\t id's de las partículas cuya distancia borde-borde es menos de rc \n");
+//            //Escribo la información de las particulas
+//            for(int i=0;i< rows;i++){
+//                for (int j=0;j<columns;j++) {
+//                    StringBuilder particleInfo = new StringBuilder();
+//                    Set<Particle> particles = grid[i][j].getParticles();
+//                    for (Particle particle : particles){
+//                        particleInfo.append(particle.getId()).append("\t-\t").append(particle.getNeighbours()).append("\n");
+//                    }
+//                    bw.write(particleInfo.toString());
+//                }
+//            }
+//            String timeString = "Execution time in milliseconds\t-\t" + time;
+//            bw.write(timeString);
+//            bw.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-    public double evolveBirdsT(double error,double delta_time,int N){
+    public double evolveBirdsT(double noise,double delta_time,int N){
         Set<Particle> cellParticules;
         Double[] orderSumatory = new Double[2];
         orderSumatory[0] = 0.0;
@@ -264,7 +264,7 @@ public class Grid {
             for(int j=0; j < columns;j++){
                 cellParticules = grid[i][j].getParticles();
                 for (Particle particle: cellParticules) {
-                    ((Bird) particle).updateAngles(error);
+                    ((Bird) particle).updateAngles(noise);
                     ((Bird) particle).setNextPosition(this.length, delta_time);
                     orderSumatory[0] += ((Bird) particle).getV() * Math.sin(Math.toRadians(((Bird) particle).getTheta()));
                     orderSumatory[1] += ((Bird) particle).getV() * Math.cos(Math.toRadians(((Bird) particle).getTheta()));
@@ -284,6 +284,7 @@ public class Grid {
         cleanCells();
         for (Bird bird : updatedBirds) {
             addToCell(bird);
+            bird.cleanNeighbours();
         }
 
         orderSumatory[0] = orderSumatory[0]/N;

@@ -25,6 +25,9 @@ public class Bird extends Particle{
         return theta;
     }
 
+    public void cleanNeighbours(){
+        neighbours.clear();
+    }
     @Override
     public void addNeighbour(Particle particle) {
         if(particle instanceof Bird){
@@ -34,22 +37,24 @@ public class Bird extends Particle{
         }
     }
 
-    public void updateAngles(double error){
-        if(neighbours.size()>0){
-        double sinProm = getThetaNeighboursProm(true);
-        double cosProm = getThetaNeighboursProm(false);
+    public void updateAngles(double noise){
+        if(!neighbours.isEmpty()){
+            double sinProm = getThetaNeighboursProm(true);
+            double cosProm = getThetaNeighboursProm(false);
 
-        double minValue = -error/2;
-        double maxValue = error/2;
-        double deltaTheta=minValue + (maxValue - minValue) * Math.random();
+            double minValue = -noise/2;
+            double maxValue = noise/2;
+            double deltaTheta=minValue + (maxValue - minValue) * Math.random();
 
-        // Clean neighbours, the code that calls this must make sure to set them again
-        this.neighbours.clear();
-        this.futureAngle =  Math.toDegrees(Math.atan2(sinProm, cosProm)) + deltaTheta;
-        if(this.futureAngle < 0){
-            this.futureAngle += 360;
-        }}
-        else{futureAngle=theta;}
+            // Clean neighbours, the code that calls this must make sure to set them again
+            this.neighbours.clear();
+            this.futureAngle =  Math.toDegrees(Math.atan2(sinProm, cosProm)) + deltaTheta;
+            if(this.futureAngle < 0){
+                this.futureAngle += 360;
+            }
+        }else{
+            futureAngle=theta;
+        }
     }
 
 //    Update the variables with futures vals and clean to start again
@@ -79,8 +84,11 @@ public class Bird extends Particle{
     }
     
     public void setNextPosition(double gridSize,double deltaTime){
-        double x=getX()+v*deltaTime*Math.cos(Math.toRadians(futureAngle));
-        double y=getY()+v*deltaTime*Math.sin(Math.toRadians(futureAngle));
+        double x=getX()+v*deltaTime*Math.cos(Math.toRadians(theta));
+        double y=getY()+v*deltaTime*Math.sin(Math.toRadians(theta));
+        System.out.println(deltaTime);
+        System.out.println(x);
+        System.out.println(y);
         setPosition(x>gridSize?x-gridSize:(x<0?x+gridSize:x),y>gridSize?y-gridSize:(y<0?y+gridSize:y));
     }
 

@@ -8,8 +8,7 @@ public class App
 {
 
     public static final int iterations = 1501;
-    public static final int tries = 1;
-    public static double error = 0.0;
+    public static double noise = 0.0;
 
     public static int N = 0;
 
@@ -26,15 +25,14 @@ public class App
             FileWriter fw = new FileWriter(file,true);
             BufferedWriter bw = new BufferedWriter(fw);
             //Escribo el titulo
-            bw.write( "n = " + error + "\n");
+            bw.write( "n = " + noise + "\n");
             //Escribo la información de las particulas
             DecimalFormat df = new DecimalFormat("#.####");
             for (Map.Entry<Integer, List<Double>> order : orderStatList.entrySet()) {
                 double sum = 0;
                 for(Double d : order.getValue())
                     sum += d;
-                double prom = sum/tries;
-                bw.write(df.format(prom) + "\n");
+                bw.write(df.format(sum) + "\n");
             }
             bw.write("\n");
             bw.close();
@@ -66,18 +64,14 @@ public class App
     }
     public static void main( String[] args )
     {
-        List<Double> eta = new ArrayList<>(Arrays.asList(0.5));
+        List<Double> eta =
+                new ArrayList<>(Arrays.asList(0.1));
 //                new ArrayList<>(Arrays.asList(0.0,
-//                0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9,
-//            1.0,
-//                1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9,
-//            2.0,
-//                2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9,
-//            3.0,
-//                3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9,
-//            4.0,
-//                4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9,
-//                5.0));
+//                0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0,
+//                1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0,
+//                2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3.0,
+//                3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 4.0,
+//                4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9, 5.0));
         for (Double n: eta) {
             System.out.println("For eta: " + n);
             String jsonFilePathStatic = "src/main/java/main/static.txt";
@@ -92,7 +86,7 @@ public class App
             double L = 0.0;
             int N = 0;
             double Rc = 0.0;
-//            double n = 0.0;
+            double noise = 0.0;
             double dT = 0.0;
             try {
                 BufferedReader br = new BufferedReader(new FileReader(jsonFilePathStatic));
@@ -101,8 +95,8 @@ public class App
                 L = Double.parseDouble(br.readLine());
                 N = Integer.parseInt(br.readLine());
                 Rc = Double.parseDouble(br.readLine());
-//                n = Double.parseDouble(br.readLine());
-                App.error = n;
+                noise = Double.parseDouble(br.readLine());
+                App.noise = n;
                 App.N = N;
                 dT = Double.parseDouble(br.readLine());
                 // Leer y retornar solo el primer valor de cada par de valores
@@ -119,55 +113,49 @@ public class App
                 e.printStackTrace();
             }
 
-            int j = 0;
-            while (j < tries){
-                try {
-                    BufferedReader br = new BufferedReader(new FileReader(jsonFilePathDynamic));
-                    String linea;
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(jsonFilePathDynamic));
+                String linea;
 
-                    // Saltar la primera línea
-                    br.readLine();
-                    int i = 0;
-                    while ((linea = br.readLine()) != null) {
-                        String[] valores = linea.split(" ");
-                        double x = Double.parseDouble(valores[0]);
-                        double y = Double.parseDouble(valores[1]);
-                        double t = Double.parseDouble(valores[2]);
-                        birdList.get(i).setPosition(x,y);
-                        birdList.get(i).setTheta(t);
-                        i++;
-                    }
-
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                System.out.println("Try " + j);
-                int M = (int)Math.floor(L / (Rc + 2*maxR));
-                // Always spherical because i want the particle to move from top to back (traspass)
-                boolean spherical = true;
-                grid = new Grid(L,M,spherical);
-                deleteOutput();
-                reloadDynamicOutput();
-                grid.updateOutput();
-                for (Bird bird : birdList) {
-                    grid.addToCell(bird);
-                }
-                int i = 1;
-                while(i < iterations){
-                    grid.setNeighbours(Rc);
-                    orderStatList.get(i-1).add(grid.evolveBirdsT(n,dT,N));
-                    grid.updateDynamicAndOutput(i,N);
+                // Saltar la primera línea
+                br.readLine();
+                int i = 0;
+                while ((linea = br.readLine()) != null) {
+                    String[] valores = linea.split(" ");
+                    double x = Double.parseDouble(valores[0]);
+                    double y = Double.parseDouble(valores[1]);
+                    double t = Double.parseDouble(valores[2]);
+                    birdList.get(i).setPosition(x,y);
+                    birdList.get(i).setTheta(t);
                     i++;
                 }
-                j++;
-            }
-            saveOrderStat(orderStatList);
 
-        }
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            int M = (int)Math.floor(L / (Rc + 2*maxR));
+            // Always spherical because i want the particle to move from top to back (traspass)
+            boolean spherical = true;
+            grid = new Grid(L,M,spherical);
+            deleteOutput();
+            reloadDynamicOutput();
+            grid.updateOutput();
+            for (Bird bird : birdList) {
+                grid.addToCell(bird);
+            }
+            int i = 1;
+            while(i < iterations){
+                grid.setNeighbours(Rc);
+                orderStatList.get(i-1).add(grid.evolveBirdsT(n,dT,N));
+                grid.updateDynamicAndOutput(i,N);
+                i++;
+            }
+        saveOrderStat(orderStatList);
 
         }
 
     }
 
+}
