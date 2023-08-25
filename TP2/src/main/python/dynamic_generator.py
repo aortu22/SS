@@ -16,7 +16,15 @@ def main():
         L = float(next(config_file))
         N = int(next(config_file))
     generar_archivo("../java/main/dynamic.txt",N,L)
-    
+
+    destination_file_path = "../java/main/dynamicOutput.txt"  # Replace with the desired path for the destination file
+    source_file_path = "../java/main/dynamic.txt"  # Replace with the actual path to the source file
+
+    with open(source_file_path, "r") as source_file:
+        content = source_file.read()
+    with open(destination_file_path, "w") as destination_file:
+        destination_file.write(content)
+
 
 if __name__ == "__main__":
     main()
