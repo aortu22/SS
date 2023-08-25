@@ -45,7 +45,7 @@ public class Bird extends Particle{
 
         // Clean neighbours, the code that calls this must make sure to set them again
         this.neighbours.clear();
-        this.futureAngle =  Math.atan2(sinProm, cosProm) + deltaTheta;
+        this.futureAngle =  Math.toDegrees(Math.atan2(sinProm, cosProm)) + deltaTheta;
         if(this.futureAngle < 0){
             this.futureAngle += 360;
         }
@@ -80,8 +80,8 @@ public class Bird extends Particle{
     }
     
     public void setNextPosition(double gridSize,double deltaTime){
-        double x=getX()+v*deltaTime*+Math.cos(Math.toRadians(futureAngle));
-        double y=getY()+v*deltaTime*+Math.sin(Math.toRadians(futureAngle));
+        double x=getX()+v*deltaTime*Math.cos(Math.toRadians(futureAngle));
+        double y=getY()+v*deltaTime*Math.sin(Math.toRadians(futureAngle));
         setPosition(x>gridSize?x-gridSize:(x<0?x+gridSize:x),y>gridSize?y-gridSize:(y<0?y+gridSize:y));
     }
 

@@ -8,7 +8,7 @@ public class App
 {
 
     public static final int iterations = 501;
-    public static final int tries = 100;
+    public static final int tries = 1;
     public static double error = 0.0;
 
     public static int N = 0;
@@ -66,19 +66,18 @@ public class App
     }
     public static void main( String[] args )
     {
-        List<Double> eta = new ArrayList<>(Arrays.asList(0.0,
+        //List<Double> eta = new ArrayList<>(Arrays.asList(0.0,
 //                0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9,
-            1.0,
+          //  1.0,
 //                1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9,
-            2.0,
+            //2.0,
 //                2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9,
-            3.0,
+            //3.0,
 //                3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9,
-            4.0,
+            //4.0,
 //                4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9,
-                5.0));
-        for (Double n: eta) {
-            System.out.println("For eta: " + n);
+             //   5.0));
+            //System.out.println("For eta: " + n);
             String jsonFilePathStatic = "src/main/java/main/static.txt";
             String jsonFilePathDynamic = "src/main/java/main/dynamic.txt";
             Map<Integer, List<Double>> orderStatList = new HashMap<>();
@@ -91,7 +90,7 @@ public class App
             double L = 0.0;
             int N = 0;
             double Rc = 0.0;
-//            double n = 0.0;
+            double n = 0.0;
             double dT = 0.0;
             try {
                 BufferedReader br = new BufferedReader(new FileReader(jsonFilePathStatic));
@@ -100,14 +99,14 @@ public class App
                 L = Double.parseDouble(br.readLine());
                 N = Integer.parseInt(br.readLine());
                 Rc = Double.parseDouble(br.readLine());
-//                n = Double.parseDouble(br.readLine());
+                n = Double.parseDouble(br.readLine());
                 App.error = n;
                 App.N = N;
                 dT = Double.parseDouble(br.readLine());
                 // Leer y retornar solo el primer valor de cada par de valores
                 int i = 0;
                 while (br.readLine() != null) {
-                    double v = 0.03; //desp lo pedimos por input o algo
+                    double v = 0.3; //desp lo pedimos por input o algo
                     Bird bird = new Bird(i, v);
                     birdList.add(bird);
                     i++;
@@ -154,11 +153,13 @@ public class App
                     grid.addToCell(bird);
                 }
                 int i = 1;
+                Bird randomBird=birdList.get(0);
                 while(i < iterations){
                     grid.setNeighbours(Rc);
                     orderStatList.get(i-1).add(grid.evolveBirdsT(n,dT,N));
                     grid.updateDynamicAndOutput(i,N);
                     i++;
+                    System.out.println(randomBird.getTheta());
                 }
                 j++;
             }
@@ -169,4 +170,4 @@ public class App
         }
 
     }
-}
+

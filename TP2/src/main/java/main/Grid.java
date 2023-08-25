@@ -80,33 +80,13 @@ public class Grid {
                     }
                 }
                 //checking if particles in same cell are neighbours
-                if(rc>Math.sqrt(Math.pow(cellLength,2)*2)){
-                    for(Particle particle: gridParticles){
-                        for (Particle particle2: gridParticles){
-                            if(!particle.equals(particle2)){
-                                particle.addNeighbour(particle2);
-                                particle2.addNeighbour(particle);
-                            }
-                        }
-                    }
-                }else{
-                    particlesArray = new ArrayList<>();
-                    particlesArray.addAll(gridParticles);
-                    for(int k=0;k<gridParticles.size();k++){
-                        for(int t=k;t<gridParticles.size();t++){
-                            if(!particlesArray.get(k).equals(particlesArray.get(t))){
-                                if(spherical){
-                                    if(particlesArray.get(k).isSomeNeighbour(particlesArray.get(t), rc,length)){
-                                        particlesArray.get(k).addNeighbour(particlesArray.get(t));
-                                        particlesArray.get(t).addNeighbour(particlesArray.get(k));
-                                    }
-                                }else{
-                                    if(particlesArray.get(k).isNeighbour(particlesArray.get(t), rc)){
-                                        particlesArray.get(k).addNeighbour(particlesArray.get(t));
-                                        particlesArray.get(t).addNeighbour(particlesArray.get(k));
-                                    }
-                                }
-                            }
+                particlesArray = new ArrayList<>();
+                particlesArray.addAll(gridParticles);
+                for(int k=0;k<gridParticles.size();k++){
+                    for(int t=k+1;t<gridParticles.size();t++){
+                        if(particlesArray.get(k).isNeighbour(particlesArray.get(t), rc)){
+                            particlesArray.get(k).addNeighbour(particlesArray.get(t));
+                            particlesArray.get(t).addNeighbour(particlesArray.get(k));
                         }
                     }
                 }
