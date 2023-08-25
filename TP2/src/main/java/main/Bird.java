@@ -35,20 +35,21 @@ public class Bird extends Particle{
     }
 
     public void updateAngles(double error){
+        if(neighbours.size()>0){
         double sinProm = getThetaNeighboursProm(true);
         double cosProm = getThetaNeighboursProm(false);
 
-        Random random = new Random();
         double minValue = -error/2;
         double maxValue = error/2;
-        double deltaTheta = minValue + (maxValue - minValue + 1) * random.nextDouble();
+        double deltaTheta=minValue + (maxValue - minValue) * Math.random();
 
         // Clean neighbours, the code that calls this must make sure to set them again
         this.neighbours.clear();
         this.futureAngle =  Math.toDegrees(Math.atan2(sinProm, cosProm)) + deltaTheta;
         if(this.futureAngle < 0){
             this.futureAngle += 360;
-        }
+        }}
+        else{futureAngle=theta;}
     }
 
 //    Update the variables with futures vals and clean to start again

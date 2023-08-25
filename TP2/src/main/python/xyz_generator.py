@@ -1,3 +1,4 @@
+import math
 def read_static_data(static_filename):
 # Read and extract wall length, number of particles, and frame distance
 # Return wall_length, num_particles, frame_distance
@@ -68,11 +69,11 @@ def create_xyz_file(output_xyz_filename, static_walls, dynamic_particles_data, o
             output_xyz_file.write(f"Frame {i}\n")
             i+=1
             for wall in static_walls:
-                output_xyz_file.write(f"1 {wall[0]} {wall[1]}\n")
+                output_xyz_file.write(f"1 {wall[0]} {wall[1]} 0 0\n")
             # Write dynamic particles for the frame
             for particle in frame_particles:
                 x, y, angle = particle
-                output_xyz_file.write(f"2 {x} {y} {angle}\n")
+                output_xyz_file.write(f"2 {x} {y} {math.cos(math.radians(angle))} {math.sin(math.radians(angle))}\n")
 
 
 def create_static_walls(wall_length):
