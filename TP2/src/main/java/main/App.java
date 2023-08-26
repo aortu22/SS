@@ -12,7 +12,7 @@ public class App
 
     public static int N = 0;
 
-    public static void saveOrderStat(Map<Integer, List<Double>> orderStatList){
+    public static void saveOrderStat(List<Double> orderStatList){
         
         try {
             String output = "src/main/python/order"+ N +".txt";
@@ -28,11 +28,8 @@ public class App
             bw.write( "n = " + noise + "\n");
             //Escribo la información de las particulas
             DecimalFormat df = new DecimalFormat("#.####");
-            for (Map.Entry<Integer, List<Double>> order : orderStatList.entrySet()) {
-                double sum = 0;
-                for(Double d : order.getValue())
-                    sum += d;
-                bw.write(df.format(sum) + "\n");
+            for (Double order : orderStatList) {
+                bw.write(df.format(order) + "\n");
             }
             bw.write("\n");
             bw.close();
@@ -67,20 +64,22 @@ public class App
         List<Double> eta =
 //                new ArrayList<>(Arrays.asList(0.2));
                 new ArrayList<>(Arrays.asList(0.0,
-                0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0,
-                1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0,
-                2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3.0,
-                3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 4.0,
-                4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9, 5.0));
+                0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9,
+                        1.0,
+                1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9,
+                        2.0,
+                2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9,
+                        3.0,
+                3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9,
+                        4.0,
+                4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9,
+                        5.0));
         for (Double n: eta) {
             System.out.println("For eta: " + n);
             reloadDynamicOutput();
             String jsonFilePathStatic = "src/main/java/main/static.txt";
             String jsonFilePathDynamic = "src/main/java/main/dynamic.txt";
-            Map<Integer, List<Double>> orderStatList = new HashMap<>();
-            for (int i = 0; i < iterations - 1; i++) {
-                orderStatList.put(i, new ArrayList<>());
-            }
+            List<Double> orderStatList = new ArrayList<>();
             Grid grid;
             List<Bird> birdList = new ArrayList<>();
             double maxR = 0.0;
@@ -148,7 +147,7 @@ public class App
             int i = 1;
             while(i < iterations){
                 grid.setNeighbours(Rc);
-                orderStatList.get(i-1).add(grid.evolveBirdsT(n,dT,N));
+                orderStatList.add(grid.evolveBirdsT(n,dT,N));
                 grid.updateDynamicAndOutput(i,N);
                 i++;
             }
