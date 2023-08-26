@@ -255,7 +255,7 @@ public class Grid {
 //        }
 //    }
 
-    public double evolveBirdsT(double noise,double delta_time,int N){
+    public double evolveBirdsT(double noise,double delta_time,int N,double velocity){
         Set<Particle> cellParticules;
         Double[] orderSumatory = new Double[2];
         orderSumatory[0] = 0.0;
@@ -287,9 +287,9 @@ public class Grid {
             bird.cleanNeighbours();
         }
 
-        orderSumatory[0] = orderSumatory[0]/N;
-        orderSumatory[1] = orderSumatory[1]/N;
-        return Math.sqrt(Math.pow(orderSumatory[0],2) + Math.pow(orderSumatory[1],2));
+        orderSumatoryTotal = Math.sqrt(Math.pow(orderSumatory[0],2) + Math.pow(orderSumatory[1],2))
+
+        return (1/ (N*velocity))*orderSumatoryTotal;
     }
 
 }
