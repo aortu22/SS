@@ -74,11 +74,12 @@ public class App
                         4.0,
                 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9,
                         5.0));
+        String jsonFilePathStatic = "src/main/java/main/static.txt";
+        String jsonFilePathDynamic = "src/main/java/main/dynamic.txt";
+
         for (Double n: eta) {
             System.out.println("For eta: " + n);
             reloadDynamicOutput();
-            String jsonFilePathStatic = "src/main/java/main/static.txt";
-            String jsonFilePathDynamic = "src/main/java/main/dynamic.txt";
             List<Double> orderStatList = new ArrayList<>();
             Grid grid;
             List<Bird> birdList = new ArrayList<>();
