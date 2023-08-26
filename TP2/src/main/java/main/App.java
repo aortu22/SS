@@ -76,7 +76,7 @@ public class App
                         5.0));
         String jsonFilePathStatic = "src/main/java/main/static.txt";
         String jsonFilePathDynamic = "src/main/java/main/dynamic.txt";
-
+        double v = 0.3; //desp lo pedimos por input o algo
         for (Double n: eta) {
             System.out.println("For eta: " + n);
             reloadDynamicOutput();
@@ -103,7 +103,6 @@ public class App
                 // Leer y retornar solo el primer valor de cada par de valores
                 int i = 0;
                 while (br.readLine() != null) {
-                    double v = 0.3; //desp lo pedimos por input o algo
                     Bird bird = new Bird(i, v);
                     birdList.add(bird);
                     i++;
@@ -148,7 +147,7 @@ public class App
             int i = 1;
             while(i < iterations){
                 grid.setNeighbours(Rc);
-                orderStatList.add(grid.evolveBirdsT(n,dT,N));
+                orderStatList.add(grid.evolveBirdsT(n,dT,N,v));
                 grid.updateDynamicAndOutput(i,N);
                 i++;
             }
