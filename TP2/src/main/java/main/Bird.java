@@ -18,7 +18,7 @@ public class Bird extends Particle{
     }
 
     public void setTheta(double theta) {
-        this.theta = theta;
+        this.theta = Math.toRadians(theta);
     }
 
     public double getTheta() {
@@ -55,7 +55,7 @@ public class Bird extends Particle{
 
 //    Update the variables with futures vals and clean to start again
     public void setFutureAngle() {
-        this.theta = this.futureAngle;
+        setTheta(this.futureAngle);
         this.futureAngle = 0;
     }
 
@@ -63,16 +63,16 @@ public class Bird extends Particle{
         double prom = 0;
         // Including the given particle
         if(isSin){
-            prom+=Math.sin(Math.toRadians(this.theta));
+            prom+=Math.sin(this.theta);
         }else{
-            prom+=Math.cos(Math.toRadians(this.theta));
+            prom+=Math.cos(this.theta);
         }
         // And its neighbours
         for (Bird n: neighbours) {
             if(isSin){
-                prom+=Math.sin(Math.toRadians(n.theta));
+                prom+=Math.sin(n.theta);
             }else{
-                prom+=Math.cos(Math.toRadians(n.theta));
+                prom+=Math.cos(n.theta);
             }
         }
 
@@ -80,8 +80,8 @@ public class Bird extends Particle{
     }
     
     public void setNextPosition(double gridSize,double deltaTime){
-        double x=getX()+v*deltaTime*Math.cos(Math.toRadians(theta));
-        double y=getY()+v*deltaTime*Math.sin(Math.toRadians(theta));
+        double x=getX()+v*deltaTime*Math.cos(theta);
+        double y=getY()+v*deltaTime*Math.sin(theta);
         setPosition(x>gridSize?x-gridSize:(x<0?x+gridSize:x),y>gridSize?y-gridSize:(y<0?y+gridSize:y));
     }
 

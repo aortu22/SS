@@ -212,7 +212,7 @@ public class Grid {
             for (Particle particle: allParticles) {
                 particleInfo.append(df.format(particle.getX())).append(' ').append(df.format(particle.getY()));
                 if(particle instanceof Bird bird){
-                    particleInfo.append(' ').append(df.format(bird.getTheta()));
+                    particleInfo.append(' ').append(df.format(Math.toDegrees(bird.getTheta())));
                 }
                 particleInfo.append('\n');
             }
@@ -266,8 +266,8 @@ public class Grid {
                 for (Particle particle: cellParticules) {
                     ((Bird) particle).updateAngles(noise);
                     ((Bird) particle).setNextPosition(this.length, delta_time);
-                    orderSumatory[0] += ((Bird) particle).getV() * Math.sin(Math.toRadians(((Bird) particle).getTheta()));
-                    orderSumatory[1] += ((Bird) particle).getV() * Math.cos(Math.toRadians(((Bird) particle).getTheta()));
+                    orderSumatory[0] += ((Bird) particle).getV() * Math.sin(((Bird) particle).getTheta());
+                    orderSumatory[1] += ((Bird) particle).getV() * Math.cos(((Bird) particle).getTheta());
                 }
             }
         }

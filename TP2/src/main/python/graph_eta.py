@@ -50,7 +50,7 @@ def main():
             n40_std_vec[i] = np.std(n40_vec[i])
             i += 1
 
-    n100_vec = np.zeros((len(eta), 1001), dtype=float)
+    n100_vec = np.zeros((len(eta), 701), dtype=float)
     n100_mean_vec = np.zeros(len(eta), dtype=float)
     n100_std_vec = np.zeros(len(eta), dtype=float)
     with open(n100_file, 'r') as n100_file:
@@ -58,7 +58,7 @@ def main():
         i = 0
         while i < len(eta):
             j = 0
-            while j < 1500:
+            while j < 1800:
                 n100_file.readline()
                 j += 1
             j = 0
