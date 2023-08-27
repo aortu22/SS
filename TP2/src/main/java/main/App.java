@@ -7,7 +7,7 @@ import java.io.*;
 public class App
 {
 
-    public static final int iterations = 1501;
+    public static final int iterations = 2501;
     public static double noise = 0.0;
 
     public static int N = 0;

@@ -5,7 +5,7 @@ def main():
     density = 0.16
     n40_file = './order40.txt'
     n100_file = './order100.txt'
-    # n400_file = './order400.txt'
+    n400_file = './order400.txt'
     # n4000_file = './order4000.txt'
 
     eta = [0.0,
@@ -22,7 +22,7 @@ def main():
 
     N = [40, 100, 400, 4000]
 
-    n40_vec = np.zeros((len(eta), 1101), dtype=float)
+    n40_vec = np.zeros((len(eta), 1401), dtype=float)
     n40_mean_vec = np.zeros(len(eta), dtype=float)
     n40_std_vec = np.zeros(len(eta), dtype=float)
     with open(n40_file, 'r') as n40_file:
@@ -30,7 +30,7 @@ def main():
         i = 0
         while i < len(eta):
             j = 0
-            while j < 400:
+            while j < 1100:
                 n40_file.readline()
                 j += 1
             j = 0
@@ -50,7 +50,7 @@ def main():
             n40_std_vec[i] = np.std(n40_vec[i])
             i += 1
 
-    n100_vec = np.zeros((len(eta), 701), dtype=float)
+    n100_vec = np.zeros((len(eta), 1001), dtype=float)
     n100_mean_vec = np.zeros(len(eta), dtype=float)
     n100_std_vec = np.zeros(len(eta), dtype=float)
     with open(n100_file, 'r') as n100_file:
@@ -58,7 +58,7 @@ def main():
         i = 0
         while i < len(eta):
             j = 0
-            while j < 800:
+            while j < 1500:
                 n100_file.readline()
                 j += 1
             j = 0
@@ -77,41 +77,34 @@ def main():
             n100_mean_vec[i] = np.mean(n100_vec[i])
             n100_std_vec[i] = np.std(n100_vec[i])
             i += 1
-    # with open(n400_file, 'r') as n400_file:
-    #     value_for_eta = ''
-    #     prev = ''
-    #     for n in eta:
-    #         first_line = n400_file.readline()
-    #         second_line = n400_file.readline()
-    #         value_for_eta = second_line[:-1].replace(",", ".")
-    #         while True:
-    #             line = n400_file.readline()
-    #             if not line:  # If readline() returns an empty string, we've reached the end of the file
-    #                 break
-    #             if line == "\n":
-    #                 if prev != "\n":
-    #                     # value_for_eta = prev[:-1].replace(",", ".")
-    #                     break
-    #             prev = line
-    #         n400_vec.append(float(value_for_eta))
-    #
-    # with open(n4000_file, 'r') as n4000_file:
-    #     value_for_eta = ''
-    #     prev = ''
-    #     for n in eta:
-    #         first_line = n4000_file.readline()
-    #         second_line = n4000_file.readline()
-    #         value_for_eta = second_line[:-1].replace(",", ".")
-    #         while True:
-    #             line = n4000_file.readline()
-    #             if not line:  # If readline() returns an empty string, we've reached the end of the file
-    #                 break
-    #             if line == "\n":
-    #                 if prev != "\n":
-    #                     # value_for_eta = prev[:-1].replace(",", ".")
-    #                     break
-    #             prev = line
-    #         n4000_vec.append(float(value_for_eta))
+
+    n400_vec = np.zeros((len(eta), 201), dtype=float)
+    n400_mean_vec = np.zeros(len(eta), dtype=float)
+    n400_std_vec = np.zeros(len(eta), dtype=float)
+    with open(n400_file, 'r') as n400_file:
+        prev = ''
+        i = 0
+        while i < len(eta):
+            j = 0
+            while j < 2300:
+                n400_file.readline()
+                j += 1
+            j = 0
+            while True:
+                line = n400_file.readline()
+                if not line:  # If readline() returns an empty string, we've reached the end of the file
+                    break
+                if line == "\n":
+                    if prev != "\n":
+                        break
+                else:
+                    n400_vec[i, j] = float(line[:-1].replace(",", "."))
+                j += 1
+                prev = line
+
+            n400_mean_vec[i] = np.mean(n400_vec[i])
+            n400_std_vec[i] = np.std(n400_vec[i])
+            i += 1
 
     plt.figure(figsize=(10, 6))
 
@@ -120,6 +113,7 @@ def main():
     # Create lines for the vectors
     plt.errorbar(eta, n40_mean_vec, yerr=n40_std_vec / np.sqrt(len(n40_std_vec)), fmt='-o',label="N=40")
     plt.errorbar(eta, n100_mean_vec, yerr=n100_std_vec / np.sqrt(len(n100_std_vec)), fmt='-o',label="N=100")
+    plt.errorbar(eta, n400_mean_vec, yerr=n400_std_vec / np.sqrt(len(n400_std_vec)), fmt='-o',label="N=400")
 
     # plt.plot(eta, n100_mean_vec, label="N=100")
     # plt.plot(eta, n400_vec, label="N=400")

@@ -287,7 +287,7 @@ public class Grid {
             bird.cleanNeighbours();
         }
 
-        orderSumatoryTotal = Math.sqrt(Math.pow(orderSumatory[0],2) + Math.pow(orderSumatory[1],2))
+        double orderSumatoryTotal = Math.sqrt(Math.pow(orderSumatory[0],2) + Math.pow(orderSumatory[1],2));
 
         return (1/ (N*velocity))*orderSumatoryTotal;
     }

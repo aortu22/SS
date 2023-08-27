@@ -5,7 +5,7 @@ import numpy as np
 # y ponerlo en hraph_eta para el calculo de la media y el desvio estandar
 def main():
     density = 0.16
-    n100_file = './order100.txt'
+    n_file = './order400.txt'
 
     eta = [0.0,
            0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9,
@@ -19,16 +19,16 @@ def main():
            4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9,
            5.0]
 
-    n_vec = np.zeros((len(eta), 1501), dtype=float)
+    n_vec = np.zeros((len(eta), 2501), dtype=float)
 
-    with open(n100_file, 'r') as n100_file:
+    with open(n_file, 'r') as n_file:
         prev = ''
         i = 0
         while i < len(eta):
             j = 0
-            n100_file.readline()  # Jump n = eta in file
+            n_file.readline()  # Jump n = eta in file
             while True:
-                line = n100_file.readline()
+                line = n_file.readline()
                 if not line:  # If readline() returns an empty string, we've reached the end of the file
                     break
                 if line == "\n":
@@ -41,7 +41,7 @@ def main():
             i += 1
     plt.figure(figsize=(10, 6))
     i = 0
-    numbers = [i for i in range(1501)]
+    numbers = [i for i in range(2501)]
 
     while i < len(eta):
         label = "η=" + str(eta[i])
@@ -57,7 +57,7 @@ def main():
     plt.xlabel("t")
     plt.title("Time and Va variation according to η with density " + str(density))
     plt.ylim(0, 1)
-    plt.xlim(0, 1501)
+    plt.xlim(0, 2501)
     plt.legend()
 
     # Show the plot
