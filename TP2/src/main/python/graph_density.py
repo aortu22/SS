@@ -6,7 +6,7 @@ def main():
     n100_file = './order_density100.txt'
     n400_file = './order_density400.txt'
 
-    density = [0.25, 1.25, 1.5, 1.75, 2.0]
+    density = [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0]
 
     N = [40, 100, 400]
 
