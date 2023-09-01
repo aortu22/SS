@@ -130,10 +130,10 @@ def main():
 
 
     # Create lines for the vectors
-    plt.errorbar(eta, n40_mean_vec, yerr=n40_std_vec / np.sqrt(len(n40_std_vec)), fmt='-o',label="N=40")
-    plt.errorbar(eta, n100_mean_vec, yerr=n100_std_vec / np.sqrt(len(n100_std_vec)), fmt='-o',label="N=100")
-    plt.errorbar(eta, n400_mean_vec, yerr=n400_std_vec / np.sqrt(len(n400_std_vec)), fmt='-o',label="N=400")
-    plt.errorbar(eta, n4000_mean_vec, yerr=n400_std_vec / np.sqrt(len(n4000_std_vec)), fmt='-o',label="N=4000")
+    plt.errorbar(eta, n40_mean_vec, yerr=n40_std_vec, fmt='-o', label="N=40")
+    plt.errorbar(eta, n100_mean_vec, yerr=n100_std_vec, fmt='-o', label="N=100")
+    plt.errorbar(eta, n400_mean_vec, yerr=n400_std_vec, fmt='-o', label="N=400")
+    plt.errorbar(eta, n4000_mean_vec, yerr=n400_std_vec, fmt='-o', label="N=4000")
 
 
     # Create boxes of info for N values

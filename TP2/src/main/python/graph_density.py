@@ -101,9 +101,9 @@ def main():
 
 
     # Create lines for the vectors
-    plt.errorbar(density, n40_mean_vec, yerr=n400_std_vec / np.sqrt(len(n40_std_vec)), fmt='-o',label="N=40")
-    plt.errorbar(density, n100_mean_vec, yerr=n100_std_vec / np.sqrt(len(n100_std_vec)), fmt='-o',label="N=100")
-    plt.errorbar(density, n400_mean_vec, yerr=n400_std_vec / np.sqrt(len(n400_std_vec)), fmt='-o',label="N=400")
+    plt.errorbar(density, n40_mean_vec, yerr=n400_std_vec, fmt='-o', label="N=40")
+    plt.errorbar(density, n100_mean_vec, yerr=n100_std_vec, fmt='-o', label="N=100")
+    plt.errorbar(density, n400_mean_vec, yerr=n400_std_vec, fmt='-o', label="N=400")
 
 
     # Create boxes of info for N values
