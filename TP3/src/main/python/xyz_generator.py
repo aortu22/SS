@@ -1,9 +1,9 @@
 import math
 def read_static_data(static_filename):
-# Read and extract wall length, number of particles, and frame distance
-# Return wall_length, num_particles, frame_distance
+    # Read and extract wall length, number of particles, and frame distance
+    # Return wall_length, num_particles, frame_distance
     with open(static_filename, 'r') as static_file:
-    # Read the first line to get wall length
+        # Read the first line to get wall length
         L = float(static_file.readline().strip())
         L_fixed = float(static_file.readline().strip())
 
@@ -31,8 +31,8 @@ def read_dynamic_data(dynamic_filename, num_particles):
 
 
 def read_output_data(output_filename):
-# Read and extract data for each frame (time, particle data)
-# Return a list of (time, particle_data) tuples
+    # Read and extract data for each frame (time, particle data)
+    # Return a list of (time, particle_data) tuples
     output_data = []
 
     with open(output_filename, 'r') as output_file:
@@ -71,7 +71,7 @@ def create_xyz_file(output_xyz_filename, static_walls, dynamic_particles_data, o
                 output_xyz_file.write(f"1 {wall[0]} {wall[1]}\n")
             # Write dynamic particles for the frame
             for particle in frame_particles:
-                x, y, angle = particle
+                x, y = particle
                 output_xyz_file.write(f"2 {x} {y}\n")
 
 
@@ -81,8 +81,8 @@ def create_static_walls(L_fixed,L):
     corner2 = (0.0, L_fixed)
     corner3 = (L_fixed, L_fixed)
     corner4 = (L_fixed, 0.0)
-    corner5 = (L_fixed * 2, (L_fixed - L ) / 2))
-    corner6 = (L_fixed * 2, L - (L_fixed - L ) / 2))
+    corner5 = (L_fixed * 2, (L_fixed - L ) / 2)
+    corner6 = (L_fixed * 2, L - (L_fixed - L ) / 2)
     static_walls = [corner1, corner2, corner3, corner4]
     return static_walls
 
