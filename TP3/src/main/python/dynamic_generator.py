@@ -20,9 +20,10 @@ def generar_archivo(nombre_archivo, n, L,R):
                 valor3 = round(random.uniform(0, 360), 2)
                 if checkNewParticle(particle_created, valor1, valor2, R):
                     break
-            particle = Particle()
+            particle = Particle(1)
             particle.set_postion(valor1, valor2)
             particle_created.append(particle)
+            print(f"{valor1} {valor2} {valor3}\n")
             f.write(f"{valor1} {valor2} {valor3}\n")
 
 def main():

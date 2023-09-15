@@ -107,7 +107,9 @@ public class App
             e.printStackTrace();
         }
         List<Wall> wallList = initializeWalls(L,L_fixed);
-        EventDrivenSim sim=new EventDrivenSim(birdList,wallList);
+        List<Vertix> vertixList = new ArrayList<>();
+//        List<Vertix> vertixList = initializeVertix(L,L_fixed);
+        EventDrivenSim sim=new EventDrivenSim(birdList, vertixList, wallList);
         deleteOutput();
         sim.updateOutput();
         double t = 0.00;

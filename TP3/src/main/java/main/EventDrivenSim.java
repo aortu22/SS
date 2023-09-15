@@ -8,27 +8,38 @@ import java.util.Locale;
 
 public class EventDrivenSim {
     private final List<Bird> particleList;
-    private final List<Wall> walls;
+    private final List<Vertix> vertixList;
+    private final List<Wall> wallList;
     private Collision  lastCollision;
     private double time;
 
-    public EventDrivenSim(List<Bird> particleList, List<Wall> walls) {
+    public EventDrivenSim(List<Bird> particleList, List<Vertix> vertixList, List<Wall> wallList) {
         this.particleList = particleList;
         this.lastCollision = null;
-        this.walls = walls;
-        for (Wall wall:walls) {
-            for(Collision collision: wall.getCollisionList()){
+        this.wallList = wallList;
+        this.vertixList = vertixList;
 
-            }
-        }
         Bird[] birds= (Bird[]) getParticleList().toArray();
         for(int i=0;i< birds.length ;i++){
+            Bird bird = birds[i];
+            // Choque con otras particulas
             for(int j=i+1;j< birds.length;j++){
-                Collision collision=new Collision(birds[i],birds[j]);
-                birds[i].getCollisionList().add(collision);
+                Collision collision=new Collision(bird,birds[j], false);
+                bird.getCollisionList().add(collision);
                 birds[j].getCollisionList().add(collision);
             }
+            // Choque con vertices
+            for (Vertix vertix : vertixList) {
+                Collision collision = new Collision(bird, vertix, true);
+                bird.getCollisionList().add(collision);
+            }
+            // Choque con paredes
+            for (Wall wall : wallList){
+                Collision collision = new Collision(bird, wall);
+                bird.getCollisionList().add(collision);
+            }
         }
+
         this.time=0;
     }
 
@@ -37,16 +48,41 @@ public class EventDrivenSim {
     }
 
     public List<Wall> getWalls() {
-        return walls;
+        return wallList;
     }
 
     //TENER EN CUENTA QUE LAS OTRAS COLICIONES TIENEN EL TIEMPO RELATIVO
     public Collision calculateNextStep(){
         double minStep = Double.MAX_VALUE-100000;
         Collision nextCollision = null;
+        Bird[] birds= (Bird[]) getParticleList().toArray();
+        for(int i=0;i< birds.length ;i++) {
+            List<Collision> birdCollisionList = birds[i].getCollisionList();
+            // Choque con otras particulas
+            for (int j = i + 1; j < birds.length; j++) {
+                double t = birds[i].birdColisionTime(birds[j])+time;
+                Collision collision = birdCollisionList.get(birdCollisionList.indexOf(new Collision(birds[i],birds[j], false)));
+                collision.setCollisionTime(t);
+                if(t<minStep){
+                    minStep = t;
+                    nextCollision = collision;
+                }
+            }
 
-        for(Wall wall:walls){
-            for (Collision collision: wall.getCollisionList()){
+            // Choque con vertices
+            for (Vertix vertix : vertixList) {
+                double t = birds[i].birdColisionTime(vertix)+time;
+                Collision collision = birdCollisionList.get(birdCollisionList.indexOf(new Collision(birds[i],vertix, true)));
+                collision.setCollisionTime(t);
+                if(t<minStep){
+                    minStep = t;
+                    nextCollision = collision;
+                }
+            }
+
+            // Choque con paredes
+            for (Wall wall : wallList){
+                Collision collision = birdCollisionList.get(birdCollisionList.indexOf(new Collision(birds[i],wall)));
                 double t = getWallCollisionTime(collision)+time;
                 collision.setCollisionTime(t);
                 if(t<minStep || nextCollision == null){
@@ -55,21 +91,6 @@ public class EventDrivenSim {
                 }
             }
         }
-        Bird[] birds= (Bird[]) getParticleList().toArray();
-        for(int i=0;i< birds.length ;i++) {
-            for (int j = i + 1; j < birds.length; j++) {
-                double t = birds[i].birdColisionTime(birds[j])+time;
-                List<Collision> birdCollisionList = birds[i].getCollisionList();
-                Collision collision = birdCollisionList.get(birdCollisionList.indexOf(new Collision(birds[i],birds[j])));
-                collision.setCollisionTime(t);
-                if(t<minStep){
-                    minStep = t;
-                    nextCollision = collision;
-                }
-            }
-        }
-
-        //        TODO: choque con vertices
 
         return  nextCollision;
     }
@@ -86,10 +107,16 @@ public class EventDrivenSim {
         Bird bird1 = collision.getBird1();
         if(collision.isWallCollision()){
             if(collision.getWall().isHorizontal()){
-                bird1.setVy(- bird1.getVy());
+                bird1.setVy(-bird1.getVy());
             }else{
-                bird1.setVx(- bird1.getVx());
+                bird1.setVx(-bird1.getVx());
             }
+        }else if(collision.isVertixCollision()){
+//            TODO: si conseguimos el angulo estaria bueno hacer esto:
+//            Vertix vertix = collision.getVertix();
+//            List<Double> vValues = vertix.vertixColision(angle,bird1.getVx(), bird1.getVy());
+            bird1.setVx(-bird1.getVx());
+            bird1.setVy(-bird1.getVy());
         }else{
             Bird bird2 = collision.getBird2();
             double deltaX=  bird2.getX() - bird1.getX();
