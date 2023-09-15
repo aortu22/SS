@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0ab8a197-6fc8-4bfa-9388-6a5289bcb3d1" name="Changes" comment="Changes">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="0ab8a197-6fc8-4bfa-9388-6a5289bcb3d1" name="Changes" comment="Changes" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -19,8 +17,10 @@
     <setting file="file://$PROJECT_DIR$/TP2/src/main/java/main/Grid.java" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TP2/src/main/java/main/Particle.java" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TP1/src/main/java/main/App.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TP3/src/main/python/dynamic_generator.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TP2/src/main/java/main/App.java" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TP2/src/main/java/main/Cell.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TP3/src/main/python/xyz_generator.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TP2/src/main/java/main/Position.java" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TP2/src/main/java/main/Bird.java" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -76,6 +76,7 @@
       <workItem from="1693430304339" duration="37000" />
       <workItem from="1694784094232" duration="472000" />
       <workItem from="1694784589770" duration="15000" />
+      <workItem from="1694790445330" duration="1112000" />
     </task>
     <servers />
   </component>

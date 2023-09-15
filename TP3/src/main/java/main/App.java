@@ -8,7 +8,7 @@ public class App
 {
 
     public static final int maxT = 100;
-
+    public static final double writingPeriod = 0.1;
     public static int N = 0;
 
     public static void deleteOutput(){
@@ -114,7 +114,7 @@ public class App
         }
         List<Wall> wallList = initializeWalls(L,L_fixed);
         List<Vertix> vertixList = initializeVertix(L,L_fixed);
-        EventDrivenSim sim=new EventDrivenSim(birdList, vertixList, wallList);
+        EventDrivenSim sim=new EventDrivenSim(birdList, vertixList, wallList,writingPeriod);
         deleteOutput();
         sim.updateOutput();
         double t = 0.00;

@@ -13,8 +13,10 @@ public class EventDrivenSim {
     private final List<Wall> wallList;
     private Collision  lastCollision;
     private double time;
+    private double nextWritingTime;
+    private double writingPeriod;
 
-    public EventDrivenSim(List<Bird> particleList, List<Vertix> vertixList, List<Wall> wallList) {
+    public EventDrivenSim(List<Bird> particleList, List<Vertix> vertixList, List<Wall> wallList,double writingPeriod) {
         this.particleList = particleList;
         this.lastCollision = null;
         this.wallList = wallList;
@@ -42,6 +44,8 @@ public class EventDrivenSim {
         }
 
         this.time=0;
+        this.nextWritingTime = 0;
+        this.writingPeriod = writingPeriod;
     }
 
     public List<Bird> getParticleList() {
@@ -195,6 +199,10 @@ public class EventDrivenSim {
 
     }
     public void updateDynamicAndOutput(Double t, int N){
+        if(t < nextWritingTime){
+            return;
+        }
+        nextWritingTime = (t % writingPeriod) * writingPeriod + writingPeriod;
         Locale locale = new Locale("en", "US");
         try {
             String dynamic = "src/main/java/main/dynamic.txt";
@@ -232,6 +240,7 @@ public class EventDrivenSim {
 
         updateOutput();
     }
+
     void addImpulse(double impulse){
         Locale locale = new Locale("en", "US");
         try {
