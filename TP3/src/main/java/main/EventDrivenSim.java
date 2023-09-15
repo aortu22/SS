@@ -20,7 +20,7 @@ public class EventDrivenSim {
         this.wallList = wallList;
         this.vertixList = vertixList;
 
-        Bird[] birds= (Bird[]) getParticleList().toArray();
+        Bird[] birds= (Bird[]) getParticleList().toArray(new Bird[particleList.size()]);
         for(int i=0;i< birds.length ;i++){
             Bird bird = birds[i];
             // Choque con otras particulas
@@ -56,7 +56,7 @@ public class EventDrivenSim {
     public Collision calculateNextStep(){
         double minStep = Double.MAX_VALUE-100000;
         Collision nextCollision = null;
-        Bird[] birds= (Bird[]) getParticleList().toArray();
+        Bird[] birds= (Bird[]) getParticleList().toArray(new Bird[particleList.size()]);
         for(int i=0;i< birds.length ;i++) {
             List<Collision> birdCollisionList = birds[i].getCollisionList();
             // Choque con otras particulas

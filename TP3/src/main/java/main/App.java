@@ -7,7 +7,7 @@ import java.io.*;
 public class App
 {
 
-    public static final int maxT = 1000;
+    public static final int maxT = 100;
 
     public static int N = 0;
 
