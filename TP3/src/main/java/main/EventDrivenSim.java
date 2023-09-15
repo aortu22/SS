@@ -3,6 +3,7 @@ package main;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -107,9 +108,11 @@ public class EventDrivenSim {
         Bird bird1 = collision.getBird1();
         if(collision.isWallCollision()){
             if(collision.getWall().isHorizontal()){
-                bird1.setVy(-bird1.getVy());
+                bird1.setVy(- bird1.getVy());
+                addImpulse(bird1.getM()*Math.abs(bird1.getVy()));
             }else{
-                bird1.setVx(-bird1.getVx());
+                bird1.setVx(- bird1.getVx());
+                addImpulse(bird1.getM()*Math.abs(bird1.getVx()));
             }
         }else{
             Bird bird2 = collision.getBird2();
@@ -129,13 +132,16 @@ public class EventDrivenSim {
             double J = 2 * bird1.getM() * bird2.getM() * deltaVdeltaR / (phi * (bird1.getM() + bird2.getM()));
             double Jx = J * deltaX/ phi;
             double Jy = J * deltaY/ phi;
-
+            double vx= bird1.getVx();
+            double vy= bird1.getVy();
             bird1.setVx(bird1.getVx() + Jx / bird1.getM());
             bird1.setVy(bird1.getVy() + Jy / bird1.getM());
 //            Si es colision con vertice, no updateo al vertice
             if(!collision.isVertixCollision()){
                 bird2.setVx(bird2.getVx() + Jx / bird2.getM());
                 bird2.setVy(bird2.getVy() + Jy / bird2.getM());
+            }else{
+                addImpulse(Math.abs(bird1.getVx()-vx)+Math.abs(bird1.getVy())-vy);
             }
         }
     }
@@ -225,5 +231,26 @@ public class EventDrivenSim {
         }
 
         updateOutput();
+    }
+    void addImpulse(double impulse){
+        Locale locale = new Locale("en", "US");
+        try {
+            String dynamic = "src/main/java/main/impulse.txt";
+            File file = new File(dynamic);
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            // Parameter false make us write stepping in the information
+            FileWriter fw = new FileWriter(file, false);
+            BufferedWriter bw = new BufferedWriter(fw);
+            StringBuilder info = new StringBuilder();
+            DecimalFormat df = new DecimalFormat("0.00", new DecimalFormatSymbols(locale));
+            info.append(df.format(time)).append(" ").append(df.format(impulse));
+            bw.write(info.toString());
+            bw.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

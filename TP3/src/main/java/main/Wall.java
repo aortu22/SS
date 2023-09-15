@@ -35,4 +35,7 @@ public class Wall {
     public boolean isHorizontal() {
         return horizontal;
     }
+    public double getLength(){
+        return horizontal? Math.abs(firstPoint.getX()- secondPoint.getX()):Math.abs(getFirstPoint().getY()-secondPoint.getY());
+    }
 }
