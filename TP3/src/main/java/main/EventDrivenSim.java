@@ -111,12 +111,6 @@ public class EventDrivenSim {
             }else{
                 bird1.setVx(-bird1.getVx());
             }
-        }else if(collision.isVertixCollision()){
-//            TODO: si conseguimos el angulo estaria bueno hacer esto:
-//            Vertix vertix = collision.getVertix();
-//            List<Double> vValues = vertix.vertixColision(angle,bird1.getVx(), bird1.getVy());
-            bird1.setVx(-bird1.getVx());
-            bird1.setVy(-bird1.getVy());
         }else{
             Bird bird2 = collision.getBird2();
             double deltaX=  bird2.getX() - bird1.getX();
@@ -138,9 +132,11 @@ public class EventDrivenSim {
 
             bird1.setVx(bird1.getVx() + Jx / bird1.getM());
             bird1.setVy(bird1.getVy() + Jy / bird1.getM());
-
-            bird2.setVx(bird2.getVx() + Jx / bird2.getM());
-            bird2.setVy(bird2.getVy() + Jy / bird2.getM());
+//            Si es colision con vertice, no updateo al vertice
+            if(!collision.isVertixCollision()){
+                bird2.setVx(bird2.getVx() + Jx / bird2.getM());
+                bird2.setVy(bird2.getVy() + Jy / bird2.getM());
+            }
         }
     }
 
@@ -212,7 +208,7 @@ public class EventDrivenSim {
             // Writting particles information
             StringBuilder particleInfo = new StringBuilder();
             DecimalFormat df = new DecimalFormat("0.00", new DecimalFormatSymbols(locale));
-            for (Wall wall: this.walls) {
+            for (Wall wall: this.wallList) {
                 particleInfo.append(df.format(wall.getFirstPoint().getX())).append(' ').append(df.format(wall.getFirstPoint().getY()));
                 particleInfo.append(' ').append(df.format(wall.getSecondPoint().getX())).append(' ').append(df.format(wall.getSecondPoint().getY()));
                 particleInfo.append('\n');

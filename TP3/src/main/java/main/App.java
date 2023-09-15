@@ -46,6 +46,12 @@ public class App
         return wallList;
     }
 
+    public static List<Vertix> initializeVertix(double L,double L_fixed){
+        List<Vertix> vertixList = new ArrayList<>();
+        vertixList.add(new Vertix(-1, L_fixed, (L_fixed-L)/2));
+        vertixList.add(new Vertix(-2, L_fixed, (L-L_fixed)/2));
+        return vertixList;
+    }
     public static void main( String[] args )
     {
         String jsonFilePathStatic = "src/main/java/main/static.txt";
@@ -107,8 +113,7 @@ public class App
             e.printStackTrace();
         }
         List<Wall> wallList = initializeWalls(L,L_fixed);
-        List<Vertix> vertixList = new ArrayList<>();
-//        List<Vertix> vertixList = initializeVertix(L,L_fixed);
+        List<Vertix> vertixList = initializeVertix(L,L_fixed);
         EventDrivenSim sim=new EventDrivenSim(birdList, vertixList, wallList);
         deleteOutput();
         sim.updateOutput();
