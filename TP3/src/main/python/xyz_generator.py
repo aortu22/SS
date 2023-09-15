@@ -4,14 +4,13 @@ def read_static_data(static_filename):
 # Return wall_length, num_particles, frame_distance
     with open(static_filename, 'r') as static_file:
     # Read the first line to get wall length
-        wall_length = float(static_file.readline().strip())
+        L = float(static_file.readline().strip())
+        L_fixed = float(static_file.readline().strip())
 
-        # Read the second line to get number of particles
+        M = float(static_file.readline().strip())
         num_particles = int(static_file.readline().strip())
 
-        # Read the third line to get frame distance
-        frame_distance = float(static_file.readline().strip())
-    return wall_length, num_particles, frame_distance
+    return L, L_fixed, num_particles
 
 
 def read_dynamic_data(dynamic_filename, num_particles):
@@ -25,8 +24,8 @@ def read_dynamic_data(dynamic_filename, num_particles):
 
         for _ in range(num_particles):
             line = dynamic_file.readline().strip()
-            x, y, angle = map(float, line.split())
-            particles.append((x, y, angle))
+            x, y,vx,vy = map(float, line.split())
+            particles.append((x, y))
 
     return time,particles
 
@@ -47,8 +46,8 @@ def read_output_data(output_filename):
             frame_particles = []
             while i < len(lines) and lines[i].strip() != "":
                 particle_data = lines[i].strip().split()
-                x, y, angle = map(float, particle_data)
-                frame_particles.append((x, y, angle))
+                x, y,vx,vy = map(float, particle_data)
+                frame_particles.append((x, y))
                 i += 1
 
             output_data.append((time, frame_particles))
@@ -69,20 +68,21 @@ def create_xyz_file(output_xyz_filename, static_walls, dynamic_particles_data, o
             output_xyz_file.write(f"Frame {i}\n")
             i+=1
             for wall in static_walls:
-                output_xyz_file.write(f"1 {wall[0]} {wall[1]} 0 0\n")
+                output_xyz_file.write(f"1 {wall[0]} {wall[1]}\n")
             # Write dynamic particles for the frame
             for particle in frame_particles:
                 x, y, angle = particle
-                output_xyz_file.write(f"2 {x} {y} {math.cos(math.radians(angle))} {math.sin(math.radians(angle))}\n")
+                output_xyz_file.write(f"2 {x} {y}\n")
 
 
-def create_static_walls(wall_length):
+def create_static_walls(L_fixed,L):
     # Create the four corners of the square wall
     corner1 = (0.0, 0.0)
-    corner2 = (0.0, wall_length)
-    corner3 = (wall_length, wall_length)
-    corner4 = (wall_length, 0.0)
-
+    corner2 = (0.0, L_fixed)
+    corner3 = (L_fixed, L_fixed)
+    corner4 = (L_fixed, 0.0)
+    corner5 = (L_fixed * 2, (L_fixed - L ) / 2))
+    corner6 = (L_fixed * 2, L - (L_fixed - L ) / 2))
     static_walls = [corner1, corner2, corner3, corner4]
     return static_walls
 
@@ -93,10 +93,10 @@ def main():
     output_xyz_filename = './output.xyz'
 
     # Read static data
-    wall_length, num_particles, frame_distance = read_static_data(static_filename)
+    L, L_fixed, num_particles = read_static_data(static_filename)
 
     # Create the static walls
-    static_walls = create_static_walls(wall_length)  # List of wall particle data (x, y, z) for each corner
+    static_walls = create_static_walls(L_fixed, L)  # List of wall particle data (x, y, z) for each corner
 
     # Read dynamic data for the first frame
     time, particles = read_dynamic_data(dynamic_filename, num_particles)
