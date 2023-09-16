@@ -7,7 +7,7 @@ import java.io.*;
 public class App
 {
 
-    public static final int maxT = 100;
+    public static final double maxT = 0.2;
     public static final double writingPeriod = 0.1;
     public static int N = 0;
 
@@ -119,8 +119,10 @@ public class App
         sim.updateOutput();
         double t = 0.00;
         while(t < maxT){
+            sim.recalculateCollisions();
             Collision newCollision = sim.calculateNextStep();
             t = newCollision.getCollisionTime();
+            System.out.println(t);
             sim.moveAllParticles(newCollision);
             sim.updateDynamicAndOutput(t,N);
             sim.recalculateDirections(newCollision);

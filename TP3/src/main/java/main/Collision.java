@@ -42,20 +42,32 @@ public class Collision {
         return vertixCollision;
     }
 
-
-    public Collision(Bird bird1, Wall wall) {
-        this.bird1 = bird1;
-        this.wall = wall;
-        this.bird2=null;
-        this.wallCollision=true;
-        this.collisionTime=Double.MAX_VALUE-100000;
-    }
-    public Collision(Bird bird1, Bird bird2, boolean vertixCollision) {
+    public Collision(Bird bird1, Bird bird2) {
         this.bird1 = bird1;
         this.bird2=bird2;
         this.wall=null;
+        this.wallCollision = false;
+        this.vertixCollision = false;
+        this.collisionTime=Double.MAX_VALUE-100000;
+    }
+
+    public Collision(Bird bird1, Vertix vertix) {
+        this.bird1 = bird1;
+        this.bird2=null;
+        this.wall=null;
         this.wallCollision=false;
-        this.vertixCollision = vertixCollision;
+        this.vertixCollision=true;
+        this.vertix = vertix;
+        this.collisionTime=Double.MAX_VALUE-100000;
+    }
+
+    public Collision(Bird bird1, Wall wall) {
+        this.bird1 = bird1;
+        this.bird2 = null;
+        this.wall = wall;
+        this.vertix = null;
+        this.wallCollision = true;
+        this.vertixCollision = false;
         this.collisionTime=Double.MAX_VALUE-100000;
     }
     @Override
@@ -64,6 +76,6 @@ public class Collision {
             return false;
         }
         Collision other=(Collision) obj;
-        return this.wall==other.getWall() && other.getBird1()==this.getBird1() && this.getBird2()==other.getBird2();
+        return this.wall==other.getWall() && this.vertix == other.vertix && ((other.getBird1()==this.getBird1() && this.getBird2()==other.getBird2()) || (other.getBird1()==this.getBird2() && this.getBird1()==other.getBird2()));
     }
 }

@@ -55,6 +55,29 @@ public class Bird extends Particle{
     }
 
     public double birdColisionTime(Bird colisionBird){
+        double deltaVx= colisionBird.getVx() - Vx;
+        double deltaVy= colisionBird.getVy() - Vy;
+
+        double deltaRx= colisionBird.getX() - getX();
+        double deltaRy= colisionBird.getY() - getY();
+
+        double deltaRdeltaR = Math.pow(deltaRx,2) + Math.pow(deltaRy,2);
+        double deltaVdeltaV = Math.pow(deltaVx,2) + Math.pow(deltaVy,2);
+        double deltaVdeltaR = (deltaVx*deltaRx)+ (deltaVy*deltaRy);
+
+        double phi = getRadio() + colisionBird.getRadio();
+
+        double d = Math.pow(deltaVdeltaR, 2) - (deltaVdeltaV*(deltaRdeltaR - Math.pow(phi, 2)));
+        if(deltaVdeltaR >= 0 ||  d < 0){
+            return Double.MAX_VALUE-100000;
+        }
+        if(-((deltaVdeltaR + Math.sqrt(d))/deltaVdeltaV) < 0){
+            return -((deltaVdeltaR + Math.sqrt(d))/deltaVdeltaV);
+        }
+        return -((deltaVdeltaR + Math.sqrt(d))/deltaVdeltaV);
+    }
+
+    public double vertixColisionTime(Vertix colisionBird){
         double deltaVx= colisionBird.getVx() - getVx();
         double deltaVy= colisionBird.getVy() - getVy();
 

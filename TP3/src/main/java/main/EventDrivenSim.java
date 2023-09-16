@@ -27,13 +27,13 @@ public class EventDrivenSim {
             Bird bird = birds[i];
             // Choque con otras particulas
             for(int j=i+1;j< birds.length;j++){
-                Collision collision=new Collision(bird,birds[j], false);
+                Collision collision=new Collision(bird,birds[j]);
                 bird.getCollisionList().add(collision);
                 birds[j].getCollisionList().add(collision);
             }
             // Choque con vertices
             for (Vertix vertix : vertixList) {
-                Collision collision = new Collision(bird, vertix, true);
+                Collision collision = new Collision(bird, vertix);
                 bird.getCollisionList().add(collision);
             }
             // Choque con paredes
@@ -56,47 +56,90 @@ public class EventDrivenSim {
         return wallList;
     }
 
+    public void recalculateCollisions(){
+        if(lastCollision == null){
+            Bird[] birds= getParticleList().toArray(new Bird[particleList.size()]);
+            for(int i=0;i< birds.length ;i++) {
+                List<Collision> birdCollisionList = birds[i].getCollisionList();
+                // Choque con otras particulas
+                for (int j = i + 1; j < birds.length; j++) {
+                    double t = birds[i].birdColisionTime(birds[j])+time;
+                    Collision collision = birdCollisionList.get(birdCollisionList.indexOf(new Collision(birds[i],birds[j])));
+                    collision.setCollisionTime(t);
+                }
+
+                // Choque con vertices
+                for (Vertix vertix : vertixList) {
+                    double t = birds[i].birdColisionTime(vertix)+time;
+                    Collision collision = birdCollisionList.get(birdCollisionList.indexOf(new Collision(birds[i],vertix)));
+                    collision.setCollisionTime(t);
+                }
+
+                // Choque con paredes
+                for (Wall wall : wallList){
+                    Collision collision = birdCollisionList.get(birdCollisionList.indexOf(new Collision(birds[i],wall)));
+                    double t = getWallCollisionTime(collision)+time;
+                    collision.setCollisionTime(t);
+                }
+            }
+        }else{
+            Bird bird1 = lastCollision.getBird1();
+            List<Collision> bird1collitionList = bird1.getCollisionList();
+            for(Collision collision : bird1collitionList){
+                double t = 0.0;
+                if(collision.isVertixCollision()){
+                    t = collision.getBird1().vertixColisionTime(collision.getVertix())+time;
+                }else if(collision.isWallCollision()){
+                    t = getWallCollisionTime(collision)+time;
+                }else{
+                    t = collision.getBird1().birdColisionTime(collision.getBird2())+time;
+                }
+
+                collision.setCollisionTime(t);
+
+            }
+            if(lastCollision.getBird2() != null){
+                Bird bird2 = lastCollision.getBird2();
+                List<Collision> bird2collitionList = bird2.getCollisionList();
+                for(Collision collision : bird2collitionList){
+                    double t = 0.0;
+                    if(collision.isVertixCollision()){
+                        t = collision.getBird1().birdColisionTime(collision.getVertix())+time;
+                    }else if(collision.isWallCollision()){
+                        t = getWallCollisionTime(collision)+time;
+                    }else{
+                        t = collision.getBird1().birdColisionTime(collision.getBird2())+time;
+                        if(t < 0){
+                            System.out.println("xd");
+                        }
+                    }
+
+                    collision.setCollisionTime(t);
+
+                }
+            }
+        }
+    }
+
+
     //TENER EN CUENTA QUE LAS OTRAS COLICIONES TIENEN EL TIEMPO RELATIVO
     public Collision calculateNextStep(){
         double minStep = Double.MAX_VALUE-100000;
         Collision nextCollision = null;
-        Bird[] birds= (Bird[]) getParticleList().toArray(new Bird[particleList.size()]);
+        Bird[] birds= getParticleList().toArray(new Bird[particleList.size()]);
         for(int i=0;i< birds.length ;i++) {
             List<Collision> birdCollisionList = birds[i].getCollisionList();
             // Choque con otras particulas
-            for (int j = i + 1; j < birds.length; j++) {
-                double t = birds[i].birdColisionTime(birds[j])+time;
-                Collision collision = birdCollisionList.get(birdCollisionList.indexOf(new Collision(birds[i],birds[j], false)));
-                collision.setCollisionTime(t);
+            for(Collision collision : birdCollisionList){
+                double t = collision.getCollisionTime();
                 if(t<minStep){
-                    minStep = t;
-                    nextCollision = collision;
-                }
-            }
-
-            // Choque con vertices
-            for (Vertix vertix : vertixList) {
-                double t = birds[i].birdColisionTime(vertix)+time;
-                Collision collision = birdCollisionList.get(birdCollisionList.indexOf(new Collision(birds[i],vertix, true)));
-                collision.setCollisionTime(t);
-                if(t<minStep){
-                    minStep = t;
-                    nextCollision = collision;
-                }
-            }
-
-            // Choque con paredes
-            for (Wall wall : wallList){
-                Collision collision = birdCollisionList.get(birdCollisionList.indexOf(new Collision(birds[i],wall)));
-                double t = getWallCollisionTime(collision)+time;
-                collision.setCollisionTime(t);
-                if(t<minStep || nextCollision == null){
                     minStep = t;
                     nextCollision = collision;
                 }
             }
         }
 
+        lastCollision = nextCollision;
         return  nextCollision;
     }
 
@@ -156,14 +199,25 @@ public class EventDrivenSim {
 //        Choque con paredes
             Wall wall=collision.getWall();
             Bird bird=collision.getBird1();
-            if (bird.getVx() > 0 && !wall.isHorizontal() && wall.getFirstPoint().getX() > bird.getVx()) {
-                return  (wall.getFirstPoint().getX() + bird.getRadio() - bird.getX()) / bird.getVx();
-            } else if (bird.getVx() < 0 && !wall.isHorizontal() && wall.getFirstPoint().getX() < bird.getVx()) {
+            if (bird.getVx() > 0 && !wall.isHorizontal() && wall.getFirstPoint().getX() > (bird.getX() + bird.getRadio())) {
+                if((wall.getFirstPoint().getX() - bird.getRadio() - bird.getX()) / bird.getVx() < 0){
+                    return (wall.getFirstPoint().getX() - bird.getRadio() - bird.getX()) / bird.getVx();
+                }
+                return  (wall.getFirstPoint().getX() - bird.getRadio() - bird.getX()) / bird.getVx();
+            } else if (bird.getVx() < 0 && !wall.isHorizontal() && wall.getFirstPoint().getX() < (bird.getX() - bird.getRadio())) {
+                if((wall.getFirstPoint().getX() + bird.getRadio() - bird.getX()) / bird.getVx()<0){
+                    return (wall.getFirstPoint().getX() + bird.getRadio() - bird.getX()) / bird.getVx();
+                }
                 return (wall.getFirstPoint().getX() + bird.getRadio() - bird.getX()) / bird.getVx();
-            } else if (bird.getVy() < 0 && wall.isHorizontal() && wall.getFirstPoint().getY() < bird.getVy()) {
+            } else if (bird.getVy() < 0 && wall.isHorizontal() && wall.getFirstPoint().getY() < (bird.getY() - bird.getRadio())) {
+                if((wall.getFirstPoint().getY() + bird.getRadio() - bird.getY()) / bird.getVy()<0){
+                    return (wall.getFirstPoint().getY() + bird.getRadio() - bird.getY()) / bird.getVy();
+                }
                 return (wall.getFirstPoint().getY() + bird.getRadio() - bird.getY()) / bird.getVy();
-            } else if (bird.getVy() > 0 && wall.isHorizontal() && wall.getFirstPoint().getY() > bird.getVy()) {
-                return (wall.getFirstPoint().getY() + bird.getRadio() - bird.getY()) / bird.getVy();
+            } else if (bird.getVy() > 0 && wall.isHorizontal() && wall.getFirstPoint().getY() > (bird.getY() + bird.getRadio())) {
+                if((wall.getFirstPoint().getY() - bird.getRadio() - bird.getY()) / bird.getVy()<0)
+                    return (wall.getFirstPoint().getY() - bird.getRadio() - bird.getY()) / bird.getVy();
+                return (wall.getFirstPoint().getY() - bird.getRadio() - bird.getY()) / bird.getVy();
             } else return Double.MAX_VALUE-100000;
 
     }
