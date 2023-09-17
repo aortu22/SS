@@ -3,7 +3,6 @@ package main;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -204,26 +203,21 @@ public class EventDrivenSim {
 //        Choque con paredes
             Wall wall=collision.getWall();
             Bird bird=collision.getBird1();
+            double collisionTime;
             if (bird.getVx() > 0 && !wall.isHorizontal() && wall.getFirstPoint().getX() > (bird.getX() + bird.getRadio())) {
-                if((wall.getFirstPoint().getX() - bird.getRadio() - bird.getX()) / bird.getVx() < 0){
-                    return (wall.getFirstPoint().getX() - bird.getRadio() - bird.getX()) / bird.getVx();
-                }
-                return  (wall.getFirstPoint().getX() - bird.getRadio() - bird.getX()) / bird.getVx();
-            } else if (bird.getVx() < 0 && !wall.isHorizontal() && wall.getFirstPoint().getX() < (bird.getX() - bird.getRadio())) {
-                if((wall.getFirstPoint().getX() + bird.getRadio() - bird.getX()) / bird.getVx()<0){
-                    return (wall.getFirstPoint().getX() + bird.getRadio() - bird.getX()) / bird.getVx();
-                }
+                collisionTime=(wall.getFirstPoint().getX() - bird.getRadio() - bird.getX()) / bird.getVx();
+                return  ;
+            }
+            if (bird.getVx() < 0 && !wall.isHorizontal() && wall.getFirstPoint().getX() < (bird.getX() - bird.getRadio())) {
                 return (wall.getFirstPoint().getX() + bird.getRadio() - bird.getX()) / bird.getVx();
-            } else if (bird.getVy() < 0 && wall.isHorizontal() && wall.getFirstPoint().getY() < (bird.getY() - bird.getRadio())) {
-                if((wall.getFirstPoint().getY() + bird.getRadio() - bird.getY()) / bird.getVy()<0){
-                    return (wall.getFirstPoint().getY() + bird.getRadio() - bird.getY()) / bird.getVy();
-                }
+            }
+            if (bird.getVy() < 0 && wall.isHorizontal() && wall.getFirstPoint().getY() < (bird.getY() - bird.getRadio())) {
                 return (wall.getFirstPoint().getY() + bird.getRadio() - bird.getY()) / bird.getVy();
-            } else if (bird.getVy() > 0 && wall.isHorizontal() && wall.getFirstPoint().getY() > (bird.getY() + bird.getRadio())) {
-                if((wall.getFirstPoint().getY() - bird.getRadio() - bird.getY()) / bird.getVy()<0)
-                    return (wall.getFirstPoint().getY() - bird.getRadio() - bird.getY()) / bird.getVy();
+            }
+            if (bird.getVy() > 0 && wall.isHorizontal() && wall.getFirstPoint().getY() > (bird.getY() + bird.getRadio())) {
                 return (wall.getFirstPoint().getY() - bird.getRadio() - bird.getY()) / bird.getVy();
-            } else return Double.MAX_VALUE-100000;
+            }
+            return Double.MAX_VALUE-100000;
 
     }
 

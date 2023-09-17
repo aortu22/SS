@@ -1,6 +1,5 @@
 package main;
 
-import java.text.DecimalFormat;
 import java.util.*;
 import java.io.*;
 
@@ -13,9 +12,14 @@ public class App
 
     public static void deleteOutput(){
         String output = "src/main/python/output.txt";
+        String output_xyz = "src/main/python/output.xyz";
         File fileOutput = new File(output);
+        File fileOutputXYZ = new File(output_xyz);
         if (fileOutput.exists()) {
             fileOutput.delete();
+        }
+        if (fileOutputXYZ.exists()) {
+            fileOutputXYZ.delete();
         }
     }
 
@@ -46,11 +50,11 @@ public class App
         wallList.add(new Wall(0.0,0.0,L_fixed,0.0));
         wallList.add(new Wall(0.0,0.0,0.0,L_fixed));
         wallList.add(new Wall(0.0,L_fixed,L_fixed,L_fixed));
-        wallList.add(new Wall(L_fixed,L_fixed,L_fixed,L_fixed - (L_fixed - L )/2));
+        wallList.add(new Wall(L_fixed,L_fixed,L_fixed,L +(L_fixed - L )/2));
         wallList.add(new Wall(L_fixed,0.0,L_fixed,(L_fixed - L )/2));
         wallList.add(new Wall(L_fixed,(L_fixed - L )/2,L_fixed * 2,(L_fixed - L )/2));
-        wallList.add(new Wall(L_fixed * 2,(L_fixed - L ) / 2,L_fixed * 2,(L_fixed - L ) / 2 + L));
-        wallList.add(new Wall(L_fixed,L_fixed - (L_fixed - L ) / 2,L_fixed*2,L_fixed - (L_fixed - L ) / 2));
+        wallList.add(new Wall(L_fixed * 2,(L_fixed - L ) / 2,L_fixed * 2,L + ((L_fixed - L ) / 2 )));
+        wallList.add(new Wall(L_fixed,L + ((L_fixed - L ) / 2),L_fixed*2,L +( (L_fixed - L ) / 2)));
         return wallList;
     }
 
@@ -132,7 +136,6 @@ public class App
             sim.recalculateCollisions();
             Collision newCollision = sim.calculateNextStep();
             t = newCollision.getCollisionTime();
-            System.out.println(t);
             sim.moveAllParticles(newCollision);
             sim.updateDynamicAndOutput(t,N);
             sim.recalculateDirections(newCollision);

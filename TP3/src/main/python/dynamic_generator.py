@@ -17,12 +17,12 @@ def generar_archivos(nombre_archivo,nombreDynamicOutput, n, L, R, V):
             fOut.write("0\n")
             particle_created = []
             for _ in range(n):
-                valor1 = round(random.uniform(0, L), 4)
-                valor2 = round(random.uniform(0, L), 4)
+                valor1 = round(random.uniform(0 + 3*R, L - 3*R), 6)
+                valor2 = round(random.uniform(0 + 3*R, L - 3*R), 6)
                 valor3 = round(random.uniform(0, 360), 4)
                 while not checkNewParticle(particle_created, valor1, valor2, R):
-                    valor1 = round(random.uniform(0, L), 4)
-                    valor2 = round(random.uniform(0, L), 4)
+                    valor1 = round(random.uniform(0 + 3*R, L - 3*R), 6)
+                    valor2 = round(random.uniform(0 + 3*R, L - 3*R), 6)
                     valor3 = round(random.uniform(0, 360), 4)
                 particle = Particle(_)
                 particle.set_postion(valor1, valor2)
