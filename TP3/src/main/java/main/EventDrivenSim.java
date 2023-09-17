@@ -224,6 +224,73 @@ public class EventDrivenSim {
 
     }
 
+    public void updateDCMOutput(){
+        try{
+            String output = "src/main/python/outputDCM.txt";
+            String dynamic = "src/main/java/main/dynamic.txt";
+            String dynamicOutput = "src/main/java/main/dynamicOutput.txt";
+
+            File fileOutput = new File(output);
+            if (!fileOutput.exists()) {
+                fileOutput.createNewFile();
+            }
+
+            // Parameter true to append to what the file already has
+            FileWriter fwOutput = new FileWriter(fileOutput, true);
+            BufferedWriter bwOutput = new BufferedWriter(fwOutput);
+
+            BufferedReader reader = new BufferedReader(new FileReader(dynamic));
+            BufferedReader readerInit = new BufferedReader(new FileReader(dynamicOutput));
+            String linea;
+            String lineaInit;
+
+            double d_x=0;
+            double d_y=0;
+            int count=0;
+            while ((linea = reader.readLine()) != null && (lineaInit = readerInit.readLine()) != null) {
+                // Dividir la cadena por espacios en blanco
+                String[] partes = linea.split(" ");
+                String[] partesInit = lineaInit.split(" ");
+
+                String toWrite = linea;
+                if (partes.length >= 2) {
+                    String r_x = partes[0];
+                    String r_y = partes[1];
+                    String r_x_init = partesInit[0];
+                    String r_y_init = partesInit[1];
+
+                    // Convertir las cadenas en números de punto flotante (double)
+                    try {
+                        double r_x_double = Double.parseDouble(r_x);
+                        double r_y_double = Double.parseDouble(r_y);
+                        double r_x_init_double = Double.parseDouble(r_x_init);
+                        double r_y_init_double = Double.parseDouble(r_y_init);
+                        d_x += Math.pow(r_x_double-r_x_init_double, 2);
+                        d_y += Math.pow(r_y_double-r_y_init_double, 2);
+                        count++;
+                    } catch (NumberFormatException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else{
+                    // Escribo el tiempro
+                    bwOutput.write(toWrite);
+                    bwOutput.write(System.lineSeparator()); // Agregar un salto de línea
+                }
+            }
+            bwOutput.write(Double.toString(d_x/count) + " " + Double.toString(d_y/count));
+            bwOutput.write(System.lineSeparator()); // Agregar un salto de línea
+            bwOutput.write('\n');
+
+            // Cerrar archivos
+            reader.close();
+            readerInit.close();
+            bwOutput.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     public void updateOutput(){
         try {
             String output = "src/main/python/output.txt";
@@ -252,6 +319,7 @@ public class EventDrivenSim {
             throw new RuntimeException(e);
         }
 
+        updateDCMOutput();
 
     }
     public void updateDynamicAndOutput(Double t, int N){

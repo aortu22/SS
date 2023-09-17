@@ -12,14 +12,19 @@ public class App
 
     public static void deleteOutput(){
         String output = "src/main/python/output.txt";
+        String output_dcm = "src/main/python/outputDCM.txt";
         String output_xyz = "src/main/python/output.xyz";
         File fileOutput = new File(output);
         File fileOutputXYZ = new File(output_xyz);
+        File fileOutputDCM = new File(output_dcm);
         if (fileOutput.exists()) {
             fileOutput.delete();
         }
         if (fileOutputXYZ.exists()) {
             fileOutputXYZ.delete();
+        }
+        if (fileOutputDCM.exists()) {
+            fileOutputDCM.delete();
         }
     }
 
