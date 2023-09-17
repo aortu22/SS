@@ -357,6 +357,29 @@ public class EventDrivenSim {
         updateOutput();
     }
 
+    void addImpulseForL(double L){
+        boolean recentlyCrated = false;
+        try {
+            String dynamic = "src/main/python/impulse.txt";
+            File file = new File(dynamic);
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+                recentlyCrated=true;
+            }
+            // Parameter false make us write stepping in the information
+            FileWriter fw = new FileWriter(file, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            if(!recentlyCrated){
+                bw.newLine();
+            }
+            bw.write(Double.toString(L));
+            bw.newLine(); // Agrega una nueva línea después de cada escritura
+            bw.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     void addImpulse(double impulse){
         Locale locale = new Locale("en", "US");
         try {
@@ -365,6 +388,7 @@ public class EventDrivenSim {
             // Si el archivo no existe es creado
             if (!file.exists()) {
                 file.createNewFile();
+
             }
             // Parameter false make us write stepping in the information
             FileWriter fw = new FileWriter(file, true);

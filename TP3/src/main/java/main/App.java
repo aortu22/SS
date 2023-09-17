@@ -137,6 +137,7 @@ public class App
         deleteImpulse();
         sim.updateOutput();
         double t = 0.00;
+        sim.addImpulseForL(L);
         while(t < maxT){
             sim.recalculateCollisions();
             Collision newCollision = sim.calculateNextStep();
