@@ -203,21 +203,24 @@ public class EventDrivenSim {
 //        Choque con paredes
             Wall wall=collision.getWall();
             Bird bird=collision.getBird1();
-            double collisionTime;
+            Double collisionTime;
             if (bird.getVx() > 0 && !wall.isHorizontal() && wall.getFirstPoint().getX() > (bird.getX() + bird.getRadio())) {
                 collisionTime=(wall.getFirstPoint().getX() - bird.getRadio() - bird.getX()) / bird.getVx();
-                return  ;
-            }
-            if (bird.getVx() < 0 && !wall.isHorizontal() && wall.getFirstPoint().getX() < (bird.getX() - bird.getRadio())) {
-                return (wall.getFirstPoint().getX() + bird.getRadio() - bird.getX()) / bird.getVx();
-            }
-            if (bird.getVy() < 0 && wall.isHorizontal() && wall.getFirstPoint().getY() < (bird.getY() - bird.getRadio())) {
-                return (wall.getFirstPoint().getY() + bird.getRadio() - bird.getY()) / bird.getVy();
-            }
-            if (bird.getVy() > 0 && wall.isHorizontal() && wall.getFirstPoint().getY() > (bird.getY() + bird.getRadio())) {
-                return (wall.getFirstPoint().getY() - bird.getRadio() - bird.getY()) / bird.getVy();
-            }
-            return Double.MAX_VALUE-100000;
+                double yPosition=bird.getY()+bird.getVy()*collisionTime;
+                return wall.getFirstPoint().getY()< wall.getSecondPoint().getY()?(yPosition>wall.getFirstPoint().getY() && yPosition<wall.getSecondPoint().getY()?collisionTime:Double.MAX_VALUE-100000):(yPosition<wall.getFirstPoint().getY() && yPosition>wall.getSecondPoint().getY()?collisionTime:Double.MAX_VALUE-100000);
+            } else if (bird.getVx() < 0 && !wall.isHorizontal() && wall.getFirstPoint().getX() < (bird.getX() - bird.getRadio())) {
+                collisionTime=(wall.getFirstPoint().getX() + bird.getRadio() - bird.getX()) / bird.getVx();
+                double yPosition=bird.getY()+bird.getVy()*collisionTime;
+                return wall.getFirstPoint().getY()< wall.getSecondPoint().getY()?(yPosition>wall.getFirstPoint().getY() && yPosition<wall.getSecondPoint().getY()?collisionTime:Double.MAX_VALUE-100000):(yPosition<wall.getFirstPoint().getY() && yPosition>wall.getSecondPoint().getY()?collisionTime:Double.MAX_VALUE-100000);
+            } else if (bird.getVy() < 0 && wall.isHorizontal() && wall.getFirstPoint().getY() < (bird.getY() - bird.getRadio())) {
+                collisionTime=(wall.getFirstPoint().getY() + bird.getRadio() - bird.getY()) / bird.getVy();
+                double xPosition=bird.getX()+bird.getVx()*collisionTime;
+                return wall.getFirstPoint().getX()< wall.getSecondPoint().getX()?(xPosition>wall.getFirstPoint().getX() && xPosition<wall.getSecondPoint().getX()?collisionTime:Double.MAX_VALUE-100000):(xPosition<wall.getFirstPoint().getX() && xPosition>wall.getSecondPoint().getX()?collisionTime:Double.MAX_VALUE-100000);
+            } else if (bird.getVy() > 0 && wall.isHorizontal() && wall.getFirstPoint().getY() > (bird.getY() + bird.getRadio())) {
+                collisionTime=(wall.getFirstPoint().getY() - bird.getRadio() - bird.getY()) / bird.getVy();
+                double xPosition=bird.getX()+bird.getVx()*collisionTime;
+                return wall.getFirstPoint().getX()< wall.getSecondPoint().getX()?(xPosition>wall.getFirstPoint().getX() && xPosition<wall.getSecondPoint().getX()?collisionTime:Double.MAX_VALUE-100000):(xPosition<wall.getFirstPoint().getX() && xPosition>wall.getSecondPoint().getX()?collisionTime:Double.MAX_VALUE-100000);
+            } else return Double.MAX_VALUE-100000;
 
     }
 

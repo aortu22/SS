@@ -65,7 +65,7 @@ def create_xyz_file(output_xyz_filename, static_walls, dynamic_particles_data, o
         for time, frame_particles in output_data:
             total_particles = len(frame_particles)
             output_xyz_file.write(f"{total_particles+total_walls}\n")
-            output_xyz_file.write(f"Frame {i}\n")
+            output_xyz_file.write(f"Frame {i} Time {time}\n")
             i+=1
             for wall in static_walls:
                 output_xyz_file.write(f"1 {wall[0]} {wall[1]}\n")
