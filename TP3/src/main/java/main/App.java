@@ -7,12 +7,20 @@ import java.io.*;
 public class App
 {
 
-    public static final double maxT = 0.2;
-    public static final double writingPeriod = 0.1;
+    public static final double maxT = 10;
+    public static final double writingPeriod = 0.01;
     public static int N = 0;
 
     public static void deleteOutput(){
         String output = "src/main/python/output.txt";
+        File fileOutput = new File(output);
+        if (fileOutput.exists()) {
+            fileOutput.delete();
+        }
+    }
+
+    public static void deleteImpulse(){
+        String output = "src/main/python/impulse.txt";
         File fileOutput = new File(output);
         if (fileOutput.exists()) {
             fileOutput.delete();
@@ -102,9 +110,10 @@ public class App
                 String[] valores = linea.split(" ");
                 double x = Double.parseDouble(valores[0]);
                 double y = Double.parseDouble(valores[1]);
-                double t = Double.parseDouble(valores[2]);
+                double Vx = Double.parseDouble(valores[2]);
+                double Vy = Double.parseDouble(valores[3]);
                 birdList.get(i).setPosition(x,y);
-                birdList.get(i).setDirection(t);
+                birdList.get(i).setDirection(Vx,Vy);
                 i++;
             }
 
@@ -116,6 +125,7 @@ public class App
         List<Vertix> vertixList = initializeVertix(L,L_fixed);
         EventDrivenSim sim=new EventDrivenSim(birdList, vertixList, wallList,writingPeriod);
         deleteOutput();
+        deleteImpulse();
         sim.updateOutput();
         double t = 0.00;
         while(t < maxT){

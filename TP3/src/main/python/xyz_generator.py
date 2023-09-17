@@ -83,7 +83,7 @@ def create_static_walls(L_fixed,L):
     corner4 = (L_fixed, 0.0)
     corner5 = (L_fixed * 2, (L_fixed - L ) / 2)
     corner6 = (L_fixed * 2, L - (L_fixed - L ) / 2)
-    static_walls = [corner1, corner2, corner3, corner4]
+    static_walls = [corner1, corner2, corner3, corner4,corner5,corner6]
     return static_walls
 
 def main():

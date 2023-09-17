@@ -19,9 +19,9 @@ public class Bird extends Particle{
         this.collisionList=new ArrayList<>();
     }
 
-    public void setDirection(double theta){
-        this.Vx = v * Math.cos(Math.toRadians(theta));
-        this.Vy = v * Math.sin(Math.toRadians(theta));
+    public void setDirection(double Vx,double Vy){
+        this.Vx = Vx;
+        this.Vy = Vy;
     }
 
 
@@ -68,7 +68,7 @@ public class Bird extends Particle{
         double phi = getRadio() + colisionBird.getRadio();
 
         double d = Math.pow(deltaVdeltaR, 2) - (deltaVdeltaV*(deltaRdeltaR - Math.pow(phi, 2)));
-        if(deltaVdeltaR >= 0 ||  d < 0){
+        if(deltaVdeltaR >= 0 ||  d < 0 || Math.abs(deltaVdeltaR) < Math.sqrt(d) ){
             return Double.MAX_VALUE-100000;
         }
         if(-((deltaVdeltaR + Math.sqrt(d))/deltaVdeltaV) < 0){

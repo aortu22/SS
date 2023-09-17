@@ -162,7 +162,12 @@ public class EventDrivenSim {
                 addImpulse(bird1.getM()*Math.abs(bird1.getVx()));
             }
         }else{
-            Bird bird2 = collision.getBird2();
+            Bird bird2;
+            if(collision.isVertixCollision()){
+                bird2 = collision.getVertix();
+            }else{
+                bird2 = collision.getBird2();
+            }
             double deltaX=  bird2.getX() - bird1.getX();
             double deltaY=  bird2.getY() - bird1.getY();
 
@@ -176,17 +181,17 @@ public class EventDrivenSim {
 
             double phi = bird1.getRadio() + bird2.getRadio();
 
-            double J = 2 * bird1.getM() * bird2.getM() * deltaVdeltaR / (phi * (bird1.getM() + bird2.getM()));
-            double Jx = J * deltaX/ phi;
-            double Jy = J * deltaY/ phi;
+            double J = (2 * bird1.getM() * bird2.getM() * deltaVdeltaR) / (phi * ((bird1.getM() + bird2.getM())));
+            double Jx = (J * deltaX)/ phi;
+            double Jy = (J * deltaY)/ phi;
             double vx= bird1.getVx();
             double vy= bird1.getVy();
             bird1.setVx(bird1.getVx() + Jx / bird1.getM());
             bird1.setVy(bird1.getVy() + Jy / bird1.getM());
 //            Si es colision con vertice, no updateo al vertice
             if(!collision.isVertixCollision()){
-                bird2.setVx(bird2.getVx() + Jx / bird2.getM());
-                bird2.setVy(bird2.getVy() + Jy / bird2.getM());
+                bird2.setVx(bird2.getVx() - Jx / bird2.getM());
+                bird2.setVy(bird2.getVy() - Jy / bird2.getM());
             }else{
                 addImpulse(Math.abs(bird1.getVx()-vx)+Math.abs(bird1.getVy())-vy);
             }
@@ -275,12 +280,12 @@ public class EventDrivenSim {
 
             // Writting particles information
             StringBuilder particleInfo = new StringBuilder();
-            DecimalFormat df = new DecimalFormat("0.00", new DecimalFormatSymbols(locale));
-            for (Wall wall: this.wallList) {
-                particleInfo.append(df.format(wall.getFirstPoint().getX())).append(' ').append(df.format(wall.getFirstPoint().getY()));
-                particleInfo.append(' ').append(df.format(wall.getSecondPoint().getX())).append(' ').append(df.format(wall.getSecondPoint().getY()));
-                particleInfo.append('\n');
-            }
+            DecimalFormat df = new DecimalFormat("0.0000000", new DecimalFormatSymbols(locale));
+            //for (Wall wall: this.wallList) {
+            //    particleInfo.append(df.format(wall.getFirstPoint().getX())).append(' ').append(df.format(wall.getFirstPoint().getY()));
+            //    particleInfo.append(' ').append(df.format(wall.getSecondPoint().getX())).append(' ').append(df.format(wall.getSecondPoint().getY()));
+            //    particleInfo.append('\n');
+            //}
             for (Bird particle: this.particleList) {
                 particleInfo.append(df.format(particle.getX())).append(' ').append(df.format(particle.getY()));
                 particleInfo.append(' ').append(df.format(particle.getVx())).append(' ').append(df.format(particle.getVy()));
@@ -298,19 +303,20 @@ public class EventDrivenSim {
     void addImpulse(double impulse){
         Locale locale = new Locale("en", "US");
         try {
-            String dynamic = "src/main/java/main/impulse.txt";
+            String dynamic = "src/main/python/impulse.txt";
             File file = new File(dynamic);
             // Si el archivo no existe es creado
             if (!file.exists()) {
                 file.createNewFile();
             }
             // Parameter false make us write stepping in the information
-            FileWriter fw = new FileWriter(file, false);
+            FileWriter fw = new FileWriter(file, true);
             BufferedWriter bw = new BufferedWriter(fw);
             StringBuilder info = new StringBuilder();
-            DecimalFormat df = new DecimalFormat("0.00", new DecimalFormatSymbols(locale));
+            DecimalFormat df = new DecimalFormat("0.0000", new DecimalFormatSymbols(locale));
             info.append(df.format(time)).append(" ").append(df.format(impulse));
             bw.write(info.toString());
+            bw.newLine(); // Agrega una nueva línea después de cada escritura
             bw.close();
         }catch (Exception e){
             e.printStackTrace();
