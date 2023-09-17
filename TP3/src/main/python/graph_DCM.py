@@ -3,10 +3,8 @@ import matplotlib.pyplot as plt
 
 
 def main():
-    # Leer el archivo y almacenar los valores en listas
-    tiempo = []
-    valor = []
 
+    deltaT = 0.01
     # Lista para almacenar las corridas
     corridas = []
 
@@ -32,7 +30,7 @@ def main():
     medias = [np.mean(corridas[i]) for i in range(len(corridas))]
     desvios_std = [np.std(corridas[i]) for i in range(len(corridas))]
 
-    x = [i * 0.01 for i in range(len(corridas))]
+    x = [i * deltaT for i in range(len(corridas))]
     # Graficar los datos como puntos
     plt.errorbar(x, medias, yerr=desvios_std, fmt='o', capsize=5)
     plt.xlabel('s')
