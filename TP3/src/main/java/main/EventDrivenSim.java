@@ -157,10 +157,18 @@ public class EventDrivenSim {
         if(collision.isWallCollision()){
             if(collision.getWall().isHorizontal()){
                 bird1.setVy(- bird1.getVy());
-                addImpulse(bird1.getM()*Math.abs(bird1.getVy()));
+                if (wallList.indexOf(collision.getWall()) >=5){
+                    addImpulse(0.0, bird1.getM()*Math.abs(bird1.getVy()));
+                }else{
+                    addImpulse(bird1.getM()*Math.abs(bird1.getVy()), 0.0);
+                }
             }else{
                 bird1.setVx(- bird1.getVx());
-                addImpulse(bird1.getM()*Math.abs(bird1.getVx()));
+                if (wallList.indexOf(collision.getWall()) >=5){
+                    addImpulse(0.0, bird1.getM()*Math.abs(bird1.getVx()));
+                }else{
+                    addImpulse(bird1.getM()*Math.abs(bird1.getVx()), 0.0);
+                }
             }
         }else{
             Bird bird2;
@@ -194,7 +202,7 @@ public class EventDrivenSim {
                 bird2.setVx(bird2.getVx() - Jx / bird2.getM());
                 bird2.setVy(bird2.getVy() - Jy / bird2.getM());
             }else{
-                addImpulse(Math.abs(bird1.getVx()-vx)+Math.abs(bird1.getVy())-vy);
+                addImpulse(Math.abs(bird1.getVx()-vx),Math.abs(bird1.getVy())-vy);
             }
         }
     }
@@ -381,7 +389,7 @@ public class EventDrivenSim {
         }
     }
 
-    void addImpulse(double impulse){
+    void addImpulse(double impulse_left, double impulse_right){
         Locale locale = new Locale("en", "US");
         try {
             String dynamic = "src/main/python/impulse"+ L +".txt";
@@ -396,7 +404,7 @@ public class EventDrivenSim {
             BufferedWriter bw = new BufferedWriter(fw);
             StringBuilder info = new StringBuilder();
             DecimalFormat df = new DecimalFormat("0.0000", new DecimalFormatSymbols(locale));
-            info.append(df.format(time)).append(" ").append(df.format(impulse));
+            info.append(df.format(time)).append(" ").append(df.format(impulse_left)).append(" ").append(df.format(impulse_right));
             bw.write(info.toString());
             bw.newLine(); // Agrega una nueva línea después de cada escritura
             bw.close();

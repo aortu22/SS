@@ -8,7 +8,7 @@ def main():
     # Lista para almacenar las corridas
     corridas = []
 
-    with open('tu_archivo.txt', 'r') as archivo:
+    with open('./outputDCM.txt', 'r') as archivo:
         lineas = archivo.readlines()
 
     corrida_actual = []

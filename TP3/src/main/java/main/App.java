@@ -7,7 +7,7 @@ public class App
 {
 
     public static final double maxT = 40;
-    public static final double writingPeriod = 0.01;
+    public static final double writingPeriod = 0.1;
     public static int N = 0;
 
     public static void deleteOutput(){
@@ -82,7 +82,7 @@ public class App
         double R = 0.0;
         double V = 0.0;
         int iter=0;
-        while (iter<10){
+        while (iter<5){
             try {
                 BufferedReader br = new BufferedReader(new FileReader(jsonFilePathStatic));
 
