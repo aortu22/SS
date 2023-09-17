@@ -281,11 +281,6 @@ public class EventDrivenSim {
             // Writting particles information
             StringBuilder particleInfo = new StringBuilder();
             DecimalFormat df = new DecimalFormat("0.0000000", new DecimalFormatSymbols(locale));
-            //for (Wall wall: this.wallList) {
-            //    particleInfo.append(df.format(wall.getFirstPoint().getX())).append(' ').append(df.format(wall.getFirstPoint().getY()));
-            //    particleInfo.append(' ').append(df.format(wall.getSecondPoint().getX())).append(' ').append(df.format(wall.getSecondPoint().getY()));
-            //    particleInfo.append('\n');
-            //}
             for (Bird particle: this.particleList) {
                 particleInfo.append(df.format(particle.getX())).append(' ').append(df.format(particle.getY()));
                 particleInfo.append(' ').append(df.format(particle.getVx())).append(' ').append(df.format(particle.getVy()));
