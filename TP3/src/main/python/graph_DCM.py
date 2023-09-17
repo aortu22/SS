@@ -27,12 +27,23 @@ def main():
     if corrida_actual:
         corridas.append(corrida_actual)
 
-    medias = [np.mean(corridas[i]) for i in range(len(corridas))]
-    desvios_std = [np.std(corridas[i]) for i in range(len(corridas))]
+    corridas_transpuestas = np.array(corridas).T
+
+
+
+
+    medias = np.mean(corridas_transpuestas)
+
+    desvios_std = np.std(corridas_transpuestas)
 
     x = [i * deltaT for i in range(len(corridas))]
+
+    coefficients = np.polyfit(x,medias, 1)
+    fit_line = np.poly1d(coefficients)
+    y_fit = fit_line(x)
     # Graficar los datos como puntos
-    plt.errorbar(x, medias, yerr=desvios_std, fmt='o', capsize=5)
+    plt.errorbar(x, medias, yerr=desvios_std, fmt='-o', capsize=5)
+    plt.plot(x, y_fit, color='red', label='Ajuste Lineal')
     plt.xlabel('s')
     plt.ylabel('DCM')
     plt.title('Gráfico de DCM en el tiempo')
