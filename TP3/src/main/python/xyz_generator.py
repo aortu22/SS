@@ -68,23 +68,23 @@ def create_xyz_file(output_xyz_filename, static_walls, dynamic_particles_data, o
             output_xyz_file.write(f"Frame {i} Time {time}\n")
             i+=1
             for wall in static_walls:
-                output_xyz_file.write(f"1 {wall[0]} {wall[1]}\n")
+                output_xyz_file.write(f"1 {wall[0]} {wall[1]} {wall[2]} {wall[3]}\n")
             # Write dynamic particles for the frame
             for particle in frame_particles:
                 x, y = particle
-                output_xyz_file.write(f"2 {x} {y}\n")
+                output_xyz_file.write(f"2 {x} {y} 0 0\n")
 
 
 def create_static_walls(L_fixed,L):
-    # Create the four corners of the square wall
-    corner1 = (0.0, 0.0)
-    corner2 = (0.0, L_fixed)
-    corner3 = (L_fixed, L_fixed)
-    corner4 = (L_fixed, 0.0)
-    corner5 = (L_fixed, (L_fixed - L) / 2)
-    corner6 = (L_fixed, L + (L_fixed - L) / 2)
-    corner7 = (L_fixed * 2, (L_fixed - L) / 2)
-    corner8 = (L_fixed * 2, L + (L_fixed - L) / 2)
+    # Create the four corners of the square wall with the vectors of representing the walls
+    corner1 = (0.0, 0.0,L_fixed,0.0)
+    corner2 = (L_fixed,0.0,0.0,(L_fixed-L)/2)
+    corner3 = (L_fixed,(L_fixed-L)/2,L_fixed,0.0)
+    corner4 = (2*L_fixed,(L_fixed-L)/2,0.0,(L_fixed-L)/2)
+    corner5 = (2*L_fixed,L_fixed-(L_fixed-L)/2,-L_fixed,0.0)
+    corner6 = (L_fixed,L_fixed-(L_fixed-L)/2,0.0,(L_fixed-L)/2)
+    corner7 =(L_fixed,L_fixed,-L_fixed,0.0)
+    corner8 =(0.0,L_fixed,0.0,-L_fixed)
     static_walls = [corner1, corner2, corner3, corner4, corner5, corner6, corner7, corner8]
     return static_walls
 
