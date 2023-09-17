@@ -80,7 +80,7 @@ def create_static_walls(L_fixed,L):
     corner1 = (0.0, 0.0,L_fixed,0.0)
     corner2 = (L_fixed,0.0,0.0,(L_fixed-L)/2)
     corner3 = (L_fixed,(L_fixed-L)/2,L_fixed,0.0)
-    corner4 = (2*L_fixed,(L_fixed-L)/2,0.0,(L_fixed-L)/2)
+    corner4 = (2*L_fixed,(L_fixed-L)/2,0.0,L)
     corner5 = (2*L_fixed,L_fixed-(L_fixed-L)/2,-L_fixed,0.0)
     corner6 = (L_fixed,L_fixed-(L_fixed-L)/2,0.0,(L_fixed-L)/2)
     corner7 =(L_fixed,L_fixed,-L_fixed,0.0)
