@@ -66,7 +66,7 @@ public class App
     public static List<Vertix> initializeVertix(double L,double L_fixed){
         List<Vertix> vertixList = new ArrayList<>();
         vertixList.add(new Vertix(-1, L_fixed, (L_fixed-L)/2));
-        vertixList.add(new Vertix(-2, L_fixed, L+(L_fixed-L)/2));
+        vertixList.add(new Vertix(-2, L_fixed, L_fixed-(L_fixed-L)/2));
         return vertixList;
     }
     public static void main( String[] args )

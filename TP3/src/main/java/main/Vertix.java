@@ -10,9 +10,10 @@ public class Vertix extends Bird{
 //        Por choque elastico
     public Vertix(int id, double x, double y) {
 //        Es una particula quieta con masa infinita y radio 0
-        super(id, 0, Double.MAX_VALUE - 100000 ,0);
+        super(id, 0, 1000000 ,0.0);
         tangC = 1.0;
         normC = 1.0;
+        this.setPosition(x,y);
     }
 
 // va = velocidad con al que viene la particula que choca
