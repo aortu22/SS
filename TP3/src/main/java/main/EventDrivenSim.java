@@ -14,12 +14,14 @@ public class EventDrivenSim {
     private double time;
     private double nextWritingTime;
     private double writingPeriod;
+    private double L;
 
-    public EventDrivenSim(List<Bird> particleList, List<Vertix> vertixList, List<Wall> wallList,double writingPeriod) {
+    public EventDrivenSim(List<Bird> particleList, List<Vertix> vertixList, List<Wall> wallList,double writingPeriod, double L) {
         this.particleList = particleList;
         this.lastCollision = null;
         this.wallList = wallList;
         this.vertixList = vertixList;
+        this.L = L;
 
         Bird[] birds= (Bird[]) getParticleList().toArray(new Bird[particleList.size()]);
         for(int i=0;i< birds.length ;i++){
@@ -155,10 +157,18 @@ public class EventDrivenSim {
         if(collision.isWallCollision()){
             if(collision.getWall().isHorizontal()){
                 bird1.setVy(- bird1.getVy());
-                addImpulse(bird1.getM()*Math.abs(bird1.getVy()));
+                if (wallList.indexOf(collision.getWall()) >=5){
+                    addImpulse(0.0, bird1.getM()*Math.abs(bird1.getVy()));
+                }else{
+                    addImpulse(bird1.getM()*Math.abs(bird1.getVy()), 0.0);
+                }
             }else{
                 bird1.setVx(- bird1.getVx());
-                addImpulse(bird1.getM()*Math.abs(bird1.getVx()));
+                if (wallList.indexOf(collision.getWall()) >=5){
+                    addImpulse(0.0, bird1.getM()*Math.abs(bird1.getVx()));
+                }else{
+                    addImpulse(bird1.getM()*Math.abs(bird1.getVx()), 0.0);
+                }
             }
         }else{
             Bird bird2;
@@ -192,7 +202,7 @@ public class EventDrivenSim {
                 bird2.setVx(bird2.getVx() - Jx / bird2.getM());
                 bird2.setVy(bird2.getVy() - Jy / bird2.getM());
             }else{
-                addImpulse(Math.abs(bird1.getVx()-vx)+Math.abs(bird1.getVy())-vy);
+                addImpulse(Math.abs(bird1.getVx()-vx),Math.abs(bird1.getVy())-vy);
             }
         }
     }
@@ -244,8 +254,7 @@ public class EventDrivenSim {
             String linea;
             String lineaInit;
 
-            double d_x=0;
-            double d_y=0;
+            double dcm=0;
             int count=0;
             while ((linea = reader.readLine()) != null && (lineaInit = readerInit.readLine()) != null) {
                 // Dividir la cadena por espacios en blanco
@@ -265,8 +274,9 @@ public class EventDrivenSim {
                         double r_y_double = Double.parseDouble(r_y);
                         double r_x_init_double = Double.parseDouble(r_x_init);
                         double r_y_init_double = Double.parseDouble(r_y_init);
-                        d_x += Math.pow(r_x_double-r_x_init_double, 2);
-                        d_y += Math.pow(r_y_double-r_y_init_double, 2);
+                        double d_x = Math.pow(r_x_double-r_x_init_double, 2);
+                        double d_y = Math.pow(r_y_double-r_y_init_double, 2);
+                        dcm+=Math.sqrt(d_x + d_y);
                         count++;
                     } catch (NumberFormatException e) {
                         throw new RuntimeException(e);
@@ -277,7 +287,7 @@ public class EventDrivenSim {
                     bwOutput.write(System.lineSeparator()); // Agregar un salto de línea
                 }
             }
-            bwOutput.write(Double.toString(d_x/count) + " " + Double.toString(d_y/count));
+            bwOutput.write(Double.toString(dcm/count));
             bwOutput.write(System.lineSeparator()); // Agregar un salto de línea
             bwOutput.write('\n');
 
@@ -326,7 +336,7 @@ public class EventDrivenSim {
         if(t < nextWritingTime){
             return;
         }
-        nextWritingTime = (t % writingPeriod) * writingPeriod + writingPeriod;
+        nextWritingTime = t + writingPeriod;
         Locale locale = new Locale("en", "US");
         try {
             String dynamic = "src/main/java/main/dynamic.txt";
@@ -360,10 +370,9 @@ public class EventDrivenSim {
         updateOutput();
     }
 
-    void addImpulse(double impulse){
-        Locale locale = new Locale("en", "US");
+    void addImpulseForL(){
         try {
-            String dynamic = "src/main/python/impulse.txt";
+            String dynamic = "src/main/python/impulse"+ L +".txt";
             File file = new File(dynamic);
             // Si el archivo no existe es creado
             if (!file.exists()) {
@@ -372,9 +381,30 @@ public class EventDrivenSim {
             // Parameter false make us write stepping in the information
             FileWriter fw = new FileWriter(file, true);
             BufferedWriter bw = new BufferedWriter(fw);
+            bw.write("\nL = "+ L);
+            bw.newLine(); // Agrega una nueva línea después de cada escritura
+            bw.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    void addImpulse(double impulse_left, double impulse_right){
+        Locale locale = new Locale("en", "US");
+        try {
+            String dynamic = "src/main/python/impulse"+ L +".txt";
+            File file = new File(dynamic);
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+
+            }
+            // Parameter false make us write stepping in the information
+            FileWriter fw = new FileWriter(file, true);
+            BufferedWriter bw = new BufferedWriter(fw);
             StringBuilder info = new StringBuilder();
             DecimalFormat df = new DecimalFormat("0.0000", new DecimalFormatSymbols(locale));
-            info.append(df.format(time)).append(" ").append(df.format(impulse));
+            info.append(df.format(time)).append(" ").append(df.format(impulse_left)).append(" ").append(df.format(impulse_right));
             bw.write(info.toString());
             bw.newLine(); // Agrega una nueva línea después de cada escritura
             bw.close();
