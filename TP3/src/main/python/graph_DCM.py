@@ -13,9 +13,9 @@ def main():
 
     corrida_actual = []
     for i, linea in enumerate(lineas):
-        if i % 2 == 1:
-            valor = float(linea.strip())
-            corrida_actual.append(valor)
+        t = float(linea.strip())
+        valor = float(linea.strip())
+        corrida_actual.append(4 * valor * t)
 
     # Verificar si se completa una corrida (una línea en blanco)
     if not linea.strip():
