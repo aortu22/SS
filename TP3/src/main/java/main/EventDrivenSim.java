@@ -328,7 +328,7 @@ public class EventDrivenSim {
         if(t < nextWritingTime){
             return;
         }
-        nextWritingTime = (t % writingPeriod) * writingPeriod + writingPeriod;
+        nextWritingTime = t + writingPeriod;
         Locale locale = new Locale("en", "US");
         try {
             String dynamic = "src/main/java/main/dynamic.txt";
