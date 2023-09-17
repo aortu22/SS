@@ -373,7 +373,7 @@ public class EventDrivenSim {
             // Parameter false make us write stepping in the information
             FileWriter fw = new FileWriter(file, true);
             BufferedWriter bw = new BufferedWriter(fw);
-            bw.write("L = "+ L);
+            bw.write("\nL = "+ L);
             bw.newLine(); // Agrega una nueva línea después de cada escritura
             bw.close();
         }catch (Exception e){
