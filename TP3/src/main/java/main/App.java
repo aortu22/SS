@@ -132,12 +132,12 @@ public class App
         }
         List<Wall> wallList = initializeWalls(L,L_fixed);
         List<Vertix> vertixList = initializeVertix(L,L_fixed);
-        EventDrivenSim sim=new EventDrivenSim(birdList, vertixList, wallList,writingPeriod);
+        EventDrivenSim sim=new EventDrivenSim(birdList, vertixList, wallList,writingPeriod,L);
         deleteOutput();
-        deleteImpulse();
+//        deleteImpulse();
         sim.updateOutput();
         double t = 0.00;
-        sim.addImpulseForL(L);
+        sim.addImpulseForL();
         while(t < maxT){
             sim.recalculateCollisions();
             Collision newCollision = sim.calculateNextStep();

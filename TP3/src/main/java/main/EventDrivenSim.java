@@ -14,12 +14,14 @@ public class EventDrivenSim {
     private double time;
     private double nextWritingTime;
     private double writingPeriod;
+    private double L;
 
-    public EventDrivenSim(List<Bird> particleList, List<Vertix> vertixList, List<Wall> wallList,double writingPeriod) {
+    public EventDrivenSim(List<Bird> particleList, List<Vertix> vertixList, List<Wall> wallList,double writingPeriod, double L) {
         this.particleList = particleList;
         this.lastCollision = null;
         this.wallList = wallList;
         this.vertixList = vertixList;
+        this.L = L;
 
         Bird[] birds= (Bird[]) getParticleList().toArray(new Bird[particleList.size()]);
         for(int i=0;i< birds.length ;i++){
@@ -244,8 +246,7 @@ public class EventDrivenSim {
             String linea;
             String lineaInit;
 
-            double d_x=0;
-            double d_y=0;
+            double dcm=0;
             int count=0;
             while ((linea = reader.readLine()) != null && (lineaInit = readerInit.readLine()) != null) {
                 // Dividir la cadena por espacios en blanco
@@ -265,8 +266,9 @@ public class EventDrivenSim {
                         double r_y_double = Double.parseDouble(r_y);
                         double r_x_init_double = Double.parseDouble(r_x_init);
                         double r_y_init_double = Double.parseDouble(r_y_init);
-                        d_x += Math.pow(r_x_double-r_x_init_double, 2);
-                        d_y += Math.pow(r_y_double-r_y_init_double, 2);
+                        double d_x = Math.pow(r_x_double-r_x_init_double, 2);
+                        double d_y = Math.pow(r_y_double-r_y_init_double, 2);
+                        dcm+=Math.sqrt(d_x + d_y);
                         count++;
                     } catch (NumberFormatException e) {
                         throw new RuntimeException(e);
@@ -277,7 +279,7 @@ public class EventDrivenSim {
                     bwOutput.write(System.lineSeparator()); // Agregar un salto de línea
                 }
             }
-            bwOutput.write(Double.toString(d_x/count) + " " + Double.toString(d_y/count));
+            bwOutput.write(Double.toString(dcm/count));
             bwOutput.write(System.lineSeparator()); // Agregar un salto de línea
             bwOutput.write('\n');
 
@@ -360,33 +362,29 @@ public class EventDrivenSim {
         updateOutput();
     }
 
-    void addImpulseForL(double L){
-        boolean recentlyCrated = false;
+    void addImpulseForL(){
         try {
-            String dynamic = "src/main/python/impulse.txt";
+            String dynamic = "src/main/python/impulse"+ L +".txt";
             File file = new File(dynamic);
             // Si el archivo no existe es creado
             if (!file.exists()) {
                 file.createNewFile();
-                recentlyCrated=true;
             }
             // Parameter false make us write stepping in the information
             FileWriter fw = new FileWriter(file, true);
             BufferedWriter bw = new BufferedWriter(fw);
-            if(!recentlyCrated){
-                bw.newLine();
-            }
-            bw.write(Double.toString(L));
+            bw.write("L = "+ L);
             bw.newLine(); // Agrega una nueva línea después de cada escritura
             bw.close();
         }catch (Exception e){
             e.printStackTrace();
         }
     }
+
     void addImpulse(double impulse){
         Locale locale = new Locale("en", "US");
         try {
-            String dynamic = "src/main/python/impulse.txt";
+            String dynamic = "src/main/python/impulse"+ L +".txt";
             File file = new File(dynamic);
             // Si el archivo no existe es creado
             if (!file.exists()) {
