@@ -7,25 +7,25 @@ public class App
 {
 
     public static final double maxT = 40;
-    public static final double writingPeriod = 0.1;
+    public static final double writingPeriod = 2;
     public static int N = 0;
 
     public static void deleteOutput(){
         String output = "src/main/python/output.txt";
-        String output_dcm = "src/main/python/outputDCM.txt";
+//        String output_dcm = "src/main/python/outputDCM.txt";
         String output_xyz = "src/main/python/output.xyz";
         File fileOutput = new File(output);
         File fileOutputXYZ = new File(output_xyz);
-        File fileOutputDCM = new File(output_dcm);
+  //      File fileOutputDCM = new File(output_dcm);
         if (fileOutput.exists()) {
             fileOutput.delete();
         }
         if (fileOutputXYZ.exists()) {
             fileOutputXYZ.delete();
         }
-        if (fileOutputDCM.exists()) {
-            fileOutputDCM.delete();
-        }
+    //    if (fileOutputDCM.exists()) {
+    //        fileOutputDCM.delete();
+    //    }
     }
 
     public static void deleteImpulse(){
@@ -131,12 +131,13 @@ public class App
             }
             List<Wall> wallList = initializeWalls(L,L_fixed);
             List<Vertix> vertixList = initializeVertix(L,L_fixed);
-            EventDrivenSim sim=new EventDrivenSim(birdList, vertixList, wallList,writingPeriod,L);
+            EventDrivenSim sim=new EventDrivenSim(birdList, vertixList, wallList,writingPeriod,L,L_fixed);
             deleteOutput();
 //        deleteImpulse();
             sim.updateOutput();
             double t = 0.00;
             sim.addImpulseForL();
+            sim.addDCMForL();
             while(t < maxT){
                 sim.recalculateCollisions();
                 Collision newCollision = sim.calculateNextStep();
