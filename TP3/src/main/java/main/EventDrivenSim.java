@@ -160,15 +160,15 @@ public class EventDrivenSim {
             if(collision.getWall().isHorizontal()){
                 bird1.setVy(-bird1.getVy());
                 switch (wallList.indexOf(collision.getWall())) {
-                    case 0, 2 -> addImpulse(bird1.getM() * Math.abs(2 * bird1.getVy()) / L_fixed, 0.00);
-                    case 5, 7 -> addImpulse(0.0, bird1.getM() * Math.abs(2 * bird1.getVy()) / L_fixed);
+                    case 0, 2 -> addImpulse(bird1.getM() * Math.abs(2 * bird1.getVy()) , 0.00);
+                    case 5, 7 -> addImpulse(0.0, bird1.getM() * Math.abs(2 * bird1.getVy()) );
                 }
             }else{
                 bird1.setVx(-bird1.getVx());
                 switch (wallList.indexOf(collision.getWall())) {
-                    case 1 -> addImpulse(bird1.getM() * Math.abs(2 * bird1.getVx()) / L_fixed, 0.00);
-                    case 3, 4 -> addImpulse(bird1.getM() * Math.abs(2 * bird1.getVx()) / ((L_fixed - L) / 2), 0.0);
-                    case 6 -> addImpulse(0.0, bird1.getM() * Math.abs(2 * bird1.getVx()) / L);
+                    case 1 -> addImpulse(bird1.getM() * Math.abs(2 * bird1.getVx()) , 0.00);
+                    case 3, 4 -> addImpulse(bird1.getM() * Math.abs(2 * bird1.getVx()) , 0.0);
+                    case 6 -> addImpulse(0.0, bird1.getM() * Math.abs(2 * bird1.getVx()) );
                 }
             }
         }else{

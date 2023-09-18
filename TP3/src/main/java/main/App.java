@@ -6,7 +6,7 @@ import java.io.*;
 public class App
 {
 
-    public static final double maxT = 40;
+    public static final double maxT = 100;
     public static final double writingPeriod = 2;
     public static int N = 0;
 
@@ -73,16 +73,16 @@ public class App
     {
         String jsonFilePathStatic = "src/main/java/main/static.txt";
         String jsonFilePathDynamic = "src/main/java/main/dynamic.txt";
-        reloadDynamicOutput();
-        List<Bird> birdList = new ArrayList<>();
-        double L = 0.0;
-        double L_fixed = 0.0;
-        double M = 0.0;
-        int N = 0;
-        double R = 0.0;
-        double V = 0.0;
         int iter=0;
         while (iter<5){
+            reloadDynamicOutput();
+            List<Bird> birdList = new ArrayList<>();
+            double L = 0.0;
+            double L_fixed = 0.0;
+            double M = 0.0;
+            int N = 0;
+            double R = 0.0;
+            double V = 0.0;
             try {
                 BufferedReader br = new BufferedReader(new FileReader(jsonFilePathStatic));
 

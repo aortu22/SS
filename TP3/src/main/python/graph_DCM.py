@@ -30,7 +30,7 @@ def main():
                         break
                 else:
                     t, valor = map(float, linea.strip().split())
-                    corrida_actual.append(4 * valor * t)
+                    corrida_actual.append(valor)
             corridas.append(corrida_actual)
             i += 1
 
@@ -55,13 +55,16 @@ def main():
         std_corridas.append(np.std(corrida))
 
     x = [i * deltaT for i in range(len(corridas[0]))]
+    short_x = x[:10]
 
-    coefficients = np.polyfit(x, mean_corridas, 1)
+
+    coefficients = np.polyfit(short_x, mean_corridas[:10], 1)
     fit_line = np.poly1d(coefficients)
-    y_fit = fit_line(x)
+    y_fit = fit_line(short_x)
+
     # Graficar los datos como puntos
     plt.errorbar(x, mean_corridas, yerr=std_corridas, fmt='-o', capsize=5)
-    plt.plot(x, y_fit, color='red', label='Ajuste Lineal')
+    plt.plot(short_x, y_fit, color='red', label='Ajuste Lineal')
     plt.xlabel('Tiempo (s)')
     plt.ylabel('DCM')
     # plt.title('Gráfico de DCM en el tiempo')

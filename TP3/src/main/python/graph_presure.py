@@ -1,6 +1,20 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+def get_perimeter_l():
+    with open("../java/main/static.txt", 'r') as config_file:
+        L = float(next(config_file))
+        L_fixed = float(next(config_file))
+        total_perimeter = L_fixed * 3 + (L_fixed - L) + L_fixed *2 + L
+        total_perimeter = L_fixed * 3 + (L_fixed - L)
+        return total_perimeter
+
+def get_perimeter_r():
+    with open("../java/main/static.txt", 'r') as config_file:
+        L = float(next(config_file))
+        L_fixed = float(next(config_file))
+        total_perimeter = L_fixed * 2 + L
+        return total_perimeter
 
 def main():
 
@@ -9,13 +23,14 @@ def main():
     # impulse_file = './impulse0.07.txt'
     # impulse_file = './impulse0.09.txt'
 
-    time = 40
+    time = 100
     times = [i for i in range(time)]
     runs = 5
     # Lista para almacenar las corridas
     corridas_r = np.zeros((runs, len(times)), dtype=float)
     corridas_l = np.zeros((runs, len(times)), dtype=float)
-
+    perimeter_l = get_perimeter_l()
+    perimeter_r = get_perimeter_r()
     with open(impulse_file, 'r') as impulse_file:
         impulse_file.readline() # Jump first enter
         i = 0
@@ -32,8 +47,8 @@ def main():
                 else:
                     tiempo, presion_l, presion_r = map(float, line.strip().split())
                     segundos = int(tiempo)
-                    corridas_r[i, segundos - 1] += float(presion_r)
-                    corridas_l[i, segundos - 1] += float(presion_l)
+                    corridas_r[i, segundos - 1] += float(presion_r) / perimeter_r
+                    corridas_l[i, segundos - 1] += float(presion_l) / perimeter_l
 
                 prev = line
             i += 1
