@@ -4,14 +4,21 @@ import matplotlib.pyplot as plt
 
 def main():
 
-    deltaT = 0.1
+    # outputDCM_file = './outputDCM0.03.txt'
+    # outputDCM_file = './outputDCM0.05.txt'
+    # outputDCM_file = './outputDCM0.07.txt'
+    outputDCM_file = './outputDCM0.09.txt'
+
+    deltaT = 2
     # Lista para almacenar las corridas
     corridas = []
+    runs = 5
     i = 0
-    with open('./outputDCM.txt', 'r') as archivo:
-        while i < 5:
+    with open(outputDCM_file, 'r') as archivo:
+        archivo.readline() # Jump first enter
+        while i < runs:
             prev = ''
-            archivo.readline() # Jump L = 0.03 in file
+            archivo.readline() # Jump L = x in file
             corrida_actual = []
             while True:
                 linea = archivo.readline()
@@ -34,15 +41,13 @@ def main():
             min_length = len(corrida)
 
     j = 0
-    while j < 5:
+    while j < runs:
         corridas[j] = corridas[j][:min_length]
         j += 1
 
 
 
     corridas_transpuestas = np.array(corridas).T
-    print(corridas)
-    print(corridas_transpuestas)
     mean_corridas = []
     std_corridas = []
     for corrida in corridas_transpuestas:
@@ -57,9 +62,9 @@ def main():
     # Graficar los datos como puntos
     plt.errorbar(x, mean_corridas, yerr=std_corridas, fmt='-o', capsize=5)
     plt.plot(x, y_fit, color='red', label='Ajuste Lineal')
-    plt.xlabel('s')
+    plt.xlabel('Tiempo (s)')
     plt.ylabel('DCM')
-    plt.title('Gráfico de DCM en el tiempo')
+    # plt.title('Gráfico de DCM en el tiempo')
     plt.legend()
     plt.grid(True)
     plt.show()

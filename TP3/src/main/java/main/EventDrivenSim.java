@@ -13,15 +13,17 @@ public class EventDrivenSim {
     private Collision  lastCollision;
     private double time;
     private double nextWritingTime;
-    private double writingPeriod;
-    private double L;
+    private final double writingPeriod;
+    private final double L;
+    private final double L_fixed;
 
-    public EventDrivenSim(List<Bird> particleList, List<Vertix> vertixList, List<Wall> wallList,double writingPeriod, double L) {
+    public EventDrivenSim(List<Bird> particleList, List<Vertix> vertixList, List<Wall> wallList,double writingPeriod, double L, double L_fixed) {
         this.particleList = particleList;
         this.lastCollision = null;
         this.wallList = wallList;
         this.vertixList = vertixList;
         this.L = L;
+        this.L_fixed = L_fixed;
 
         Bird[] birds= (Bird[]) getParticleList().toArray(new Bird[particleList.size()]);
         for(int i=0;i< birds.length ;i++){
@@ -157,17 +159,16 @@ public class EventDrivenSim {
         if(collision.isWallCollision()){
             if(collision.getWall().isHorizontal()){
                 bird1.setVy(-bird1.getVy());
-                if (wallList.indexOf(collision.getWall()) >= 5){
-                    addImpulse(0.0, bird1.getM()*Math.abs(2*bird1.getVy()));
-                }else{
-                    addImpulse(bird1.getM()*Math.abs(2*bird1.getVy()), 0.0);
+                switch (wallList.indexOf(collision.getWall())) {
+                    case 0, 2 -> addImpulse(bird1.getM() * Math.abs(2 * bird1.getVy()) / L_fixed, 0.00);
+                    case 5, 7 -> addImpulse(0.0, bird1.getM() * Math.abs(2 * bird1.getVy()) / L_fixed);
                 }
             }else{
                 bird1.setVx(-bird1.getVx());
-                if (wallList.indexOf(collision.getWall()) >= 5){
-                    addImpulse(0.0, bird1.getM()*Math.abs(2*bird1.getVx()));
-                }else{
-                    addImpulse(bird1.getM()*Math.abs(2*bird1.getVx()), 0.0);
+                switch (wallList.indexOf(collision.getWall())) {
+                    case 1 -> addImpulse(bird1.getM() * Math.abs(2 * bird1.getVx()) / L_fixed, 0.00);
+                    case 3, 4 -> addImpulse(bird1.getM() * Math.abs(2 * bird1.getVx()) / ((L_fixed - L) / 2), 0.0);
+                    case 6 -> addImpulse(0.0, bird1.getM() * Math.abs(2 * bird1.getVx()) / L);
                 }
             }
         }else{
@@ -236,7 +237,7 @@ public class EventDrivenSim {
 
     public void updateDCMOutput(){
         try{
-            String output = "src/main/python/outputDCM.txt";
+            String output = "src/main/python/outputDCM" + L + ".txt";
             String dynamic = "src/main/java/main/dynamic.txt";
             String dynamicOutput = "src/main/java/main/dynamicOutput.txt";
 
@@ -385,7 +386,7 @@ public class EventDrivenSim {
 
     void addDCMForL(){
         try {
-            String output = "src/main/python/outputDCM.txt";
+            String output = "src/main/python/outputDCM" + L + ".txt";
             File fileOutput = new File(output);
             if (!fileOutput.exists()) {
                 fileOutput.createNewFile();

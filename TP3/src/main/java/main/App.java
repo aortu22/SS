@@ -6,8 +6,8 @@ import java.io.*;
 public class App
 {
 
-    public static final double maxT = 100;
-    public static final double writingPeriod = 1;
+    public static final double maxT = 40;
+    public static final double writingPeriod = 2;
     public static int N = 0;
 
     public static void deleteOutput(){
@@ -131,7 +131,7 @@ public class App
             }
             List<Wall> wallList = initializeWalls(L,L_fixed);
             List<Vertix> vertixList = initializeVertix(L,L_fixed);
-            EventDrivenSim sim=new EventDrivenSim(birdList, vertixList, wallList,writingPeriod,L);
+            EventDrivenSim sim=new EventDrivenSim(birdList, vertixList, wallList,writingPeriod,L,L_fixed);
             deleteOutput();
 //        deleteImpulse();
             sim.updateOutput();

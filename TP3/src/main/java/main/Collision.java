@@ -1,9 +1,9 @@
 package main;
 
 public class Collision {
-    private Bird bird1;
-    private Bird bird2;
-    private Wall wall;
+    private final Bird bird1;
+    private final Bird bird2;
+    private final Wall wall;
 
     private Vertix vertix;
     private double collisionTime;
@@ -72,10 +72,9 @@ public class Collision {
     }
     @Override
     public boolean equals(Object obj) {
-        if(!(obj instanceof Collision)){
+        if(!(obj instanceof Collision other)){
             return false;
         }
-        Collision other=(Collision) obj;
         return this.wall==other.getWall() && this.vertix == other.vertix && ((other.getBird1()==this.getBird1() && this.getBird2()==other.getBird2()) || (other.getBird1()==this.getBird2() && this.getBird1()==other.getBird2()));
     }
 }
