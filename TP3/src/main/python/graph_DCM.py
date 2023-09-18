@@ -4,45 +4,58 @@ import matplotlib.pyplot as plt
 
 def main():
 
-    deltaT = 0.01
+    deltaT = 0.1
     # Lista para almacenar las corridas
     corridas = []
-
+    i = 0
     with open('./outputDCM.txt', 'r') as archivo:
-        lineas = archivo.readlines()
-
-    corrida_actual = []
-    for i, linea in enumerate(lineas):
-        t = float(linea.strip())
-        valor = float(linea.strip())
-        corrida_actual.append(4 * valor * t)
-
-    # Verificar si se completa una corrida (una línea en blanco)
-    if not linea.strip():
-        if corrida_actual:  # Ignorar si está vacía
-            corridas.append(corrida_actual)
+        while i < 5:
+            prev = ''
+            archivo.readline() # Jump L = 0.03 in file
             corrida_actual = []
+            while True:
+                linea = archivo.readline()
 
-    # Añadir la última corrida si no se terminó con una línea en blanco
-    if corrida_actual:
-        corridas.append(corrida_actual)
+                if not linea:  # If readline() returns an empty string, we've reached the end of the file
+                    break
+                if linea == "\n":
+                    if prev != "\n":
+                        break
+                else:
+                    t, valor = map(float, linea.strip().split())
+                    corrida_actual.append(4 * valor * t)
+            corridas.append(corrida_actual)
+            i += 1
+
+    min_length = 10000000000
+    i = 0
+    for corrida in corridas:
+        if min_length > len(corrida):
+            min_length = len(corrida)
+
+    j = 0
+    while j < 5:
+        corridas[j] = corridas[j][:min_length]
+        j += 1
+
+
 
     corridas_transpuestas = np.array(corridas).T
+    print(corridas)
+    print(corridas_transpuestas)
+    mean_corridas = []
+    std_corridas = []
+    for corrida in corridas_transpuestas:
+        mean_corridas.append(np.mean(corrida))
+        std_corridas.append(np.std(corrida))
 
+    x = [i * deltaT for i in range(len(corridas[0]))]
 
-
-
-    medias = np.mean(corridas_transpuestas)
-
-    desvios_std = np.std(corridas_transpuestas)
-
-    x = [i * deltaT for i in range(len(corridas))]
-
-    coefficients = np.polyfit(x,medias, 1)
+    coefficients = np.polyfit(x, mean_corridas, 1)
     fit_line = np.poly1d(coefficients)
     y_fit = fit_line(x)
     # Graficar los datos como puntos
-    plt.errorbar(x, medias, yerr=desvios_std, fmt='-o', capsize=5)
+    plt.errorbar(x, mean_corridas, yerr=std_corridas, fmt='-o', capsize=5)
     plt.plot(x, y_fit, color='red', label='Ajuste Lineal')
     plt.xlabel('s')
     plt.ylabel('DCM')
