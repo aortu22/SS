@@ -5,7 +5,6 @@ def get_perimeter_l():
     with open("../java/main/static.txt", 'r') as config_file:
         L = float(next(config_file))
         L_fixed = float(next(config_file))
-        total_perimeter = L_fixed * 3 + (L_fixed - L) + L_fixed *2 + L
         total_perimeter = L_fixed * 3 + (L_fixed - L)
         return total_perimeter
 
@@ -18,9 +17,9 @@ def get_perimeter_r():
 
 def main():
 
-    impulse_file = './impulse0.03.txt'
+    # impulse_file = './impulse0.03.txt'
     # impulse_file = './impulse0.05.txt'
-    # impulse_file = './impulse0.07.txt'
+    impulse_file = './impulse0.07.txt'
     # impulse_file = './impulse0.09.txt'
 
     time = 100
