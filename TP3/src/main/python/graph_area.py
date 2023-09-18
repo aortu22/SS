@@ -1,15 +1,19 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 # Define the file names and corresponding areas
 file_names = ["impulse0.03.txt", "impulse0.05.txt", "impulse0.07.txt", "impulse0.09.txt"]
-areas = [(0.09*0.09+0.09*0.03), (0.09*0.09+0.09*0.05), (0.09*0.09+0.09*0.07), (0.09*0.09+0.09*0.09)]
+l=[0.03,0.05,0.07,0.09]
+areas = []
+
 areasNegative = [1/(0.09*0.09+0.09*0.03), 1/(0.09*0.09+0.09*0.05), 1/(0.09*0.09+0.09*0.07), 1/(0.09*0.09+0.09*0.09)]
 
 # Initialize lists to store results
 averages = []
 errors = []
-
+for i in range(len(l)):
+    areas.append([0.09 * 3 + (0.09 - l[i]),0.09 * 2 + l[i]])
 # Loop through each file
 for file_name, area in zip(file_names, areas):
     data = []
@@ -22,13 +26,14 @@ for file_name, area in zip(file_names, areas):
     for line in lines:
         if line.strip():  # Ignore empty lines
             run_data = line.split()
-            if len(run_data)==1 and run>0:
+            if run_data[0]=="L" and run>0:
                 runs.append(run)
                 run=0
-                break
-            if len(run_data) == 3 and float(run_data[0])>35:
-                run=run+float(run_data[1])+ float(run_data[2])
 
+            if len(run_data) == 3 and  run_data[0]!="L" and float(run_data[0])>95:
+
+                run=run+(float(run_data[1])/area[0]+ float(run_data[2])/area[1])
+    runs.append(run)
     # Calculate the sum and average for each run
 
     for i in range(len(runs)):
@@ -39,27 +44,30 @@ for file_name, area in zip(file_names, areas):
 
 
     averages.append(run_averages)
+    print(run_averages*(area[1]+area[0]))
     errors.append(run_error)
-for i in range(len(areas)):
-    print(averages[i]*areas[i])
+
 # Create a graph
-slope, _ = np.polyfit(areasNegative, averages, 1, full=False)
+
+slope = np.mean(np.divide(averages, areasNegative))
 
 def linear_fit(x):
     return slope * x
 
 # Crear un nuevo conjunto de datos para la línea ajustada
-x_fit = np.linspace(min(areasNegative), max(areasNegative), 100)
+x_fit = np.linspace(0, max(areasNegative), 100)
 y_fit = linear_fit(x_fit)
 
 # Crear el gráfico de dispersión de los datos originales
 plt.plot(areasNegative, averages, label='Datos originales')
 
 # Agregar la línea ajustada al mismo gráfico
-plt.plot(x_fit, y_fit-7, label=f'Línea ajustada: y = {slope:.2f}x', color='red')
+plt.plot(x_fit, y_fit, label=f'Línea ajustada: y = {slope:.2f}x', color='red')
 plt.errorbar(areasNegative, averages, yerr=errors, marker='o', linestyle='-', capsize=5)
-plt.xlabel('Area-1')
-plt.ylabel('Presion')
-plt.title('presion vs. Area-1')
+for i, x_val in enumerate(areasNegative):
+    y_val = averages[i]
+    plt.text(x_val, y_val, f'x={round(x_val)}', ha='right', va='bottom')
+plt.xlabel('A^-1 (1/m^2)')
+plt.ylabel('Presión (Kg/s^2)')
 plt.grid(True)
 plt.show()
