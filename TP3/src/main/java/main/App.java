@@ -74,7 +74,7 @@ public class App
         String jsonFilePathStatic = "src/main/java/main/static.txt";
         String jsonFilePathDynamic = "src/main/java/main/dynamic.txt";
         int iter=0;
-        while (iter<5){
+        while (iter<1){
             reloadDynamicOutput();
             List<Bird> birdList = new ArrayList<>();
             double L = 0.0;
