@@ -61,6 +61,7 @@ public class App1
         double Y = 0;
         double dT = 0.0;
         double dTEscritura = 0.0;
+        double A = 1.0;
         try {
             BufferedReader br = new BufferedReader(new FileReader(jsonFilePathStatic));
 
@@ -74,7 +75,7 @@ public class App1
             int i = 0;
             particle = new Particle(1,0,M);
             particle.setPosition(1,0);          //La particula arranca en (1,0) siempre
-            particle.setSpeed();
+            particle.setSpeed(-A * Y / (2*M));
             br.close();
         } catch (IOException e) {
             e.printStackTrace();
