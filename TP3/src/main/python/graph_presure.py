@@ -1,42 +1,84 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
-def get_perimeter_length():
+def get_perimeter_l():
     with open("../java/main/static.txt", 'r') as config_file:
         L = float(next(config_file))
         L_fixed = float(next(config_file))
-        total_perimeter = L_fixed * 3 + (L_fixed - L) + L_fixed *2 + L
+        total_perimeter = L_fixed * 3 + (L_fixed - L)
+        return total_perimeter
+
+def get_perimeter_r():
+    with open("../java/main/static.txt", 'r') as config_file:
+        L = float(next(config_file))
+        L_fixed = float(next(config_file))
+        total_perimeter = L_fixed * 2 + L
         return total_perimeter
 
 def main():
 
-    presiones_por_segundo = {}
+    # impulse_file = './impulse0.03.txt'
+    # impulse_file = './impulse0.05.txt'
+    impulse_file = './impulse0.07.txt'
+    # impulse_file = './impulse0.09.txt'
 
-    with open('impulse.txt', 'r') as archivo:
-        for linea in archivo:
-            tiempo, presion = map(float, linea.strip().split())
-            segundo = int(tiempo)
+    time = 100
+    times = [i for i in range(time)]
+    runs = 5
+    # Lista para almacenar las corridas
+    corridas_r = np.zeros((runs, len(times)), dtype=float)
+    corridas_l = np.zeros((runs, len(times)), dtype=float)
+    perimeter_l = get_perimeter_l()
+    perimeter_r = get_perimeter_r()
+    with open(impulse_file, 'r') as impulse_file:
+        impulse_file.readline() # Jump first enter
+        i = 0
+        while i < runs:
+            prev = ''
+            impulse_file.readline() # Jump L = x in file
+            while True:
+                line = impulse_file.readline()
+                if not line:  # If readline() returns an empty string, we've reached the end of the file
+                    break
+                if line == "\n":
+                    if prev != "\n":
+                        break
+                else:
+                    tiempo, presion_l, presion_r = map(float, line.strip().split())
+                    segundos = int(tiempo)
+                    corridas_r[i, segundos - 1] += float(presion_r) / perimeter_r
+                    corridas_l[i, segundos - 1] += float(presion_l) / perimeter_l
 
-            # Verificar si ya existe una suma para ese segundo en el diccionario
-            if segundo in presiones_por_segundo:
-                presiones_por_segundo[segundo] += presion
-            else:
-                presiones_por_segundo[segundo] = presion
+                prev = line
+            i += 1
 
-    tiempos = list(presiones_por_segundo.keys())
-    presiones = list(presiones_por_segundo.values())
+    corridas_transpuestas_r = np.array(corridas_r).T
+    mean_corridas_r = []
+    std_corridas_r = []
+    for corrida in corridas_transpuestas_r:
+        mean_corridas_r.append(np.mean(corrida))
+        std_corridas_r.append(np.std(corrida))
 
-    #longitud total del perimetro
-    perimeter_length = get_perimeter_length()
+    corridas_transpuestas_l = np.array(corridas_l).T
+    mean_corridas_l = []
+    std_corridas_l = []
+    for corrida in corridas_transpuestas_l:
+        mean_corridas_l.append(np.mean(corrida))
+        std_corridas_l.append(np.std(corrida))
 
-# Dividir todos los valores de presión por x
-    presiones_divididas = [presion / perimeter_length for presion in presiones]
-    plt.bar(tiempos, presiones_divididas, width=1.0, align='edge')
+
+    plt.figure(figsize=(10, 6))
+    direct = ['Izquierda', 'Derecha']
+    # Create lines for the vectors
+    plt.errorbar(times, np.array(mean_corridas_l), yerr=np.array(std_corridas_l), fmt='-o', label=f"Recinto = {direct[0]}")
+    plt.errorbar(times, np.array(mean_corridas_r), yerr=np.array(std_corridas_r), fmt='-o', label=f"Recinto = {direct[1]}")
+
+    # Dividir todos los valores de presión por x
     plt.xlabel('Tiempo (s)')
-    plt.ylabel('Presión (Pa)')
-    plt.title('Presión por segundo')
+    plt.ylabel('Presión (Kg/s^2)')
     plt.grid(True)
+    plt.legend()
     plt.show()
-
 
 
 if __name__ == "__main__":

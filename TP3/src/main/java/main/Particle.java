@@ -6,7 +6,7 @@ import java.util.List;
 public class Particle implements Comparable<Particle> {
     private final int id;
     private final List<Particle> neighbours = new ArrayList<>();
-    private Position position = new Position(0,0);
+    private final Position position = new Position(0,0);
 
     private final double radio;
 

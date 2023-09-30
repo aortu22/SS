@@ -6,26 +6,26 @@ import java.io.*;
 public class App
 {
 
-    public static final double maxT = 10;
-    public static final double writingPeriod = 0.01;
+    public static final double maxT = 100;
+    public static final double writingPeriod = 2;
     public static int N = 0;
 
     public static void deleteOutput(){
         String output = "src/main/python/output.txt";
-        String output_dcm = "src/main/python/outputDCM.txt";
+//        String output_dcm = "src/main/python/outputDCM.txt";
         String output_xyz = "src/main/python/output.xyz";
         File fileOutput = new File(output);
         File fileOutputXYZ = new File(output_xyz);
-        File fileOutputDCM = new File(output_dcm);
+  //      File fileOutputDCM = new File(output_dcm);
         if (fileOutput.exists()) {
             fileOutput.delete();
         }
         if (fileOutputXYZ.exists()) {
             fileOutputXYZ.delete();
         }
-        if (fileOutputDCM.exists()) {
-            fileOutputDCM.delete();
-        }
+    //    if (fileOutputDCM.exists()) {
+    //        fileOutputDCM.delete();
+    //    }
     }
 
     public static void deleteImpulse(){
@@ -73,77 +73,81 @@ public class App
     {
         String jsonFilePathStatic = "src/main/java/main/static.txt";
         String jsonFilePathDynamic = "src/main/java/main/dynamic.txt";
-        double v = 0.03; //desp lo pedimos por input o algo
-        reloadDynamicOutput();
-        List<Double> orderStatList = new ArrayList<>();
-        List<Bird> birdList = new ArrayList<>();
-        double L = 0.0;
-        double L_fixed = 0.0;
-        double M = 0.0;
-        int N = 0;
-        double R = 0.0;
-        double V = 0.0;
-        double m = 1.0;
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(jsonFilePathStatic));
+        int iter=0;
+        while (iter<1){
+            reloadDynamicOutput();
+            List<Bird> birdList = new ArrayList<>();
+            double L = 0.0;
+            double L_fixed = 0.0;
+            double M = 0.0;
+            int N = 0;
+            double R = 0.0;
+            double V = 0.0;
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(jsonFilePathStatic));
 
-            // Leer las primeras 3 líneas y guardarlas en variables especiales
-            L = Double.parseDouble(br.readLine());
-            L_fixed = Double.parseDouble(br.readLine());
-            M = Double.parseDouble(br.readLine());
-            N = Integer.parseInt(br.readLine());
-            R = Double.parseDouble(br.readLine());
-            V = Double.parseDouble(br.readLine());
-            App.N = N;
-            // Leer y retornar solo el primer valor de cada par de valores
-            int i = 0;
-            while (br.readLine() != null) {
-                Bird bird = new Bird(i, v, m, R);
-                birdList.add(bird);
-                i++;
+                // Leer las primeras 3 líneas y guardarlas en variables especiales
+                L = Double.parseDouble(br.readLine());
+                L_fixed = Double.parseDouble(br.readLine());
+                M = Double.parseDouble(br.readLine());
+                N = Integer.parseInt(br.readLine());
+                R = Double.parseDouble(br.readLine());
+                V = Double.parseDouble(br.readLine());
+                App.N = N;
+                // Leer y retornar solo el primer valor de cada par de valores
+                int i = 0;
+                while (br.readLine() != null) {
+                    Bird bird = new Bird(i, V, M, R);
+                    birdList.add(bird);
+                    i++;
+                }
+
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(jsonFilePathDynamic));
+                String linea;
 
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(jsonFilePathDynamic));
-            String linea;
+                // Saltar la primera línea
+                br.readLine();
+                int i = 0;
+                while ((linea = br.readLine()) != null) {
+                    String[] valores = linea.split(" ");
+                    double x = Double.parseDouble(valores[0]);
+                    double y = Double.parseDouble(valores[1]);
+                    double Vx = Double.parseDouble(valores[2]);
+                    double Vy = Double.parseDouble(valores[3]);
+                    birdList.get(i).setPosition(x,y);
+                    birdList.get(i).setDirection(Vx,Vy);
+                    i++;
+                }
 
-            // Saltar la primera línea
-            br.readLine();
-            int i = 0;
-            while ((linea = br.readLine()) != null) {
-                String[] valores = linea.split(" ");
-                double x = Double.parseDouble(valores[0]);
-                double y = Double.parseDouble(valores[1]);
-                double Vx = Double.parseDouble(valores[2]);
-                double Vy = Double.parseDouble(valores[3]);
-                birdList.get(i).setPosition(x,y);
-                birdList.get(i).setDirection(Vx,Vy);
-                i++;
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            List<Wall> wallList = initializeWalls(L,L_fixed);
+            List<Vertix> vertixList = initializeVertix(L,L_fixed);
+            EventDrivenSim sim=new EventDrivenSim(birdList, vertixList, wallList,writingPeriod,L,L_fixed);
+            deleteOutput();
+//        deleteImpulse();
+            sim.updateOutput();
+            double t = 0.00;
+            sim.addImpulseForL();
+            sim.addDCMForL();
+            while(t < maxT){
+                sim.recalculateCollisions();
+                Collision newCollision = sim.calculateNextStep();
+                t = newCollision.getCollisionTime();
+                sim.moveAllParticles(newCollision);
+                sim.updateDynamicAndOutput(t,N);
+                sim.recalculateDirections(newCollision);
             }
 
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        List<Wall> wallList = initializeWalls(L,L_fixed);
-        List<Vertix> vertixList = initializeVertix(L,L_fixed);
-        EventDrivenSim sim=new EventDrivenSim(birdList, vertixList, wallList,writingPeriod);
-        deleteOutput();
-        deleteImpulse();
-        sim.updateOutput();
-        double t = 0.00;
-        while(t < maxT){
-            sim.recalculateCollisions();
-            Collision newCollision = sim.calculateNextStep();
-            t = newCollision.getCollisionTime();
-            sim.moveAllParticles(newCollision);
-            sim.updateDynamicAndOutput(t,N);
-            sim.recalculateDirections(newCollision);
+            iter++;
         }
 
     }
