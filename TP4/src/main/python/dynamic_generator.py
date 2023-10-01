@@ -1,15 +1,14 @@
 import random
-import math
 from particle import Particle
 
-def checkNewParticle(particle_created,x,y,R):
+def checkNewParticle(particle_created,x,R):
     for particle in particle_created:
-        if math.sqrt((x-particle.getX())**2 + (y - particle.getY())**2) <= (R * 2):
+        if (x - particle.getX()) <= (R * 2):
             return False
     return True
 
 
-def generar_archivos(nombre_archivo,nombreDynamicOutput, n, L, R, V):
+def generar_archivos(nombre_archivo, nombreDynamicOutput, n, L, R):
     print(n)
     with open(nombre_archivo, 'w') as f:
         with open(nombreDynamicOutput, 'w') as fOut:
@@ -17,32 +16,38 @@ def generar_archivos(nombre_archivo,nombreDynamicOutput, n, L, R, V):
             fOut.write("0\n")
             particle_created = []
             for _ in range(n):
-                valor1 = round(random.uniform(0 + 3*R, L - 3*R), 6)
-                valor2 = round(random.uniform(0 + 3*R, L - 3*R), 6)
-                valor3 = round(random.uniform(0, 360), 4)
-                while not checkNewParticle(particle_created, valor1, valor2, R):
-                    valor1 = round(random.uniform(0 + 3*R, L - 3*R), 6)
-                    valor2 = round(random.uniform(0 + 3*R, L - 3*R), 6)
-                    valor3 = round(random.uniform(0, 360), 4)
+                valorX = round(random.uniform(0 + R*1.5, L - R*1.5), 6)
+                while not checkNewParticle(particle_created, valorX, R):
+                    valorX = round(random.uniform(0 + R*1.5, L - R*1.5), 6)
                 particle = Particle(_)
-                particle.set_postion(valor1, valor2)
+                particle.set_postion(valorX, 0)
                 particle_created.append(particle)
-                f.write(f"{valor1} {valor2} {valor3}\n")
-                fOut.write(f"{valor1} {valor2} {V*math.cos(math.radians(valor3))} {V*math.sin(math.radians(valor3))}\n")
+                f.write(f"{valorX}\n")
+                fOut.write(f"{valorX}\n")
+
+def complete_static(nombre_archivo, M, R, L, N):
+    with open(nombre_archivo, 'w') as f:
+        f.write(f"{R}\n")
+        f.write(f"{M}\n")
+        f.write(f"{L}\n")
+        f.write(f"{N}\n")
+        for _ in range(N):
+            valorU = round(random.uniform(9,12), 6)
+            f.write(f"{valorU}\n")
+
 
 def main():
+    M = 0.0
+    R = 0.0
     L = 0.0
     N = 0
-    L_fixed = 0.0
-    R = 0.0
-    with open("../java/main/static.txt", 'r') as config_file:
-        L = float(next(config_file))
-        L_fixed = float(next(config_file))
-        M = float(next(config_file))
-        N = int(next(config_file))
+    with open("../java/main/static_2.txt", 'r') as config_file:
         R = float(next(config_file))
-        V = float(next(config_file))
-    generar_archivos("../java/main/dynamic.txt","../java/main/dynamicOutput.txt", N, L_fixed, R, V)
+        M = float(next(config_file))
+        L = float(next(config_file))
+        N = int(next(config_file))
+    complete_static("../java/main/static_2.txt", M, R, L, N)
+    generar_archivos("../java/main/dynamic_2.txt", "../java/main/dynamicOutput_2.txt", N, L, R)
 
 
 
