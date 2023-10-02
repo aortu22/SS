@@ -35,6 +35,7 @@ public class OscilatorSim {
                 // Verlet - Original
                 particle.setVerletPosition(dT);
                 particle.verletVelocity(dT);
+                particle.setAcceleration((-K*particle.getX() - Y*particle.getSpeed())/particle.getM());
             }
         }
         particle.setError(Math.pow(particle.analyticSolutionComparison(t) - particle.getX(), 2));

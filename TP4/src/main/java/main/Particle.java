@@ -120,13 +120,12 @@ public class Particle implements Comparable<Particle> {
         setPosition(verletPosition(dt), position.getY());
     }
     public  double verletPosition(double dt){
-        double force = -K*position.getX() - Y*speed;
-        return 2*position.getX() - previousX + (Math.pow(dt, 2)/M)*force; //diapo 13
+        double x = position.getX();
+        return 2*x - previousX + Math.pow(dt, 2)*acceleration; //diapo 13
     }
 
     public void verletVelocity(double dt) { //diapo 15
-        double nextPostion = verletPosition(dt);
-        setSpeed((nextPostion-previousX)/(2*dt));
+        setSpeed((position.getX()*(2*M-K* Math.pow(dt,2))-2*M*previousX)/(2*dt*M+Y*Math.pow(dt,2)));
     }
 
     public void setEulerPosition(double dt){

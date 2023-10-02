@@ -77,7 +77,7 @@ public class App1
                     particle.setGearPredictor();
                 }
                 case "verlet" -> {
-                    // Verlet - Original
+                    particle.eulerVelocity(dT);
                     particle.setEulerPosition(dT);
                     particle.setAcceleration((-k*particle.getX() -Y*particle.getSpeed())/M);
                 }

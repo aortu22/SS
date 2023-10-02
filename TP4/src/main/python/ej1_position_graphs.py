@@ -44,10 +44,11 @@ def main():
     print("ECM Gear ", errors_gear)
 
     # Ejercicio 1.1 oscilator
-    plt.plot(times_beeman, calculate_analytical_positions(np.array(times_beeman)), label="Analítica", linestyle='-')
-    plt.plot(times_beeman, positions_beeman, label=f"{methods_to_use[1]}", linestyle= '--')
     plt.plot(times_verlet, positions_verlet, label=f"{methods_to_use[0]}", linestyle= '-.')
+    plt.plot(times_beeman, positions_beeman, label=f"{methods_to_use[1]}", linestyle= '--')
     plt.plot(times_gear, positions_gear, label=f"{methods_to_use[2]}", linestyle= ':')
+    plt.plot(times_beeman, calculate_analytical_positions(np.array(times_beeman)), label="Analítica", linestyle='-')
+
     plt.xlabel("Tiempo (s)", fontsize=20)
     plt.ylabel("Posición (m)", fontsize=20)
 
