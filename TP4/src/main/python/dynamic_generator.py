@@ -25,12 +25,15 @@ def generar_archivos(nombre_archivo, nombreDynamicOutput, n, L, R):
                 f.write(f"{valorX}\n")
                 fOut.write(f"{valorX}\n")
 
-def complete_static(nombre_archivo, M, R, L, N):
+def complete_static(nombre_archivo, M, R, L, N,dT, dTEscritura):
     with open(nombre_archivo, 'w') as f:
         f.write(f"{R}\n")
         f.write(f"{M}\n")
         f.write(f"{L}\n")
         f.write(f"{N}\n")
+        f.write(f"{dT}\n")
+        f.write(f"{dTEscritura}\n")
+
         for _ in range(N):
             valorU = round(random.uniform(9,12), 6)
             f.write(f"{valorU}\n")
@@ -46,7 +49,9 @@ def main():
         M = float(next(config_file))
         L = float(next(config_file))
         N = int(next(config_file))
-    complete_static("../java/main/static_2.txt", M, R, L, N)
+        dT = float(next(config_file))
+        dTEscritura = float(next(config_file))
+    complete_static("../java/main/static_2.txt", M, R, L, N,dT, dTEscritura)
     generar_archivos("../java/main/dynamic_2.txt", "../java/main/dynamicOutput_2.txt", N, L, R)
 
 
