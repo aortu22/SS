@@ -49,16 +49,20 @@ def main():
         verlet_err = getErrors(name)
         verlet_errors.append(sum(verlet_err)/len(verlet_err))
 
+    print(beeman_errors)
+    print(verlet_errors)
+    print(gear_errors)
 
     # Graficar los datos
-    t = [10 ** -6, 10 ** -5, 10 ** -4, 10 ** -3, 10 ** -2]
+    t = [10 ** -2, 10 ** -3, 10 ** -4, 10 ** -5, 10 ** -6]
 
     plt.loglog(t, verlet_errors, linestyle='-.', marker='o', label='Verlet')
     plt.loglog(t, beeman_errors, linestyle='--', marker='o', label='Beeman')
     plt.loglog(t, gear_errors, linestyle=':', marker='o', label='Gear Corrector Predictor')
 
 
-    plt.xlabel("Tiempo (s)", fontsize=15)
+
+    plt.xlabel("$\Delta t$ ($s$)", fontsize=15)
     plt.ylabel("MSE", fontsize=15)
 
     plt.legend()
