@@ -68,18 +68,13 @@ public class App1
             double v = -A * Y / (2*M);
             particle.setSpeed(v);
             switch (method) {
-                case "beeman" -> {
+                case "beeman", "verlet" -> {
                     particle.eulerVelocity(dT);
                     particle.setEulerPosition(dT);
                     particle.setAcceleration((-k*particle.getX() -Y*particle.getSpeed())/M);
                 }
                 case "gear" -> {
                     particle.setGearPredictor();
-                }
-                case "verlet" -> {
-                    particle.eulerVelocity(dT);
-                    particle.setEulerPosition(dT);
-                    particle.setAcceleration((-k*particle.getX() -Y*particle.getSpeed())/M);
                 }
             }
             particle.setPosition(x,0);
