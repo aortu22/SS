@@ -11,19 +11,21 @@ public class ParticleLineSim {
     private double nextT;
     private double dTEscritura;
     private double dT;
+    private double L;
 
 
-    public ParticleLineSim(List<Particle> particleList, double dTEscritura, double dT){
+    public ParticleLineSim(List<Particle> particleList, double dTEscritura, double dT,double L){
         this.particleList = particleList;
         this.nextT = dTEscritura;
         this.dTEscritura = dTEscritura;
         this.dT = dT;
+        this.L = L;
     }
 
     //Move particles using gear 5
-    public void moveParticlesAndRecalculateForces(double t, double dT){
+    public void moveParticlesAndRecalculateForces(double t, double dT,double L){
         for(Particle particle : particleList){
-            particle.FiveGearPredictor(dT);
+            particle.FiveGearPredictorTp2(dT,L,particleList);
         }
     }
 

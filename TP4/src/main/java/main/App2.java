@@ -82,7 +82,9 @@ public class App2 {
                 String[] valores = linea.split(" ");
                 double x = Double.parseDouble(valores[0]);
                 particleList.get(i).setPosition(x,0);
-                particleList.get(i).setGearPredictor();
+                particleList.get(i).setSpeed(particleList.get(i).getLimitSpeed());
+                particleList.get(i).setAcceleration(0);
+                particleList.get(i).setGearPredictorTp2();
                 i++;
             }
             br.close();
@@ -90,13 +92,13 @@ public class App2 {
             e.printStackTrace();
         }
 
-        ParticleLineSim sim = new ParticleLineSim(particleList,dTEscritura,dT);
+        ParticleLineSim sim = new ParticleLineSim(particleList,dTEscritura,dT,L);
         deleteOutput();
         sim.updateOutput();
         double t = 0.00;
         while(t < maxT){
             t += dT;
-            sim.moveParticlesAndRecalculateForces(t,dT);
+            sim.moveParticlesAndRecalculateForces(t,dT,L);
             sim.updateDynamicAndOutput(t);
         }
 
