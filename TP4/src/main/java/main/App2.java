@@ -53,8 +53,8 @@ public class App2 {
             BufferedReader br = new BufferedReader(new FileReader(jsonFilePathStatic));
 
             // Leer las primeras 3 líneas y guardarlas en variables especiales
-            M = Double.parseDouble(br.readLine());
             R = Double.parseDouble(br.readLine());
+            M = Double.parseDouble(br.readLine());
             L = Double.parseDouble(br.readLine());
             N = Integer.parseInt(br.readLine());
             dT = Double.parseDouble(br.readLine());
