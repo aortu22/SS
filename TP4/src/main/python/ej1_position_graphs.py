@@ -25,7 +25,7 @@ def parse_output(output_filename):
 
             i += 1  # Skip the empty line between frames
 
-        return positions,times, errors
+        return positions, times, errors
 
 
 def main():
