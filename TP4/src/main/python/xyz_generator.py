@@ -4,8 +4,8 @@ def read_static_data(static_filename):
     # Return wall_length, num_particles, frame_distance
     with open(static_filename, 'r') as static_file:
         # Read the first line to get wall length
-        static_file.readline().strip()
         R = float(static_file.readline().strip())
+        static_file.readline().strip()
         L_fixed = float(static_file.readline().strip())
 
         N = int(static_file.readline().strip())
