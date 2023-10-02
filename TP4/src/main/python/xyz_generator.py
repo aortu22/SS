@@ -4,13 +4,13 @@ def read_static_data(static_filename):
     # Return wall_length, num_particles, frame_distance
     with open(static_filename, 'r') as static_file:
         # Read the first line to get wall length
-        L = float(static_file.readline().strip())
+        static_file.readline().strip()
+        R = float(static_file.readline().strip())
         L_fixed = float(static_file.readline().strip())
 
-        M = float(static_file.readline().strip())
-        num_particles = int(static_file.readline().strip())
+        N = int(static_file.readline().strip())
 
-    return L, L_fixed, num_particles
+    return R, L_fixed, N
 
 
 def read_dynamic_data(dynamic_filename, num_particles):
@@ -46,8 +46,8 @@ def read_output_data(output_filename):
             frame_particles = []
             while i < len(lines) and lines[i].strip() != "":
                 particle_data = lines[i].strip().split()
-                x, y,vx,vy = map(float, particle_data)
-                frame_particles.append((x, y))
+                x, v = map(float, particle_data)
+                frame_particles.append((x, v))
                 i += 1
 
             output_data.append((time, frame_particles))
@@ -57,57 +57,37 @@ def read_output_data(output_filename):
     return output_data
 
 
-def create_xyz_file(output_xyz_filename, static_walls, dynamic_particles_data, output_data):
+def create_xyz_file(output_xyz_filename, output_data,R):
     with open(output_xyz_filename, 'w') as output_xyz_file:
         # Write subsequent frames from output_data
         i=0
-        total_walls=len(static_walls)
         for time, frame_particles in output_data:
-            total_particles = len(frame_particles)
-            output_xyz_file.write(f"{total_particles+total_walls}\n")
+            total_particles = len(frame_particles)+2
+            output_xyz_file.write(f"{total_particles}\n")
             output_xyz_file.write(f"Frame {i} Time {time}\n")
             i+=1
-            for wall in static_walls:
-                output_xyz_file.write(f"1 {wall[0]} {wall[1]} {wall[2]} {wall[3]}\n")
             # Write dynamic particles for the frame
+            output_xyz_file.write(f"1 0.0 0.01 \n")
+            output_xyz_file.write(f"1 135.0 0.01 \n")
             for particle in frame_particles:
-                x, y = particle
-                output_xyz_file.write(f"2 {x} {y} 0 0\n")
-
-
-def create_static_walls(L_fixed,L):
-    # Create the four corners of the square wall with the vectors of representing the walls
-    corner1 = (0.0, 0.0,L_fixed,0.0)
-    corner2 = (L_fixed,0.0,0.0,(L_fixed-L)/2)
-    corner3 = (L_fixed,(L_fixed-L)/2,L_fixed,0.0)
-    corner4 = (2*L_fixed,(L_fixed-L)/2,0.0,(L_fixed-L)/2)
-    corner5 = (2*L_fixed,L_fixed-(L_fixed-L)/2,-L_fixed,0.0)
-    corner6 = (L_fixed,L_fixed-(L_fixed-L)/2,0.0,(L_fixed-L)/2)
-    corner7 =(L_fixed,L_fixed,-L_fixed,0.0)
-    corner8 =(0.0,L_fixed,0.0,-L_fixed)
-    static_walls = [corner1, corner2, corner3, corner4, corner5, corner6, corner7, corner8]
-    return static_walls
+                x, v = particle
+                output_xyz_file.write(f"2 {x} {R} \n")
 
 def main():
-    static_filename = "../java/main/static.txt"
-    dynamic_filename = "../java/main/dynamic.txt"
-    output_filename = './output.txt'
+    static_filename = "../java/main/static_2.txt"
+    output_filename = './output_2_0.01.txt'
     output_xyz_filename = './output.xyz'
 
     # Read static data
-    L, L_fixed, num_particles = read_static_data(static_filename)
+    R, L_fixed, N = read_static_data(static_filename)
 
-    # Create the static walls
-    static_walls = create_static_walls(L_fixed, L)  # List of wall particle data (x, y, z) for each corner
 
-    # Read dynamic data for the first frame
-    time, particles = read_dynamic_data(dynamic_filename, num_particles)
 
     # Read output data for each frame
     output_data = read_output_data(output_filename)
 
     # Create the XYZ file
-    create_xyz_file(output_xyz_filename, static_walls, particles,output_data)
+    create_xyz_file(output_xyz_filename,output_data,R)
 
 if __name__ == "__main__":
     main()
