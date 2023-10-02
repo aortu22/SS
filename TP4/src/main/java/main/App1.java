@@ -72,12 +72,12 @@ public class App1
                     particle.eulerVelocity(-dT);
                     particle.setEulerPosition(-dT);
                     particle.setAcceleration((-k*particle.getX() -Y*particle.getSpeed())/M);
+                    particle.setPosition(x,0);
+                    particle.setSpeed(v);
+                    particle.setAcceleration((-k*x -Y*v)/M);
                 }
                 case "gear" -> particle.setGearPredictor();
             }
-            particle.setPosition(x,0);
-            particle.setSpeed(v);
-            particle.setAcceleration((-k*x -Y*v)/M);
             br.close();
         } catch (IOException e) {
             e.printStackTrace();
