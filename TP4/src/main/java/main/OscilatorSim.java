@@ -95,10 +95,11 @@ public class OscilatorSim {
 
             // Imprimo la informacion, este va a ser la posicion y el error respecto a la solucion analitca
             StringBuilder particleInfo = new StringBuilder();
-            DecimalFormat df_1 = new DecimalFormat("0.0000", new DecimalFormatSymbols(locale));
-            DecimalFormat df_2 = new DecimalFormat("0.000000000000000000000000000000000000000000000000", new DecimalFormatSymbols(locale));
+//            DecimalFormat df_1 = new DecimalFormat("0.0000", new DecimalFormatSymbols(locale));
+//            DecimalFormat df_2 = new DecimalFormat("0.000000000000000000000000000000000000000000000000", new DecimalFormatSymbols(locale));
 
-            particleInfo.append(df_1.format(particle.getX())).append(' ').append(df_2.format(particle.getError()));
+//            particleInfo.append(df_1.format(particle.getX())).append(' ').append(df_2.format(particle.getError()));
+            particleInfo.append(particle.getX()).append(' ').append(particle.getError());
             particleInfo.append('\n');
             bw.write(particleInfo.toString());
             bw.close();
