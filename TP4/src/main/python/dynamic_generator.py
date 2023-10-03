@@ -3,7 +3,7 @@ from particle import Particle
 
 def checkNewParticle(particle_created,x,R):
     for particle in particle_created:
-        if (x - particle.getX()) <= (R * 2):
+        if abs(x - particle.getX()) <= (R * 2):
             return False
     return True
 
