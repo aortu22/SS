@@ -35,28 +35,28 @@ public class Particle implements Comparable<Particle> {
         if (L - getX() < 2 * radio) { //En este caso esta cerca del borde derecho de la linea
             for (Particle particle : particleList) {
                 if (!particle.equals(this)) {
-                    if (particle.getX() - getX() <= 2 * radio) { //Hay colision
-                        totalForce += (K_CONST * (Math.abs(particle.getX() - getX()) - 2 * radio) * (particle.getX() - getX() >= 0 ? 1 : -1));
-                    } else if ((particle.getX() + L) - getX() < 2 * radio) {
-                        totalForce += (K_CONST * (Math.abs((particle.getX() + L) - getX()) - 2 * radio) * ((particle.getX() + L) - getX() >= 0 ? 1 : -1));
+                    if ( Math.abs(particle.getX() - getX()) <= 2 * radio) { //Hay colision
+                        totalForce += (K_CONST * (Math.abs(particle.getX() - getX()) - 2 * radio) * ( Math.signum(particle.getX() - getX())));
+                    } else if (Math.abs(particle.getX() + L) - getX() < 2 * radio) {
+                        totalForce += (K_CONST * (Math.abs((particle.getX() + L) - getX()) - 2 * radio) * ( Math.signum((particle.getX() + L) - getX())));
                     }
                 }
             }
         } else if (getX() < 2 * radio) { //En este caso esta cerca del borde izquierdo
             for (Particle particle : particleList) {
                 if (!particle.equals(this)) {
-                    if (particle.getX() - getX() <= 2 * radio) { //Hay colision
-                        totalForce += (K_CONST * (Math.abs(particle.getX() - getX()) - 2 * radio) * (particle.getX() - getX() >= 0 ? 1 : -1));
-                    } else if (particle.getX() - (getX() + L) < 2 * radio) {
-                        totalForce += (K_CONST * (Math.abs(particle.getX() - (getX() + L)) - 2 * radio) * (particle.getX() - (getX() + L) >= 0 ? 1 : -1));
+                    if ( Math.abs(particle.getX() - getX()) <= 2 * radio) { //Hay colision
+                        totalForce += (K_CONST * (Math.abs(particle.getX() - getX()) - 2 * radio) * ( Math.signum(particle.getX() - getX()) ));
+                    } else if ( Math.abs(particle.getX() - (getX() + L)) < 2 * radio) {
+                        totalForce += (K_CONST * (Math.abs(particle.getX() - (getX() + L)) - 2 * radio) * ( Math.signum(particle.getX() - (getX() + L)) ));
                     }
                 }
             }
         } else {
             for (Particle particle : particleList) {
                 if (!particle.equals(this)) {
-                    if (particle.getX() - getX() <= 2 * radio) { //Hay colision
-                        totalForce += (K_CONST * (Math.abs(particle.getX() - getX()) - 2 * radio) * (particle.getX() - getX() >= 0 ? 1 : -1));
+                    if ( Math.abs(particle.getX() - getX()) <= 2 * radio) { //Hay colision
+                        totalForce += (K_CONST * (Math.abs(particle.getX() - getX()) - 2 * radio) * (Math.signum(particle.getX() - getX())));
                     }
                 }
             }
@@ -232,17 +232,19 @@ public class Particle implements Comparable<Particle> {
 
 //        Prediction to order 5
         double x0 = (x + xa * dt + xb * Math.pow(dt, 2) / factorial(2) + xc * Math.pow(dt, 3) / factorial(3) + xd * Math.pow(dt, 4) / factorial(4) + xe * Math.pow(dt, 5) / factorial(5)) % L;
+        x0 += x0 < 0 ? L : 0.0;
         double x1 = xa + xb * dt + xc * Math.pow(dt, 2) / factorial(2) + xd * Math.pow(dt, 3) / factorial(3) + xe * Math.pow(dt, 4) / factorial(4);
         double x2 = xb + xc * dt + xd * Math.pow(dt, 2) / factorial(2) + xe * Math.pow(dt, 3) / factorial(3);
         double x3 = xc + xd * dt + xe * Math.pow(dt, 2) / factorial(2);
         double x4 = xd + xe * dt;
 
 //        Evaluate
-        double deltaA = getTotalForces(particleList,L) - x2;
+        double deltaA = getTotalForces(particleList,L)/getM() - x2;
         double deltaR2 = (deltaA * Math.pow(dt, 2)) / factorial(2);
 
 //        Corrected
         double x0Corrected= (x0 + gearCoefficients[0] * deltaR2) %L;
+        x0Corrected += x0Corrected < 0 ? L : 0.0;
         double x1Corrected = x1 + gearCoefficients[1] * deltaR2 / dt;
         double x2Corrected = x2 + gearCoefficients[2] * deltaR2 * factorial(2) / Math.pow(dt, 2);
         double x3Corrected = x3 + gearCoefficients[3] * deltaR2 * factorial(3) / Math.pow(dt, 3);

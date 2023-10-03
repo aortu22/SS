@@ -8,7 +8,7 @@ public class App2 {
     public static final double maxT = 180.0;
 
     public static void deleteOutput() {
-        String output = "src/main/python/output_2.txt";
+        String output = "src/main/python/output_2_0.01.txt";
         String output_xyz = "src/main/python/output.xyz";
         File fileOutput = new File(output);
         File fileOutputXYZ = new File(output_xyz);
