@@ -62,16 +62,13 @@ def create_xyz_file(output_xyz_filename, output_data,R):
         # Write subsequent frames from output_data
         i=0
         for time, frame_particles in output_data:
-            total_particles = len(frame_particles)+2
+            total_particles = len(frame_particles)
             output_xyz_file.write(f"{total_particles}\n")
-            output_xyz_file.write(f"Frame {i} Time {time}\n")
+            output_xyz_file.write(f"Lattice=\"135.0 0.0 0.0 0.0 10.0 0.0 0.0 0.0 10.0\" Properties=pos:R:3:radius:R:1 Origin=\"0.0 -5.0 -5.0\" pbc=\"T F F\" Time={time}\n")
             i+=1
-            # Write dynamic particles for the frame
-            output_xyz_file.write(f"1 0.0 0.01 \n")
-            output_xyz_file.write(f"1 135.0 0.01 \n")
             for particle in frame_particles:
                 x, v = particle
-                output_xyz_file.write(f"2 {x} {R} \n")
+                output_xyz_file.write(f"{x} 0.0 0.0 {R} \n")
 
 def main():
     static_filename = "../java/main/static_2.txt"
