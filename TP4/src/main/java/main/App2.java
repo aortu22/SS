@@ -7,8 +7,8 @@ import java.util.List;
 public class App2 {
     public static final double maxT = 180.0;
 
-    public static void deleteOutput() {
-        String output = "src/main/python/output_2_0.01.txt";
+    public static void deleteOutput(String dt, String N) {
+        String output = "src/main/python/output_2_" + N +"_"+dt+".txt";
         String output_xyz = "src/main/python/output.xyz";
         File fileOutput = new File(output);
         File fileOutputXYZ = new File(output_xyz);
@@ -22,8 +22,8 @@ public class App2 {
 
 
     public static void reloadDynamicOutput(){
-        try (FileReader reader = new FileReader("src/main/java/main/dynamicOutput_1.txt");
-             FileWriter writer = new FileWriter("src/main/java/main/dynamic_1.txt")) {
+        try (FileReader reader = new FileReader("src/main/java/main/dynamicOutput_2.txt");
+             FileWriter writer = new FileWriter("src/main/java/main/dynamic_2.txt")) {
 
             int character;
             while ((character = reader.read()) != -1) {
@@ -63,7 +63,6 @@ public class App2 {
             int i = 0;
             while( i < N){
                 Particle newParticle = new Particle(i,R,M);
-                newParticle.setLimitSpeed(Double.parseDouble(br.readLine()));
                 particleList.add(newParticle);
                 i++;
             }
@@ -82,7 +81,7 @@ public class App2 {
                 String[] valores = linea.split(" ");
                 double x = Double.parseDouble(valores[0]);
                 particleList.get(i).setPosition(x,0);
-                particleList.get(i).setSpeed(particleList.get(i).getLimitSpeed());
+                particleList.get(i).setSpeed(Double.parseDouble(valores[1]));
                 particleList.get(i).setAcceleration(0);
                 particleList.get(i).setGearPredictorTp2();
                 i++;
@@ -92,8 +91,8 @@ public class App2 {
             e.printStackTrace();
         }
 
-        ParticleLineSim sim = new ParticleLineSim(particleList,dTEscritura,dT,L);
-        deleteOutput();
+        ParticleLineSim sim = new ParticleLineSim(particleList,dTEscritura,dT,L, N);
+        deleteOutput(String.valueOf(dT), String.valueOf(N));
         sim.updateOutput();
         double t = 0.00;
         while(t < maxT){

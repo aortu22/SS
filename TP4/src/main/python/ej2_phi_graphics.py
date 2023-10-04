@@ -1,14 +1,12 @@
 import matplotlib.pyplot as plt
 
-from graphics.parse_files import  parse_output_file
-
 def get_static_data(config_path):
     with open(config_path, 'r') as config_file:
         R = float(next(config_file))
         M = float(next(config_file))
         L = float(next(config_file))
         N = int(next(config_file))
-        return N,R,L
+        return N, R, L
 
 def parse_output(filename):
     data = []
@@ -31,7 +29,7 @@ def main():
     config_path = "../java/main/static_2.txt"
     output_base_path = './'
     dt_values = [1.0E-1, 1.0E-2, 1.0E-3, 1.0E-4, 1.0E-5]
-    dt_values_str = ["0.1","0.01","0.001","0.0001","0.00001"]
+    dt_values_str = ["0.1", "0.01", "0.001", "1.0E-4", "1.0E-5"]
     n, particleRadius, lineLength = get_static_data(config_path)
     phi_dt_difference = {}
     color_list = ['b', 'g', 'r', 'c', 'y']
@@ -40,8 +38,8 @@ def main():
     for dt in range(len(dt_values) - 1):
         current_dt = dt_values_str[dt]
         next_dt = dt_values_str[dt+1]
-        current_dt_particle_data = parse_output(output_base_path + "output_2_" + current_dt  + ".txt")
-        next_dt_particle_data = parse_output(output_base_path + "output_2_" + next_dt  + ".txt")
+        current_dt_particle_data = parse_output(output_base_path + "output_2_25_" + current_dt + ".txt")
+        next_dt_particle_data = parse_output(output_base_path + "output_2_25_" + next_dt + ".txt")
 
         # Calcula la diferencia entre los datos de partículas y almacénala en phi_dt_difference
         aux_phi = []
@@ -59,14 +57,15 @@ def main():
                 aux_phi.append(x_difference/15)
             elif current_dt == ("0.001"):
                 aux_phi.append(x_difference/70)
-            elif current_dt == ("0.0001"):
+            elif current_dt == ("1.0E-4"):
                 aux_phi.append(x_difference/10)
 
             # aux_phi.append(x_difference)
 
         phi_dt_difference[index] = aux_phi
         # plt.scatter([i*0.1 for i in range(0, 1801)], aux_phi, marker='o', linestyle='-', color=color_list[index-1],label=f'K= {index}')
-        plt.plot([i * 0.1 for i in range(0, 1801)], aux_phi, linestyle='-', color=color_list[index - 1],label=f'K= {index}')
+        numbers = [i * 0.1 for i in range(0, 1801)]
+        plt.plot(numbers, aux_phi, linestyle='-', color=color_list[index - 1], label=f'K= {index}')
         index += 1
 
     # print(phi_dt_difference)
@@ -74,7 +73,7 @@ def main():
     plt.ylabel('Φ(t)')
     plt.legend()
     plt.grid(True)
-    plt.savefig('graphs/ej_2_1_no_periodic.png')
+    plt.show()
 
     plt.cla()
 
