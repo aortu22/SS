@@ -1,7 +1,5 @@
 import matplotlib.pyplot as plt
 
-from graphics.parse_files import  parse_output_file
-
 def get_static_data(config_path):
     with open(config_path, 'r') as config_file:
         R = float(next(config_file))
