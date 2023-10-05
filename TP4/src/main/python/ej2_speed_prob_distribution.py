@@ -36,7 +36,7 @@ def main():
     # Agregar la recta y=1/3 desde el punto en el que la velocidad es 9
     x_recta = np.linspace(9, max(bin_centers), 100)  # Valores de x desde 9 hasta el máximo
     y_recta = np.full_like(x_recta, 1 / 3)  # Array de 1/3 del mismo tamaño que x
-    plt.plot(x_recta, y_recta, 'r--', label='Initial distribution')  # Agregar la recta
+    plt.plot(x_recta, y_recta, 'r--', label='Initial distribution', marker='o')  # Agregar la recta
     plt.ylabel('Densidad de probabilidad ($\\frac{{\mathrm{1}}}{{\mathrm{cm/s}}})$')
     plt.xlabel('Velocidad ($\\frac{{\mathrm{cm}}}{{\mathrm{s}}})$')
 
