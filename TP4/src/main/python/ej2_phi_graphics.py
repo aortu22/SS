@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def get_static_data(config_path):
@@ -55,7 +56,10 @@ def main():
         numbers = [i * 0.1 for i in range(0, 1801)]
         plt.plot(numbers, aux_phi, linestyle='-', color=color_list[index - 1], label=f'K= {index}')
         index += 1
+    ax = plt.gca()
 
+    # Set x logaritmic
+    ax.set_yscale('log')
     plt.xlabel('Tiempo (s)')
     plt.ylabel('Φ(t)')
     plt.xlim(0, 180)
