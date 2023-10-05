@@ -80,7 +80,9 @@ public class App2 {
                 String[] valores = linea.split(" ");
                 double x = Double.parseDouble(valores[0]);
                 particleList.get(i).setPosition(x,0);
-                particleList.get(i).setSpeed(Double.parseDouble(valores[2]));
+                double ui = Double.parseDouble(valores[2]);
+                particleList.get(i).setSpeed(ui);
+                particleList.get(i).setLimitSpeed(ui);
                 particleList.get(i).setAcceleration(0);
                 particleList.get(i).setGearPredictorTp2();
                 i++;

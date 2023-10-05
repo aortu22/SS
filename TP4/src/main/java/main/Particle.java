@@ -14,11 +14,6 @@ public class Particle implements Comparable<Particle> {
     private double previousAcceleration;
     private final double K_CONST = 2500;
     private double[] gearPredictor;
-
-    public double getxPlainPosition() {
-        return xPlainPosition;
-    }
-
     double[] gearCoefficients = {3 / 16.0, 251 / 360.0, 1, 11 / 18.0, 1 / 6.0, 1 / 60.0};
 
     private double previousX = -1;
@@ -36,43 +31,92 @@ public class Particle implements Comparable<Particle> {
         this.error = 0;
     }
 
-    public double getTotalForces(List<Particle> particleList, double L) {
-        double totalForce = 0;
-        if (L - getX() < 2 * radio) { //En este caso esta cerca del borde derecho de la linea
-            for (Particle particle : particleList) {
-                if (!particle.equals(this)) {
-                    if ( Math.abs(particle.getX() - getX()) <= 2 * radio) { //Hay colision
-                        totalForce += (K_CONST * (Math.abs(particle.getX() - getX()) - 2 * radio) * ( Math.signum(particle.getX() - getX())));
-                    } else if (Math.abs(particle.getX() + L) - getX() < 2 * radio) {
-                        totalForce += (K_CONST * (Math.abs((particle.getX() + L) - getX()) - 2 * radio) * ( Math.signum((particle.getX() + L) - getX())));
-                    }
-                }
-            }
-        } else if (getX() < 2 * radio) { //En este caso esta cerca del borde izquierdo
-            for (Particle particle : particleList) {
-                if (!particle.equals(this)) {
-                    if ( Math.abs(particle.getX() - getX()) <= 2 * radio) { //Hay colision
-                        totalForce += (K_CONST * (Math.abs(particle.getX() - getX()) - 2 * radio) * ( Math.signum(particle.getX() - getX()) ));
-                    } else if ( Math.abs(particle.getX() - (getX() + L)) < 2 * radio) {
-                        totalForce += (K_CONST * (Math.abs(particle.getX() - (getX() + L)) - 2 * radio) * ( Math.signum(particle.getX() - (getX() + L)) ));
-                    }
-                }
-            }
-        } else {
-            for (Particle particle : particleList) {
-                if (!particle.equals(this)) {
-                    if ( Math.abs(particle.getX() - getX()) <= 2 * radio) { //Hay colision
-                        totalForce += (K_CONST * (Math.abs(particle.getX() - getX()) - 2 * radio) * (Math.signum(particle.getX() - getX())));
-                    }
-                }
-            }
+    public boolean collidesWith(Particle p, Double dt) {
+        double deltaRx = this.getX() - p.getX();
+        double deltaVx = this.speed - p.speed;
+
+        double sigma = this.radio + p.radio;
+
+        double dv_dr = (deltaRx * deltaVx);
+        if (dv_dr >= 0) {
+            return false;
         }
-        totalForce += ( limitSpeed - speed );
-        return totalForce;
+
+        double dv2 = (deltaVx * deltaVx);
+        double dr2 = (deltaRx * deltaRx);
+        double d = Math.pow(dv_dr, 2) - dv2 * (dr2 - Math.pow(sigma, 2));
+        if (d < 0) {
+            return false;
+        }
+
+        return (-(dv_dr + Math.sqrt(d)) / dv2 ) < dt;
     }
+
+    private double getForce(Particle p1) {
+        return K_CONST * (Math.abs(p1.getX()-this.getX()) - (2*p1.radio)) * (Math.signum(p1.getX()-this.getX()));
+    }
+
+    public double getTotalForces(List<Particle> particleList, double dt) {
+            double colisionForceSum = 0.0;
+            for(Particle otherParticle: particleList) {
+                if(!this.equals(otherParticle) && this.collidesWith(otherParticle, dt)) {
+                    colisionForceSum += getForce(otherParticle);
+                }
+            }
+            return ((limitSpeed - speed) + colisionForceSum);
+
+//        double totalForce = 0;
+//        for (Particle particle : particleList) {
+//            if (!particle.equals(this)) {
+//                if (Math.abs(particle.getX() - getX()) <= 2 * radio) { //Hay colision
+//                    totalForce += (K_CONST * (Math.abs(particle.getX() - getX()) - 2 * radio) * (Math.signum(particle.getX() - getX())));
+//                } else if (L-Math.abs(particle.getX() - getX()) <= 2 *radio) {
+//                    totalForce += (K_CONST * (L-Math.abs(particle.getX() - getX()) - 2 * radio) * (Math.signum(L - particle.getX() - getX())));
+//                }
+//            }
+//        }
+//        if (L - getX() < 2 * radio) { //En este caso esta cerca del borde derecho de la linea
+//            for (Particle particle : particleList) {
+//                if (!particle.equals(this)) {
+//                    if (Math.abs(particle.getX() - getX()) <= 2 * radio) { //Hay colision
+//                        totalForce += (K_CONST * (Math.abs(particle.getX() - getX()) - 2 * radio) * ( Math.signum(particle.getX() - getX())));
+//                    }
+//                    else if (Math.abs(particle.getX() + L - getX()) < 2 * radio) {
+//                        totalForce += (K_CONST * (Math.abs((particle.getX() + L) - getX()) - 2 * radio) * ( Math.signum((particle.getX() + L) - getX())));
+//                    }
+//                }
+//            }
+//        } else if (getX() < 2 * radio) { //En este caso esta cerca del borde izquierdo
+//            for (Particle particle : particleList) {
+//                if (!particle.equals(this)) {
+//                    if (Math.abs(particle.getX() - getX()) <= 2 * radio) { //Hay colision
+//                        totalForce += (K_CONST * (Math.abs(particle.getX() - getX()) - 2 * radio) * ( Math.signum(particle.getX() - getX()) ));
+//                    }
+//                    else if ( Math.abs(particle.getX() - (getX() + L)) < 2 * radio) {
+//                        totalForce += (K_CONST * (Math.abs(particle.getX() - (getX() + L)) - 2 * radio) * ( Math.signum(particle.getX() - (getX() + L)) ));
+//                    }
+//                }
+//            }
+//        } else {
+//            for (Particle particle : particleList) {
+//                if (!particle.equals(this)) {
+//                    if (Math.abs(particle.getX() - getX()) <= 2 * radio) { //Hay colision
+//                        totalForce += (K_CONST * (Math.abs(particle.getX() - getX()) - 2 * radio) * (Math.signum(particle.getX() - getX())));
+//                    }
+//                }
+//            }
+//        }
+//        totalForce += ( limitSpeed - speed );
+//        return totalForce;
+    }
+
 
     public void setLimitSpeed(double speed){
         this.limitSpeed = speed;
+    }
+
+    public double getxPlainPosition() {
+        return xPlainPosition;
     }
 
     public double getLimitSpeed(){
@@ -99,10 +143,10 @@ public class Particle implements Comparable<Particle> {
     public void setGearPredictor(){
         double x = position.getX() ;
         double xa = speed;
-        double xb = 0;
-        double xc = 0;
-        double xd = 0;
-        double xe = 0;
+        double xb = acceleration;
+        double xc = (-K*speed - Y*acceleration)/M;
+        double xd = (-K*acceleration - Y*xc)/M;
+        double xe = (-K*xc - Y*xd)/M;
 
         this.gearPredictor = new double[]{x,xa,xb,xc,xd,xe};
     }
@@ -110,12 +154,12 @@ public class Particle implements Comparable<Particle> {
     public void setGearPredictorTp2(){
         double x = position.getX() ;
         double xa = speed;
-        double xb = acceleration;
-        double xc = (-K*speed - Y*acceleration)/M;
-        double xd = (-K*acceleration - Y*xc)/M;
-        double xe = (-K*xc - Y*xd)/M;
+        double xb = 0;
+        double xc = 0;
+        double xd = 0;
+        double xe = 0;
 
-        this.gearPredictor = new double[]{x,xa,xb,xc,xd,xe, x};
+        this.gearPredictor = new double[]{x,xa,xb,xc,xd,xe,x};
     }
 
     public double getAcceleration(double acceleration){
@@ -250,8 +294,13 @@ public class Particle implements Comparable<Particle> {
         double x4 = xd + xe * dt;
         double xPlain = xP + xa * dt + xb * Math.pow(dt, 2) / factorial(2) + xc * Math.pow(dt, 3) / factorial(3) + xd * Math.pow(dt, 4) / factorial(4) + xe * Math.pow(dt, 5) / factorial(5);
 
+        setPosition(x0, position.getY());
+        setSpeed(x1);
+        setAcceleration(x2);
+        setxPlainPosition(xPlain);
 //        Evaluate
-        double deltaA = getTotalForces(particleList,L)/getM() - x2;
+//        double deltaA = getTotalForces(particleList,L)/getM() - x2;
+        double deltaA = getTotalForces(particleList,dt)/getM() - x2;
         double deltaR2 = (deltaA * Math.pow(dt, 2)) / factorial(2);
 
 //        Corrected
