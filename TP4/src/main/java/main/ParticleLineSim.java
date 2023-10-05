@@ -12,14 +12,16 @@ public class ParticleLineSim {
     private double dTEscritura;
     private double dT;
     private double L;
+    private int N;
 
 
-    public ParticleLineSim(List<Particle> particleList, double dTEscritura, double dT,double L){
+    public ParticleLineSim(List<Particle> particleList, double dTEscritura, double dT,double L, int N){
         this.particleList = particleList;
         this.nextT = dTEscritura;
         this.dTEscritura = dTEscritura;
         this.dT = dT;
         this.L = L;
+        this.N = N;
     }
 
     //Move particles using gear 5
@@ -31,7 +33,7 @@ public class ParticleLineSim {
 
     public void updateOutput(){
         try {
-            String output = "src/main/python/output_2_"+dT+".txt";
+            String output = "src/main/python/output_2_" + N + "_" +dT+".txt";
             String dynamic = "src/main/java/main/dynamic_2.txt";
             File fileOutput = new File(output);
             if (!fileOutput.exists()) {
@@ -84,7 +86,7 @@ public class ParticleLineSim {
             StringBuilder particleInfo = new StringBuilder();
             DecimalFormat df = new DecimalFormat("0.0000", new DecimalFormatSymbols(locale));
             for (Particle particle: this.particleList) {
-                particleInfo.append(df.format(particle.getX()));
+                particleInfo.append(df.format(particle.getX())).append(' ').append(df.format(particle.getxPlainPosition()));
                 particleInfo.append(' ').append(df.format(particle.getSpeed()));
                 particleInfo.append('\n');
             }

@@ -77,7 +77,7 @@ def create_xyz_file(output_xyz_filename, output_data,R,totaltime):
 def main():
     time=40
     static_filename = "../java/main/static_2.txt"
-    output_filename = './output_2_0.01.txt'
+    output_filename = './output_2_25_0.01.txt'
     output_xyz_filename = './output.xyz'
 
     # Read static data
