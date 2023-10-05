@@ -62,6 +62,7 @@ def main():
     plt.errorbar(N_list, aux_prom, yerr=error, fmt='o', capsize=6)
 
     plt.xlabel('N')
+    plt.xlim(5, 30)
     plt.ylabel('Velocidad Promedio ($\\frac{{\mathrm{cm}}}{{\mathrm{s}}})$')
     plt.grid(True)
     plt.show()

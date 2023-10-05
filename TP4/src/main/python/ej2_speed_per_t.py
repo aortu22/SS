@@ -41,6 +41,7 @@ def main():
         index += 1
 
     plt.xlabel('Tiempo (s)')
+    plt.xlim(0, 180)
     plt.ylabel('Velocidad Promedio ($\\frac{{\mathrm{cm}}}{{\mathrm{s}}})$')
     plt.legend()
     plt.grid(True)
