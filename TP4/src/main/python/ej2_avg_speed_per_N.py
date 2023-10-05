@@ -21,7 +21,7 @@ def parse_output(filename):
             if len(valores) == 1:
                 data.append(current_time_data)
                 current_time_data = []
-            elif len(valores) == 2:
+            elif len(valores) == 3:
                 current_time_data.append(float(valores[2]))
     return data
 
@@ -44,8 +44,8 @@ def main():
             aux_vels = []
             #Itero por cada arreglo de tiempos
             for i in range(len(speed_matrix)):
-                #if i < 120.00:
-                #    continue
+                if i < 120.00:
+                    continue
                 vel_difference = 0
 
                 for current_particle in speed_matrix[i]:
@@ -69,11 +69,11 @@ def main():
         aux_prom.append(promedio_vel_list[i])
 
     # Dibujar un punto por cada valor de N en el gráfico de dispersión
-    plt.scatter(N_list, aux_prom, marker='o', color='b', label='Puntos')
+    plt.scatter(N_list, aux_prom, marker='o', color='g', label='Puntos')
 
     # Unir los puntos con una línea
     error = [0.01, 0.03, 0.05, 0.02, 0.02, 0.2]
-    plt.plot(N_list, aux_prom, linestyle='-', color='g', label='Línea de Unión')
+    plt.plot(N_list, aux_prom, linestyle='-', color='r', label='Línea de Unión')
     plt.errorbar(N_list, aux_prom, yerr=error, fmt='o', capsize=6)
 
     plt.xlabel('N')
