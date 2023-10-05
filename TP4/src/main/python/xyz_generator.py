@@ -57,20 +57,25 @@ def read_output_data(output_filename):
     return output_data
 
 
-def create_xyz_file(output_xyz_filename, output_data,R):
+def create_xyz_file(output_xyz_filename, output_data,R,totaltime):
     with open(output_xyz_filename, 'w') as output_xyz_file:
         # Write subsequent frames from output_data
         i=0
+        frametime=totaltime/1000
+        frame=0
         for time, frame_particles in output_data:
-            total_particles = len(frame_particles)
-            output_xyz_file.write(f"{total_particles}\n")
-            output_xyz_file.write(f"Lattice=\"135.0 0.0 0.0 0.0 10.0 0.0 0.0 0.0 10.0\" Properties=pos:R:3:radius:R:1 Origin=\"0.0 -5.0 -5.0\" pbc=\"T F F\" Time={time}\n")
-            i+=1
-            for particle in frame_particles:
-                x, v = particle
-                output_xyz_file.write(f"{x} 0.0 0.0 {R} \n")
+            if(frametime*frame<time):
+                total_particles = len(frame_particles)
+                output_xyz_file.write(f"{total_particles}\n")
+                output_xyz_file.write(f"Lattice=\"135.0 0.0 0.0 0.0 10.0 0.0 0.0 0.0 10.0\" Properties=pos:R:3:radius:R:1 Origin=\"0.0 -5.0 -5.0\" pbc=\"T F F\" Time={time}\n")
+                i+=1
+                frame+=1
+                for particle in frame_particles:
+                    x, v = particle
+                    output_xyz_file.write(f"{x} 0.0 0.0 {R} \n")
 
 def main():
+    time=40
     static_filename = "../java/main/static_2.txt"
     output_filename = './output_2_0.01.txt'
     output_xyz_filename = './output.xyz'
@@ -84,7 +89,7 @@ def main():
     output_data = read_output_data(output_filename)
 
     # Create the XYZ file
-    create_xyz_file(output_xyz_filename,output_data,R)
+    create_xyz_file(output_xyz_filename,output_data,R,time)
 
 if __name__ == "__main__":
     main()
