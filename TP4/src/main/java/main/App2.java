@@ -20,7 +20,6 @@ public class App2 {
         }
     }
 
-
     public static void reloadDynamicOutput(){
         try (FileReader reader = new FileReader("src/main/java/main/dynamicOutput_2.txt");
              FileWriter writer = new FileWriter("src/main/java/main/dynamic_2.txt")) {
@@ -81,7 +80,7 @@ public class App2 {
                 String[] valores = linea.split(" ");
                 double x = Double.parseDouble(valores[0]);
                 particleList.get(i).setPosition(x,0);
-                particleList.get(i).setSpeed(Double.parseDouble(valores[1]));
+                particleList.get(i).setSpeed(Double.parseDouble(valores[2]));
                 particleList.get(i).setAcceleration(0);
                 particleList.get(i).setGearPredictorTp2();
                 i++;
