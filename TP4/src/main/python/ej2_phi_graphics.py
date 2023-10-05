@@ -1,15 +1,4 @@
 import matplotlib.pyplot as plt
-import numpy as np
-
-
-def get_static_data(config_path):
-    with open(config_path, 'r') as config_file:
-        R = float(next(config_file))
-        M = float(next(config_file))
-        L = float(next(config_file))
-        N = int(next(config_file))
-        return R, M, L, N
-
 
 def parse_output(filename):
     data = []
@@ -30,10 +19,7 @@ def parse_output(filename):
 
 
 def main():
-    # config_path = "../java/main/static_2.txt"
-    output_base_path = './'
     dt_values_str = ["0.1", "0.01", "0.001", "1.0E-4", "1.0E-5"]
-    # R, M, L, N = get_static_data(config_path)
     phi_dt_difference = {}
     color_list = ['b', 'g', 'r', 'c']
 
@@ -41,8 +27,8 @@ def main():
     for dt in range(len(dt_values_str) - 1):
         current_dt = dt_values_str[dt]
         next_dt = dt_values_str[dt + 1]
-        current_dt_particle_data = parse_output(output_base_path + "output_2_25_" + current_dt + ".txt")
-        next_dt_particle_data = parse_output(output_base_path + "output_2_25_" + next_dt + ".txt")
+        current_dt_particle_data = parse_output("./output_2_25_" + current_dt + ".txt")
+        next_dt_particle_data = parse_output("./output_2_25_" + next_dt + ".txt")
 
         # Diferencia entre current y next
         aux_phi = []

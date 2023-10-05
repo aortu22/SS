@@ -1,10 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import math
 
 def main():
-    #n = 10
-    #n = 20
+    # n = 10
+    # n = 20
     n = 30
     stationary = 120
     filename = f'output_2_{str(n)}_0.001.txt'
@@ -19,7 +18,7 @@ def main():
 
         for line in archive:
             cols = line.split()
-            if len(cols) == 2:
+            if len(cols) == 3:
                 velocities.append(float(cols[2]))
 
     archive.close()
