@@ -95,7 +95,7 @@ public class App2 {
         deleteOutput(String.valueOf(dT), String.valueOf(N));
         sim.updateOutput();
         double t = 0.00;
-        while(t < maxT){
+        while(t + dT < maxT){
             t += dT;
             sim.moveParticlesAndRecalculateForces(t,dT,L);
             sim.updateDynamicAndOutput(t);

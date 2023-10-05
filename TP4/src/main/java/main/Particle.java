@@ -264,11 +264,11 @@ public class Particle implements Comparable<Particle> {
         double x5Corrected = xe + gearCoefficients[5] * deltaR2 * factorial(5) / Math.pow(dt, 5);
         double xPlainCorrected= xPlain + gearCoefficients[0] * deltaR2;
 
-        this.gearPredictor = new double[]{x0Corrected, x1Corrected, x2Corrected, x3Corrected, x4Corrected, x5Corrected};
+        this.gearPredictor = new double[]{x0Corrected, x1Corrected, x2Corrected, x3Corrected, x4Corrected, x5Corrected, xPlainCorrected};
         setPosition(x0Corrected, position.getY());
-        setxPlainPosition(xPlainCorrected);
         setSpeed(x1Corrected);
         setAcceleration(x2Corrected);
+        setxPlainPosition(xPlainCorrected);
     }
 
 

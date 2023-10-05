@@ -23,22 +23,21 @@ def parse_output(filename):
             if len(valores) == 1:
                 data.append(current_time_data)
                 current_time_data = []
-            elif len(valores) == 2:
+            elif len(valores) == 3:
                 current_time_data.append(float(valores[1]))
     return data
 
 
 def main():
-    config_path = "../java/main/static_2.txt"
+    # config_path = "../java/main/static_2.txt"
     output_base_path = './'
-    dt_values = [1.0E-1, 1.0E-2, 1.0E-3, 1.0E-4, 1.0E-5]
     dt_values_str = ["0.1", "0.01", "0.001", "1.0E-4", "1.0E-5"]
-    R, M, L, N = get_static_data(config_path)
+    # R, M, L, N = get_static_data(config_path)
     phi_dt_difference = {}
     color_list = ['b', 'g', 'r', 'c']
 
     index = 1
-    for dt in range(len(dt_values) - 1):
+    for dt in range(len(dt_values_str) - 1):
         current_dt = dt_values_str[dt]
         next_dt = dt_values_str[dt + 1]
         current_dt_particle_data = parse_output(output_base_path + "output_2_25_" + current_dt + ".txt")
@@ -49,8 +48,7 @@ def main():
         for i in range(len(current_dt_particle_data)):
             x_difference = 0
             for current_particle, next_particle in zip(current_dt_particle_data[i], next_dt_particle_data[i]):
-                dist_directa = abs(next_particle - current_particle)
-                x_difference += min(dist_directa, L - dist_directa)
+                x_difference += abs(next_particle - current_particle)
             aux_phi.append(x_difference)
 
         phi_dt_difference[index] = aux_phi
