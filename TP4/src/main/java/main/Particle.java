@@ -32,10 +32,10 @@ public class Particle implements Comparable<Particle> {
     }
 
     public boolean collidesWith(Particle p, Double dt) {
-        double deltaRx = this.getX() - p.getX();
-        double deltaVx = this.speed - p.speed;
+        double deltaRx = getX() - p.getX();
+        double deltaVx = speed - p.speed;
 
-        double sigma = this.radio + p.radio;
+        double sigma = radio + p.radio;
 
         double dv_dr = (deltaRx * deltaVx);
         if (dv_dr >= 0) {
@@ -52,62 +52,17 @@ public class Particle implements Comparable<Particle> {
         return (-(dv_dr + Math.sqrt(d)) / dv2 ) < dt;
     }
 
-    private double getForce(Particle p1) {
-        return K_CONST * (Math.abs(p1.getX()-this.getX()) - (2*p1.radio)) * (Math.signum(p1.getX()-this.getX()));
-    }
+
 
     public double getTotalForces(List<Particle> particleList, double dt) {
             double colisionForceSum = 0.0;
-            for(Particle otherParticle: particleList) {
-                if(!this.equals(otherParticle) && this.collidesWith(otherParticle, dt)) {
-                    colisionForceSum += getForce(otherParticle);
+            for(Particle p: particleList) {
+                if(!this.equals(p) && this.collidesWith(p, dt)) {
+                    double rest = p.getX()-this.getX();
+                    colisionForceSum += (K_CONST * (Math.abs(rest) - (2*radio)) * (Math.signum(rest)));
                 }
             }
             return ((limitSpeed - speed) + colisionForceSum);
-
-//        double totalForce = 0;
-//        for (Particle particle : particleList) {
-//            if (!particle.equals(this)) {
-//                if (Math.abs(particle.getX() - getX()) <= 2 * radio) { //Hay colision
-//                    totalForce += (K_CONST * (Math.abs(particle.getX() - getX()) - 2 * radio) * (Math.signum(particle.getX() - getX())));
-//                } else if (L-Math.abs(particle.getX() - getX()) <= 2 *radio) {
-//                    totalForce += (K_CONST * (L-Math.abs(particle.getX() - getX()) - 2 * radio) * (Math.signum(L - particle.getX() - getX())));
-//                }
-//            }
-//        }
-//        if (L - getX() < 2 * radio) { //En este caso esta cerca del borde derecho de la linea
-//            for (Particle particle : particleList) {
-//                if (!particle.equals(this)) {
-//                    if (Math.abs(particle.getX() - getX()) <= 2 * radio) { //Hay colision
-//                        totalForce += (K_CONST * (Math.abs(particle.getX() - getX()) - 2 * radio) * ( Math.signum(particle.getX() - getX())));
-//                    }
-//                    else if (Math.abs(particle.getX() + L - getX()) < 2 * radio) {
-//                        totalForce += (K_CONST * (Math.abs((particle.getX() + L) - getX()) - 2 * radio) * ( Math.signum((particle.getX() + L) - getX())));
-//                    }
-//                }
-//            }
-//        } else if (getX() < 2 * radio) { //En este caso esta cerca del borde izquierdo
-//            for (Particle particle : particleList) {
-//                if (!particle.equals(this)) {
-//                    if (Math.abs(particle.getX() - getX()) <= 2 * radio) { //Hay colision
-//                        totalForce += (K_CONST * (Math.abs(particle.getX() - getX()) - 2 * radio) * ( Math.signum(particle.getX() - getX()) ));
-//                    }
-//                    else if ( Math.abs(particle.getX() - (getX() + L)) < 2 * radio) {
-//                        totalForce += (K_CONST * (Math.abs(particle.getX() - (getX() + L)) - 2 * radio) * ( Math.signum(particle.getX() - (getX() + L)) ));
-//                    }
-//                }
-//            }
-//        } else {
-//            for (Particle particle : particleList) {
-//                if (!particle.equals(this)) {
-//                    if (Math.abs(particle.getX() - getX()) <= 2 * radio) { //Hay colision
-//                        totalForce += (K_CONST * (Math.abs(particle.getX() - getX()) - 2 * radio) * (Math.signum(particle.getX() - getX())));
-//                    }
-//                }
-//            }
-//        }
-//        totalForce += ( limitSpeed - speed );
-//        return totalForce;
     }
 
 

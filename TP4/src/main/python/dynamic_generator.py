@@ -23,8 +23,6 @@ def generar_archivos(nombre_archivo, nombreDynamicOutput, n, L, R, u_array):
                 index = random.randint(0, len(espacios) - 1)
                 valorX = round(espacios[index] * (2 * R), 6)
                 espacios.pop(index)
-                # while not checkNewParticle(particle_created, valorX, R):
-                #     valorX = round(random.randint(0, len(espacios)) * (2 * R), 6)
                 particle = Particle(i)
                 particle.set_postion(valorX, 0)
                 particle_created.append(particle)

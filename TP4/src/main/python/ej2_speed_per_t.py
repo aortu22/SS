@@ -20,9 +20,7 @@ def parse_output(filename):
 def main():
     N_values = [5, 10, 15, 20, 25, 30]
     dt = 0.001
-    phi_dt_difference = {}
     color_list = ['r', 'm', 'g', 'b', 'y', 'c']
-    # color_list = ['navy', 'darkgreen', 'maroon', 'teal', 'gold', 'purple']
 
     index = 0
     for N in N_values:
