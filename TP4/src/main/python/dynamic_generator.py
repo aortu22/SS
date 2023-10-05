@@ -24,8 +24,8 @@ def generar_archivos(nombre_archivo, nombreDynamicOutput, n, L, R, u_array):
                 particle = Particle(i)
                 particle.set_postion(valorX, 0)
                 particle_created.append(particle)
-                f.write(f"{valorX} {u_array[i]}\n")
-                fOut.write(f"{valorX} {u_array[i]}\n")
+                f.write(f"{valorX} {valorX} {u_array[i]}\n")
+                fOut.write(f"{valorX} {valorX} {u_array[i]}\n")
 
 def complete_static( N ):
     u_array = []

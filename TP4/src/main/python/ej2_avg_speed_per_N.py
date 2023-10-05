@@ -22,7 +22,7 @@ def parse_output(filename):
                 data.append(current_time_data)
                 current_time_data = []
             elif len(valores) == 2:
-                current_time_data.append(float(valores[1]))
+                current_time_data.append(float(valores[2]))
     return data
 
 

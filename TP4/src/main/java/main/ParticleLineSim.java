@@ -86,7 +86,7 @@ public class ParticleLineSim {
             StringBuilder particleInfo = new StringBuilder();
             DecimalFormat df = new DecimalFormat("0.0000", new DecimalFormatSymbols(locale));
             for (Particle particle: this.particleList) {
-                particleInfo.append(df.format(particle.getX()));
+                particleInfo.append(df.format(particle.getX())).append(' ').append(df.format(particle.getxPlainPosition()));
                 particleInfo.append(' ').append(df.format(particle.getSpeed()));
                 particleInfo.append('\n');
             }

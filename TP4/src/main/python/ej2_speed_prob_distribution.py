@@ -21,7 +21,7 @@ def main():
             cols = line.split()
 
             if len(cols) == 2:
-                velocities.append(float(cols[1]))
+                velocities.append(float(cols[2]))
 
     archive.close()
 

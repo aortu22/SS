@@ -7,12 +7,18 @@ public class Particle implements Comparable<Particle> {
     private final int id;
     private final List<Particle> neighbours = new ArrayList<>();
     private Position position = new Position(0,0);
+    private double xPlainPosition;
     private double speed;
     private double acceleration = -1;
     private double limitSpeed;
     private double previousAcceleration;
     private final double K_CONST = 2500;
     private double[] gearPredictor;
+
+    public double getxPlainPosition() {
+        return xPlainPosition;
+    }
+
     double[] gearCoefficients = {3 / 16.0, 251 / 360.0, 1, 11 / 18.0, 1 / 6.0, 1 / 60.0};
 
     private double previousX = -1;
@@ -109,7 +115,7 @@ public class Particle implements Comparable<Particle> {
         double xd = (-K*acceleration - Y*xc)/M;
         double xe = (-K*xc - Y*xd)/M;
 
-        this.gearPredictor = new double[]{x,xa,xb,xc,xd,xe};
+        this.gearPredictor = new double[]{x,xa,xb,xc,xd,xe, x};
     }
 
     public double getAcceleration(double acceleration){
@@ -195,7 +201,7 @@ public class Particle implements Comparable<Particle> {
         double xb = gearPredictor[2];
         double xc = gearPredictor[3];
         double xd = gearPredictor[4];
-        double xe = gearPredictor[4];
+        double xe = gearPredictor[5];
 
 //        Prediction to order 5
         double x0 = x + xa * dt + xb * Math.pow(dt, 2) / factorial(2) + xc * Math.pow(dt, 3) / factorial(3) + xd * Math.pow(dt, 4) / factorial(4) + xe * Math.pow(dt, 5) / factorial(5);
@@ -222,13 +228,18 @@ public class Particle implements Comparable<Particle> {
         setAcceleration(x2Corrected);
     }
 
-    public void FiveGearPredictorTp2(double dt,double L, List<Particle> particleList) {
+    public void setxPlainPosition(double xPlainPosition) {
+        this.xPlainPosition = xPlainPosition;
+    }
+
+    public void FiveGearPredictorTp2(double dt, double L, List<Particle> particleList) {
         double x = gearPredictor[0];
         double xa = gearPredictor[1];
         double xb = gearPredictor[2];
         double xc = gearPredictor[3];
         double xd = gearPredictor[4];
-        double xe = gearPredictor[4];
+        double xe = gearPredictor[5];
+        double xP = gearPredictor[6];
 
 //        Prediction to order 5
         double x0 = (x + xa * dt + xb * Math.pow(dt, 2) / factorial(2) + xc * Math.pow(dt, 3) / factorial(3) + xd * Math.pow(dt, 4) / factorial(4) + xe * Math.pow(dt, 5) / factorial(5)) % L;
@@ -237,6 +248,7 @@ public class Particle implements Comparable<Particle> {
         double x2 = xb + xc * dt + xd * Math.pow(dt, 2) / factorial(2) + xe * Math.pow(dt, 3) / factorial(3);
         double x3 = xc + xd * dt + xe * Math.pow(dt, 2) / factorial(2);
         double x4 = xd + xe * dt;
+        double xPlain = xP + xa * dt + xb * Math.pow(dt, 2) / factorial(2) + xc * Math.pow(dt, 3) / factorial(3) + xd * Math.pow(dt, 4) / factorial(4) + xe * Math.pow(dt, 5) / factorial(5);
 
 //        Evaluate
         double deltaA = getTotalForces(particleList,L)/getM() - x2;
@@ -250,9 +262,11 @@ public class Particle implements Comparable<Particle> {
         double x3Corrected = x3 + gearCoefficients[3] * deltaR2 * factorial(3) / Math.pow(dt, 3);
         double x4Corrected = x4 + gearCoefficients[4] * deltaR2 * factorial(4) / Math.pow(dt, 4);
         double x5Corrected = xe + gearCoefficients[5] * deltaR2 * factorial(5) / Math.pow(dt, 5);
+        double xPlainCorrected= xPlain + gearCoefficients[0] * deltaR2;
 
         this.gearPredictor = new double[]{x0Corrected, x1Corrected, x2Corrected, x3Corrected, x4Corrected, x5Corrected};
         setPosition(x0Corrected, position.getY());
+        setxPlainPosition(xPlainCorrected);
         setSpeed(x1Corrected);
         setAcceleration(x2Corrected);
     }
