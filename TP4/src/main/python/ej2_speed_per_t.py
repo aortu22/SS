@@ -44,7 +44,6 @@ def main():
     plt.ylabel('Velocidad Promedio ($\\frac{{\mathrm{cm}}}{{\mathrm{s}}})$')
     plt.legend()
     plt.grid(True)
-    plt.cla()
     plt.show()
 
 if __name__ == "__main__":
