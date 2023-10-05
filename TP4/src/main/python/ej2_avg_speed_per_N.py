@@ -1,13 +1,5 @@
 import matplotlib.pyplot as plt
 
-def get_static_data(config_path):
-    with open(config_path, 'r') as config_file:
-        R = float(next(config_file))
-        M = float(next(config_file))
-        L = float(next(config_file))
-        N = int(next(config_file))
-        return N,R,L
-
 def parse_output(filename):
     data = []
     current_time_data = []
@@ -28,24 +20,20 @@ def parse_output(filename):
 
 def main():
     N_values = [5, 10, 15, 20, 25, 30]
-    config_json_path = "../java/main/static_2.txt"
-    output_base_path = './'
     dt_values = [1.0E-3]
-    n, particleRadius, lineLength = get_static_data(config_json_path)
     phi_dt_difference = {}
-    color_list = ['b', 'g', 'r', 'c', 'y', 'm']
 
     for dt in dt_values:
         index = 0
         for N in N_values:
-            speed_matrix = parse_output(output_base_path + "output_2_" + str(dt) + "_0.001" + ".txt")
+            speed_matrix = parse_output("./output_2_" + str(N) + "_0.001" + ".txt")
 
             #Arreglo con el promedio de velocidades por tiempo
             aux_vels = []
             #Itero por cada arreglo de tiempos
             for i in range(len(speed_matrix)):
-                #if i < 120.00:
-                #    continue
+                if i < 120.00:
+                   continue
                 vel_difference = 0
 
                 for current_particle in speed_matrix[i]:
@@ -79,8 +67,6 @@ def main():
     plt.xlabel('N')
     plt.ylabel('Velocidad Promedio ($\\frac{{\mathrm{cm}}}{{\mathrm{s}}})$')
     plt.grid(True)
-    # plt.savefig('graphs/ej_2_2_1_prom_vel.png')
-    plt.savefig('graphs/ej_2_3_prom_vel.png')
     plt.show()
 
 

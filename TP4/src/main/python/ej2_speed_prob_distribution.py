@@ -13,13 +13,12 @@ def main():
         velocities = []
         t = archive.readline()
         while float(t) < stationary:
-            for i in range(n)+1:
+            for i in range(n+1):
                 archive.readline()
             t = archive.readline()
 
         for line in archive:
             cols = line.split()
-
             if len(cols) == 2:
                 velocities.append(float(cols[2]))
 
@@ -44,7 +43,7 @@ def main():
 
     plt.grid(True)
     plt.legend()
-    plt.savefig(f'./graphs/bins.png')
+    plt.show()
 
     print(np.trapz(hist, bin_centers))
 
