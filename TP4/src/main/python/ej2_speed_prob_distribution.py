@@ -1,27 +1,57 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import math
 
 def main():
-    n = 10
-    # n = 20
-    # n = 30
     stationary = 120
-    filename = f'output_2_{str(n)}_0.001.txt'
+    filenames = ['../src/main/resources/ex2/output_2_10_0.001.txt',
+                 '../src/main/resources/ex2/output_2_20_0.001.txt',
+                 '../src/main/resources/ex2/output_2_30_0.001.txt']
+    velocities_dict = {}
 
-    with open(filename, 'r') as archive:
-        velocities = []
-        t = archive.readline()
-        while float(t) < stationary:
-            for i in range(n+1):
-                archive.readline()
-            t = archive.readline()
+    i = 0
+    for filename in filenames:
+        i += 10
+        velocities_dict[i] = []
+        with open(filename, 'r') as archive:
+            dt = archive.readline()
+            while float(dt) < stationary:
+                for j in range(i):
+                    archive.readline()
+                dt = archive.readline()
 
-        for line in archive:
-            cols = line.split()
-            if len(cols) == 3:
-                velocities.append(float(cols[2]))
+            for line in archive:
+                cols = line.split()
 
-    archive.close()
+                if len(cols) != 1:
+                    velocities_dict[i].append(float(cols[2]))
+
+        archive.close()
+
+    plt.figure(figsize=(8, 6))  # Tamaño del gráfico
+    lim = None
+    for i, velocities in velocities_dict.items():
+        num_particles = len(velocities)
+        bins = int(math.log2(num_particles)) + 1
+        p, x = np.histogram(velocities, bins)
+        x = x[:-1] + (x[1] - x[0]) / 2
+        if i == 10:
+            lim = x
+        plt.plot(x, [a / ((x[1] - x[0]) * num_particles) for a in p], linestyle='-', label=f'N={i}')
+
+    x_recta = np.linspace(9, max(lim), 100)
+    y_recta = np.full_like(x_recta, 1 / 3)
+    plt.plot(x_recta, y_recta, 'r--', label='Initial distribution')
+
+    plt.legend()  # Mostrar leyendas para cada conjunto de datos
+    plt.xlabel('Velocidad ($\\frac{{\mathrm{cm}}}{{\mathrm{s}}})$')
+    plt.ylabel('Densidad de probabilidad ($\\frac{{\mathrm{1}}}{{\mathrm{cm/s}}})$')
+    plt.savefig(f'./graphs/unified.png')
+
+
+
+
+
 
     #Calculo al raiz de la cantidad de velocidades
     num_bins = int(np.sqrt(len(velocities)))
