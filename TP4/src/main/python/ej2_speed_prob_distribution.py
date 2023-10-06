@@ -58,11 +58,10 @@ def main():
 
         plt.plot(bin_centers, hist, linestyle='-', color=color_list[i], label=f'Stationary distribution N={N[i]}')
 
-        # Agregar la recta y=1/3 desde el punto en el que la velocidad es 9
-        x_recta = np.linspace(9, max(bin_centers), 100)  # Valores de x desde 9 hasta el máximo
-        y_recta = np.full_like(x_recta, 1 / 3)  # Array de 1/3 del mismo tamaño que x
-        plt.plot(x_recta, y_recta, linestyle='dotted', color=color_list_init[i], label='Initial distribution', marker='o')  # Agregar la recta
-
+    # Agregar la recta y=1/3 desde el punto en el que la velocidad es 9
+    x_recta = np.linspace(9, 12, 100)  # Valores de x desde 9 hasta el máximo
+    y_recta = np.full_like(x_recta, 1 / 3)  # Array de 1/3 del mismo tamaño que x
+    plt.plot(x_recta, y_recta, linestyle='dotted', color='b', label='Initial distribution')  # Agregar la recta
 
     plt.legend()  # Mostrar leyendas para cada conjunto de datos
     plt.xlabel('Velocidad ($\\frac{{\mathrm{cm}}}{{\mathrm{s}}})$')
