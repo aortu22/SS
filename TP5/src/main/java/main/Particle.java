@@ -14,12 +14,20 @@ public class Particle implements Comparable<Particle> {
 
     private final double M;
 
-    private final double radio;
+    private double radio;
 
     public Particle(int id, double radio,double M){
         this.id = id;
         this.radio = radio;
         this.M = M;
+    }
+
+    public double getRadio() {
+        return radio;
+    }
+
+    public void setRadio(double radio) {
+        this.radio = radio;
     }
 
     public boolean collidesWith(Particle p, Double dt) {

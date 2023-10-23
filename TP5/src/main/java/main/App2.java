@@ -6,9 +6,10 @@ import java.util.List;
 
 public class App2 {
     public static final double maxT = 180.0;
+    public static double dT = 0.0;
 
-    public static void deleteOutput(String dt, String N) {
-        String output = "src/main/python/output_2_" + N +"_"+dt+".txt";
+    public static void deleteOutput() {
+        String output = "src/main/python/output_2.txt";
         String output_xyz = "src/main/python/output.xyz";
         File fileOutput = new File(output);
         File fileOutputXYZ = new File(output_xyz);
@@ -39,66 +40,72 @@ public class App2 {
     {
         String jsonFilePathStatic = "src/main/java/main/static_2.txt";
         String jsonFilePathDynamic = "src/main/java/main/dynamic_2.txt";
+        String jsonFilePathUnaffiliated = "src/main/java/main/unaffiliated.txt";
+
         reloadDynamicOutput();
-        Particle particle = null;
-        double R = 0.0;
-        double M = 0.0;
-        double L = 0;
-        int N = 0;
-        double dT = 0.0;
         double dTEscritura = 0.0;
-        List<Particle> particleList = new ArrayList<>();
+        double rMin = 0.0;
+        double rMax = 0.0;
+        double B = 0.0;
         try {
             BufferedReader br = new BufferedReader(new FileReader(jsonFilePathStatic));
 
+            /*
+            dT
+            dTEscritura
+            Rmin
+            Rmax
+            B
+             */
             // Leer las primeras 3 líneas y guardarlas en variables especiales
-            R = Double.parseDouble(br.readLine());
-            M = Double.parseDouble(br.readLine());
-            L = Double.parseDouble(br.readLine());
-            N = Integer.parseInt(br.readLine());
             dT = Double.parseDouble(br.readLine());
             dTEscritura = Double.parseDouble(br.readLine());
-            // Leer y retornar solo el primer valor de cada par de valores
-            int i = 0;
-            while( i < N){
-                Particle newParticle = new Particle(i,R,M);
-                particleList.add(newParticle);
-                i++;
-            }
+            rMin = Double.parseDouble(br.readLine());
+            rMax = Double.parseDouble(br.readLine());
+            B = Double.parseDouble(br.readLine());
             br.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        Pedestrian testPedestrian = null;
         try {
             BufferedReader br = new BufferedReader(new FileReader(jsonFilePathDynamic));
+            String linea;
+
+            double tau = Double.parseDouble(br.readLine());
+            double x = 0;
+            double y = 0;
+            double d = Double.parseDouble(br.readLine());
+            List<Position> targetList = new ArrayList<>();
+            targetList.add(new Position(d,0));
+            testPedestrian = new Pedestrian(1,rMin,1,targetList,rMin,rMax,tau,dT,B);
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        List<Particle> unaffiliatedList = new ArrayList<>();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(jsonFilePathUnaffiliated));
             String linea;
 
             br.readLine();
             int i = 0;
             while((linea = br.readLine()) != null ){
-                String[] valores = linea.split(" ");
-                double x = Double.parseDouble(valores[0]);
-                particleList.get(i).setPosition(x,0);
-                double ui = Double.parseDouble(valores[2]);
-                particleList.get(i).setSpeed(ui);
-                particleList.get(i).setLimitSpeed(ui);
-                particleList.get(i).setAcceleration(0);
-                particleList.get(i).setGearPredictorTp2();
+                Particle particle = new Particle(i,rMax,1);
+                //NO SE EL ORDEN PERO ACA HAY QUE LEER EL ARCHIVO Y OBTENER LA POSICION Y LA DIRECCION DE CADA UNO
                 i++;
             }
             br.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        ParticleLineSim sim = new ParticleLineSim(particleList,dTEscritura,dT,L, N);
-        deleteOutput(String.valueOf(dT), String.valueOf(N));
+        PedestrianSim sim = new PedestrianSim(testPedestrian,null,dTEscritura,dT);
+        deleteOutput();
         sim.updateOutput();
         double t = 0.00;
         while(t < maxT){
             t += dT;
-            sim.moveParticlesAndRecalculateForces(t,dT,L);
+            sim.advancePedestrian(t);
             sim.updateDynamicAndOutput(t);
         }
 
