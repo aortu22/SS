@@ -24,6 +24,7 @@ public class PedestrianSim {
     }
 
     public void advancePedestrian(double t){
+        // EJERCICIO C
         if(unaffiliatedPedestrian != null){
             updateUnaffilatedPedestrians(t);
             Particle closestImpactParticle = null;
@@ -40,9 +41,9 @@ public class PedestrianSim {
             if(closestImpactParticle != null){
                 colitionHeuristic(closestImpactParticle);
             }else{
-//                respondingPedestrian.setAngleToTarget;
+                respondingPedestrian.setAngleToTarget();
             }
-        }else{
+        }else{  //EJERCICIO B
             if(respondingPedestrian.getNextTarget().getX() - respondingPedestrian.getPosition().getX() < respondingPedestrian.getD()){
                 respondingPedestrian.updateDecreseR();
             }else{
@@ -60,7 +61,7 @@ public class PedestrianSim {
     }
 
     public void colitionHeuristic(Particle particle){
-
+        
     }
 
     public void updateOutput(){
