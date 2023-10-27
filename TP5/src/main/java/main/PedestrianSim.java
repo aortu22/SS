@@ -49,7 +49,7 @@ public class PedestrianSim {
             }else{
                 respondingPedestrian.udapteIncreaseR();
             }
-            respondingPedestrian.calculateSpeedWithR();
+            respondingPedestrian.setSpeed(respondingPedestrian.calculateSpeedWithR());
             respondingPedestrian.updatePosition(dT);
         }
 
