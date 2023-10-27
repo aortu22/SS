@@ -64,9 +64,9 @@ public class PedestrianSim {
         
     }
 
-    public void updateOutput(){
+    public void updateOutput(double tau, String str){
         try {
-            String output = "src/main/python/output_1.txt";
+            String output = "src/main/python/output_1_"+tau+"_"+str+".txt";
             String dynamic = "src/main/java/main/dynamic_1.txt";
             File fileOutput = new File(output);
             if (!fileOutput.exists()) {
@@ -94,7 +94,7 @@ public class PedestrianSim {
 
     }
 
-    public void updateDynamicAndOutput(Double t){
+    public void updateDynamicAndOutput(Double t, double tau, String str){
         if(t < nextT){
             return;
         }
@@ -126,6 +126,6 @@ public class PedestrianSim {
             e.printStackTrace();
         }
 
-        updateOutput();
+        updateOutput(tau, str);
     }
 }

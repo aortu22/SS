@@ -7,6 +7,9 @@ import java.util.List;
 public class App2 {
     public static final double maxT = 180.0;
     public static double dT = 0.0;
+    public static double tau = 0.0;
+    public static String str = "acceleration";
+
 
     public static void deleteOutput() {
         String output = "src/main/python/output_2.txt";
@@ -101,12 +104,12 @@ public class App2 {
         }
         PedestrianSim sim = new PedestrianSim(testPedestrian,null,dTEscritura,dT);
         deleteOutput();
-        sim.updateOutput();
+        sim.updateOutput(tau,str);
         double t = 0.00;
         while(t < maxT){
             t += dT;
             sim.advancePedestrian(t);
-            sim.updateDynamicAndOutput(t);
+            sim.updateDynamicAndOutput(t,tau,str);
         }
 
     }
