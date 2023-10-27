@@ -9,8 +9,9 @@ public class App1
 
     public static double dT = 0.0;
     public static double tau = 0.0;
-//    time c - time b (in excel)
+//  TODO: set according time c - time b (in excel)
     public static double maxT = 3.4;
+//  TODO: set acceleration o deacceleration
     public static String str = "acceleration";
 
     public static void deleteOutput(){
@@ -78,11 +79,11 @@ public class App1
                 double d = Double.parseDouble(br.readLine());
                 double vMax = Double.parseDouble(br.readLine());
                 List<Position> targetList = new ArrayList<>();
-                //TODO: SETEAR TARGET (10,0) SI ES ACELERACION o (d,0) SI ES FRENADO
+            //  TODO: SETEAR TARGET (10,0) SI ES ACELERACION o (d,0) SI ES FRENADO
                 targetList.add(new Position(10,0));
                 testPedestrian = new Pedestrian(1,rMin,1,targetList,rMin,rMax,tau,dT,B,d);
                 testPedestrian.setLimitSpeed(vMax);
-                //TODO: SETEAR SPEED EN 0 SI ES ACELERACION o VMAX SI ES FRENADO
+            //  TODO: SETEAR SPEED EN 0 SI ES ACELERACION o VMAX SI ES FRENADO
                 testPedestrian.setSpeed(0);
                 testPedestrian.setAngle(0.0);
                 br.close();
