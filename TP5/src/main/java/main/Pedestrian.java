@@ -92,5 +92,8 @@ public class Pedestrian extends Particle{
         }
     }
 
+    public void setAngleToTarget(){
+        setAngle(Math.toDegrees(Math.atan2(nextTarget.getY() - getPosition().getY(), nextTarget.getX() - getPosition().getX())));
+    }
 
 }
