@@ -117,7 +117,6 @@ public class PedestrianSim {
             // Imprimo la informacion, este va a ser la posicion y el error respecto a la solucion analitca
             StringBuilder particleInfo = new StringBuilder();
             DecimalFormat df = new DecimalFormat("0.0000", new DecimalFormatSymbols(locale));
-            particleInfo.append(df.format(respondingPedestrian.getX())).append(' ').append(df.format(respondingPedestrian.getY()));
             particleInfo.append(' ').append(df.format(respondingPedestrian.getSpeed()));
             particleInfo.append('\n');
             bw.write(particleInfo.toString());

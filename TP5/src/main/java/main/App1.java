@@ -7,10 +7,7 @@ import java.util.List;
 public class App1
 {
 
-//    TODO: correr on maxT = 5 para la ppt
-    public static final double maxT = 5.0;
     public static double dT = 0.0;
-
 
     public static void deleteOutput(){
         String output = "src/main/python/output_1.txt";
@@ -51,6 +48,7 @@ public class App1
         double rMin = 0.0;
         double rMax = 0.0;
         double B = 0.0;
+        Pedestrian testPedestrian = null;
         try {
             BufferedReader br = new BufferedReader(new FileReader(jsonFilePathStatic));
 
@@ -67,14 +65,6 @@ public class App1
             rMin = Double.parseDouble(br.readLine());
             rMax = Double.parseDouble(br.readLine());
             B = Double.parseDouble(br.readLine());
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Pedestrian testPedestrian = null;
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(jsonFilePathDynamic));
-            String linea;
 
             double tau = Double.parseDouble(br.readLine());
             double x = 0;
@@ -82,21 +72,23 @@ public class App1
             double d = Double.parseDouble(br.readLine());
             double vMax = Double.parseDouble(br.readLine());
             List<Position> targetList = new ArrayList<>();
-            //ACA SETEAR TARGET (10,0) SI ES ACELERACION O (d,0) si es frenado
-            targetList.add(new Position(0,0));
+            //TODO: SETEAR TARGET (10,0) SI ES ACELERACION o (d,0) SI ES FRENADO
+            targetList.add(new Position(10,0));
             testPedestrian = new Pedestrian(1,rMin,1,targetList,rMin,rMax,tau,dT,B,d);
             testPedestrian.setLimitSpeed(vMax);
-            //ACA SETEAR SPEED EN 0 SI ES ACELERACION O VMAX SI ES FRENADO
+            //TODO: SETEAR SPEED EN 0 SI ES ACELERACION o VMAX SI ES FRENADO
             testPedestrian.setSpeed(0);
+
             br.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         PedestrianSim sim = new PedestrianSim(testPedestrian,null,dTEscritura,dT);
         deleteOutput();
         sim.updateOutput();
         double t = 0.00;
-        while(t < maxT){
+        while(testPedestrian.getSpeed() < testPedestrian.getLimitSpeed()){
             t += dT;
             sim.advancePedestrian(t);
             sim.updateDynamicAndOutput(t);
