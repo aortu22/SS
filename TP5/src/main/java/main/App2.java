@@ -108,7 +108,10 @@ public class App2 {
         double t = 0.00;
         while(t < maxT){
             t += dT;
-            sim.advancePedestrian(t);
+            if( !sim.advancePedestrian(t)){
+                sim.updateDynamicAndOutput(t,tau,str);
+                break;  //Se quedo sin targets
+            }
             sim.updateDynamicAndOutput(t,tau,str);
         }
 

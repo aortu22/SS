@@ -26,5 +26,9 @@ public class Position {
         return y;
     }
 
+    public double calculateDistance(Position otherPosition){
+        return Math.sqrt(Math.pow(x - otherPosition.x,2) + Math.pow(y - otherPosition.y,2));
+    }
+
 
 }

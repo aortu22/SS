@@ -43,25 +43,8 @@ public class Particle implements Comparable<Particle> {
         this.radio = radio;
     }
 
-    public boolean collidesWith(Particle p, Double dt) {
-        double deltaRx = getX() - p.getX();
-        double deltaVx = speed - p.speed;
-
-        double sigma = radio + p.radio;
-
-        double dv_dr = (deltaRx * deltaVx);
-        if (dv_dr >= 0) {
-            return false;
-        }
-
-        double dv2 = (deltaVx * deltaVx);
-        double dr2 = (deltaRx * deltaRx);
-        double d = Math.pow(dv_dr, 2) - dv2 * (dr2 - Math.pow(sigma, 2));
-        if (d < 0) {
-            return false;
-        }
-
-        return (-(dv_dr + Math.sqrt(d)) / dv2 ) < dt;
+    public boolean collidesWith(Particle p) {
+        return Math.sqrt(Math.pow(position.getX() - p.getX(),2) + Math.pow(position.getY() - p.getY(),2)) < 2 * getRadio();
     }
 
     public double getAngleToOtherParticle(Particle otherParticle){

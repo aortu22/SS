@@ -4,13 +4,28 @@ import java.util.List;
 
 public class Pedestrian extends Particle{
     private final List<Position> targetList;
-    private Position nextTarget;
+    private Position currentTarget;
+    private int currentTargetIndex;
 
-    public Position getNextTarget() {
-        return nextTarget;
+    public Position getCurrentTarget() {
+        return currentTarget;
+    }
+
+    public Position setNextTarget(){
+        currentTargetIndex++;
+        if(targetList.size() < currentTargetIndex + 1){
+            return null;
+        }
+        currentTarget = targetList.get(currentTargetIndex);
+        return currentTarget;
     }
 
     private double rMin;
+
+    public double getrMin() {
+        return rMin;
+    }
+
     private double rMax;
     private final double rInteraction = 1.0;
     private double tau;
@@ -30,7 +45,8 @@ public class Pedestrian extends Particle{
     public Pedestrian(int id, double radio, double M, List<Position> targetList, double rMin, double rMax, double tau, double deltaT, double B,double D) {
         super(id, radio, M);
         this.targetList = targetList;
-        this.nextTarget = targetList.get(0);
+        this.currentTarget = targetList.get(0);
+        this.currentTargetIndex = 0;
         this.rMin = rMin;
         this.rMax = rMax;
         this.tau = tau;
@@ -103,7 +119,7 @@ public class Pedestrian extends Particle{
     }
 
     public void setAngleToTarget(){
-        setAngle(Math.toDegrees(Math.atan2(nextTarget.getY() - getPosition().getY(), nextTarget.getX() - getPosition().getX())));
+        setAngle(Math.toDegrees(Math.atan2(currentTarget.getY() - getPosition().getY(), currentTarget.getX() - getPosition().getX())));
     }
 
 }

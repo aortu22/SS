@@ -23,9 +23,16 @@ public class PedestrianSim {
         this.dT = dT;
     }
 
-    public void advancePedestrian(double t){
+    public boolean advancePedestrian(double t){
         // EJERCICIO C
+        boolean isCollition = false;
         if(unaffiliatedPedestrian != null){
+            if( respondingPedestrian.getPosition().calculateDistance(respondingPedestrian.getCurrentTarget()) < respondingPedestrian.getRadio()){
+                if(respondingPedestrian.setNextTarget() == null){
+                    return false;
+                }
+            }
+
             updateUnaffilatedPedestrians(t);
             Particle closestImpactParticle = null;
             double smallestCollitionTime = 0;
@@ -40,18 +47,21 @@ public class PedestrianSim {
             }
             if(closestImpactParticle != null){
                 colitionHeuristic(closestImpactParticle);
+                isCollition = respondingPedestrian.collidesWith(closestImpactParticle);
             }else{
                 respondingPedestrian.setAngleToTarget();
             }
         }
-        if(respondingPedestrian.getNextTarget().getX() - respondingPedestrian.getPosition().getX() < respondingPedestrian.getD()){
+        if(isCollition){
+            respondingPedestrian.setRadio(respondingPedestrian.getrMin());
+        }else if(respondingPedestrian.getCurrentTarget().getX() - respondingPedestrian.getPosition().getX() < respondingPedestrian.getD()){
             respondingPedestrian.updateDecreseR();
         }else{
             respondingPedestrian.udapteIncreaseR();
         }
         respondingPedestrian.setSpeed(respondingPedestrian.calculateSpeedWithR());
         respondingPedestrian.updatePosition(dT);
-
+        return true;
 
     }
 
@@ -60,22 +70,23 @@ public class PedestrianSim {
         //actualizar las posiciones y direcciones de los unaffilated
     }
 
+
     public void colitionHeuristic(Particle particle) {
         //PRIMERO YA SE CHEQUEO QUE EL ANGULO LA PARTICULA Q LO CHOQUE NO VENGA DE A ATRAS
-            double anguloA = ( respondingPedestrian.getAngle() + 360) % 360;
-            double anguloB = ( particle.getAngle() + 360) % 360;
+        double anguloA = ( respondingPedestrian.getAngle() + 360) % 360;
+        double anguloB = ( particle.getAngle() + 360) % 360;
 
-            // Calcular la diferencia entre los ángulos
-            double diferencia = (anguloB - anguloA + 360) % 360;
+        // Calcular la diferencia entre los ángulos
+        double diferencia = (anguloB - anguloA + 360) % 360;
 
-            // Sumar 45 grados al ángulo A si es más cercano ir en sentido horario,
-            // de lo contrario, restar 45 grados.
-            if (diferencia <= 180) {
-                anguloA = (anguloA + 45) % 360;
-            } else {
-                anguloA = (anguloA - 45 + 360) % 360;
-            }
-            respondingPedestrian.setAngle(anguloA);
+        // Sumar 45 grados al ángulo A si es más cercano ir en sentido horario,
+        // de lo contrario, restar 45 grados.
+        if (diferencia <= 180) {
+            anguloA = (anguloA + 45) % 360;
+        } else {
+            anguloA = (anguloA - 45 + 360) % 360;
+        }
+        respondingPedestrian.setAngle(anguloA);
     }
 
     public void updateOutput(double tau, String str){
