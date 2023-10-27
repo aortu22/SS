@@ -26,13 +26,41 @@ public class PedestrianSim {
     public void advancePedestrian(double t){
         if(unaffiliatedPedestrian != null){
             updateUnaffilatedPedestrians(t);
+            Particle closestImpactParticle = null;
+            double smallestCollitionTime = 0;
+            for(Particle particle : unaffiliatedPedestrian){
+                //Esta en rango de choque
+                if(respondingPedestrian.calculateDistance(particle) < 2 * respondingPedestrian.getrInteraction()){
+                    double collitionTime = respondingPedestrian.calcularTiempoColision(particle);
+                    if (collitionTime > smallestCollitionTime){
+                        closestImpactParticle = particle;
+                    }
+                }
+            }
+            if(closestImpactParticle != null){
+                colitionHeuristic(closestImpactParticle);
+            }else{
+                respondingPedestrian.setAngleToTarget;
+            }
+        }else{
+            if(respondingPedestrian.getNextTarget().getX() - respondingPedestrian.getPosition().getX() < respondingPedestrian.getD()){
+                respondingPedestrian.updateDecreseR();
+            }else{
+                respondingPedestrian.udapteIncreaseR();
+            }
+            respondingPedestrian.calculateSpeedWithR();
+            respondingPedestrian.updatePosition(dT);
         }
-        //VER SI HAY COLISION, Y LUEGO AVANZAR CON LOS CALCULOS
+
     }
 
     public void updateUnaffilatedPedestrians(double t){
         String unaffilatedFile = "src/main/java/.....txt";
         //actualizar las posiciones y direcciones de los unaffilated
+    }
+
+    public void colitionHeuristic(Particle particle){
+
     }
 
     public void updateOutput(){
