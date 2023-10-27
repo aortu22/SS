@@ -45,11 +45,15 @@ public class Pedestrian extends Particle{
     }
 
     public void udapteIncreaseR(){
-        setRadio( getRadio() + rMax/ (tau/deltaT)  );
+        if( getRadio() < rMax){
+            setRadio( getRadio() + rMax/ (tau/deltaT)  );
+        }
     }
 
     public void updateDecreseR(){
-        setRadio( getRadio() - rMax/ (tau/deltaT)  );
+        if(getRadio() > rMin){
+            setRadio( getRadio() - rMax/ (tau/deltaT)  );
+        }
     }
 
     public void resetR(){
@@ -65,6 +69,12 @@ public class Pedestrian extends Particle{
     }
 
     public double calcularTiempoColision(Particle particle) {
+        double angleToParticle = (getAngleToOtherParticle(particle) + 360) % 360;
+        //PRIMERO CHEQUEO QUE EL ANGULO LA PARTICULA Q LO CHOQUE NO VENGA DE A ATRAS
+        if ((getAngle() - angleToParticle + 360) % 360 > 90 && (angleToParticle - getAngle() + 360) % 360 > 90) {
+            return -1;
+        }
+
         double[] velocidadRelativa = new double[]{getSpeed()*Math.cos(getAngle()) - particle.getSpeed()*Math.cos(getAngle()) ,
                 getSpeed()*Math.sin(getAngle()) - particle.getSpeed()*Math.sin(getAngle())};
 
