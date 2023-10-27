@@ -64,6 +64,9 @@ public class Particle implements Comparable<Particle> {
         return (-(dv_dr + Math.sqrt(d)) / dv2 ) < dt;
     }
 
+    public double getAngleToOtherParticle(Particle otherParticle){
+        return Math.toDegrees(Math.atan2(otherParticle.getY() - getPosition().getY(), otherParticle.getX() - getPosition().getX()));
+    }
 
 
 
