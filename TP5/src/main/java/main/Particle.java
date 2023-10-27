@@ -9,8 +9,13 @@ public class Particle implements Comparable<Particle> {
     private Position position = new Position(0,0);
     private double xPlainPosition;
     private double speed;
+    private double angle;
     private double acceleration = -1;
     private double limitSpeed;
+
+    public Position getPosition() {
+        return position;
+    }
 
     private final double M;
 
@@ -24,6 +29,14 @@ public class Particle implements Comparable<Particle> {
 
     public double getRadio() {
         return radio;
+    }
+
+    public double getAngle() {
+        return angle;
+    }
+
+    public void setAngle(double angle) {
+        this.angle = angle;
     }
 
     public void setRadio(double radio) {

@@ -77,8 +77,8 @@ public class App2 {
             double y = 0;
             double d = Double.parseDouble(br.readLine());
             List<Position> targetList = new ArrayList<>();
-            targetList.add(new Position(d,0));
-            testPedestrian = new Pedestrian(1,rMin,1,targetList,rMin,rMax,tau,dT,B);
+            targetList.add(new Position(0,0));
+            testPedestrian = new Pedestrian(1,rMin,1,targetList,rMin,rMax,tau,dT,B,d);
             br.close();
         } catch (IOException e) {
             e.printStackTrace();
