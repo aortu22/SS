@@ -9,6 +9,8 @@ public class App1
 
     public static double dT = 0.0;
     public static double tau = 0.0;
+//    time c - time b (in excel)
+    public static double maxT = 3.4;
     public static String str = "acceleration";
 
     public static void deleteOutput(){
@@ -44,14 +46,14 @@ public class App1
         String jsonFilePathStatic = "src/main/java/main/static_1.txt";
         String jsonFilePathDynamic = "src/main/java/main/dynamic_1.txt";
 
-        reloadDynamicOutput();
         Particle particle = null;
         double dTEscritura = 0.0;
         double rMin = 0.0;
         double rMax = 0.0;
         double B = 0.0;
         Pedestrian testPedestrian = null;
-        while (tau < 2.0){
+        while (tau + 0.1 < 2.0){
+            reloadDynamicOutput();
             tau += 0.1;
             try {
                 BufferedReader br = new BufferedReader(new FileReader(jsonFilePathStatic));
@@ -70,7 +72,7 @@ public class App1
                 rMax = Double.parseDouble(br.readLine());
                 B = Double.parseDouble(br.readLine());
 
-                double tau = Double.parseDouble(br.readLine());
+//                double tau = Double.parseDouble(br.readLine());
                 double x = 0;
                 double y = 0;
                 double d = Double.parseDouble(br.readLine());
@@ -92,7 +94,7 @@ public class App1
             deleteOutput();
             sim.updateOutput(tau, str);
             double t = 0.00;
-            while(testPedestrian.getSpeed() < testPedestrian.getLimitSpeed()){
+            while(t < maxT){
                 t += dT;
                 sim.advancePedestrian(t);
                 sim.updateDynamicAndOutput(t, tau, str);
