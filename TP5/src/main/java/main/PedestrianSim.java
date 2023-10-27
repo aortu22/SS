@@ -25,23 +25,23 @@ public class PedestrianSim {
 
     public void advancePedestrian(double t){
         if(unaffiliatedPedestrian != null){
-//            updateUnaffilatedPedestrians(t);
-//            Particle closestImpactParticle = null;
-//            double smallestCollitionTime = 0;
-//            for(Particle particle : unaffiliatedPedestrian){
-//                //Esta en rango de choque
-//                if(respondingPedestrian.calculateDistance(particle) < 2 * respondingPedestrian.getrInteraction()){
-//                    double collitionTime = respondingPedestrian.calculateCollitionTime(particle);
-//                    if (collitionTime > smallestCollitionTime){
-//                        closestImpactParticle = particle;
-//                    }
-//                }
-//            }
-//            if(closestImpactParticle != null){
-//                colitionHeuristic(closestImpactParticle);
-//            }else{
-//                respondingPedestrian.setAngle(CALCULO DE ANGULO AL TARGET);
-//            }
+            updateUnaffilatedPedestrians(t);
+            Particle closestImpactParticle = null;
+            double smallestCollitionTime = 0;
+            for(Particle particle : unaffiliatedPedestrian){
+                //Esta en rango de choque
+                if(respondingPedestrian.calculateDistance(particle) < 2 * respondingPedestrian.getrInteraction()){
+                    double collitionTime = respondingPedestrian.calcularTiempoColision(particle);
+                    if (collitionTime > smallestCollitionTime){
+                        closestImpactParticle = particle;
+                    }
+                }
+            }
+            if(closestImpactParticle != null){
+                colitionHeuristic(closestImpactParticle);
+            }else{
+                respondingPedestrian.setAngleToTarget;
+            }
         }else{
             if(respondingPedestrian.getNextTarget().getX() - respondingPedestrian.getPosition().getX() < respondingPedestrian.getD()){
                 respondingPedestrian.updateDecreseR();

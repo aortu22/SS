@@ -88,6 +88,7 @@ public class App1
             testPedestrian.setLimitSpeed(vMax);
             //ACA SETEAR SPEED EN 0 SI ES ACELERACION O VMAX SI ES FRENADO
             testPedestrian.setSpeed(0);
+            testPedestrian.setAngle(0.0);
             br.close();
         } catch (IOException e) {
             e.printStackTrace();
