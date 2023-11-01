@@ -89,9 +89,13 @@ public class PedestrianSim {
         respondingPedestrian.setAngle(anguloA);
     }
 
-    public void updateOutput(double tau, String str){
+    public void updateOutput(int id, double tau, String str){
         try {
-            String output = "src/main/python/output_1_"+tau+"_"+str+".txt";
+
+            DecimalFormat df_time = new DecimalFormat("#.#");
+            String t = df_time.format(tau);
+
+            String output = "src/main/python/output_"+id+"_"+t+"_"+str+".txt";
             String dynamic = "src/main/java/main/dynamic_1.txt";
             File fileOutput = new File(output);
             if (!fileOutput.exists()) {
@@ -119,7 +123,7 @@ public class PedestrianSim {
 
     }
 
-    public void updateDynamicAndOutput(Double t, double tau, String str){
+    public void updateDynamicAndOutput(Double t, int id, double tau, String str){
         if(t < nextT){
             return;
         }
@@ -136,21 +140,17 @@ public class PedestrianSim {
             FileWriter fw = new FileWriter(file, false);
             BufferedWriter bw = new BufferedWriter(fw);
 
-            bw.write( t.toString() + '\n');
-
-            // Ordering particles with id
 
             // Imprimo la informacion, este va a ser la posicion y el error respecto a la solucion analitca
             StringBuilder particleInfo = new StringBuilder();
             DecimalFormat df = new DecimalFormat("0.0000", new DecimalFormatSymbols(locale));
             particleInfo.append(df.format(respondingPedestrian.getSpeed()));
-            particleInfo.append('\n');
-            bw.write(particleInfo.toString());
+            bw.write(t.toString() + ' ' + particleInfo);
             bw.close();
         }catch (Exception e){
             e.printStackTrace();
         }
 
-        updateOutput(tau, str);
+        updateOutput(id,tau, str);
     }
 }

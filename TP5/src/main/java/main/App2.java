@@ -7,6 +7,7 @@ import java.util.List;
 public class App2 {
     public static final double maxT = 180.0;
     public static double dT = 0.0;
+    public static int id = 0;
     public static double tau = 0.0;
     public static String str = "acceleration";
 
@@ -104,15 +105,15 @@ public class App2 {
         }
         PedestrianSim sim = new PedestrianSim(testPedestrian,null,dTEscritura,dT);
         deleteOutput();
-        sim.updateOutput(tau,str);
+        sim.updateOutput(id, tau,str);
         double t = 0.00;
         while(t < maxT){
             t += dT;
             if( !sim.advancePedestrian(t)){
-                sim.updateDynamicAndOutput(t,tau,str);
+                sim.updateDynamicAndOutput(t, id, tau,str);
                 break;  //Se quedo sin targets
             }
-            sim.updateDynamicAndOutput(t,tau,str);
+            sim.updateDynamicAndOutput(t, id, tau,str);
         }
 
     }
