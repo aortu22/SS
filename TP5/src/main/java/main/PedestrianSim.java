@@ -102,7 +102,7 @@ public class PedestrianSim {
         // Sumar 45 grados al ángulo A si es más cercano ir en sentido horario,
         // de lo contrario, restar 45 grados.
         double distance = respondingPedestrian.getPosition().calculateDistance(particle.getPosition());
-        double angleToCorrect = 45 * ( (distance - 2 * respondingPedestrian.getRadio())/ (3* respondingPedestrian.getRadio()));
+        double angleToCorrect = 45 * ( ( 5 * respondingPedestrian.getRadio() - distance)/ (3* respondingPedestrian.getRadio()));
 
         if (diferencia <= 180) {
             anguloA = (anguloA + angleToCorrect) % 360;
