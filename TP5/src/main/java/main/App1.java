@@ -15,6 +15,8 @@ public class App1
 //  TODO: set according time c - time b (in excel for acc) or timetime b - time a (in excel for deacc)
     public static double maxT = 2.4;
 //  TODO: set acceleration o deacceleration
+
+//    public static String str = "acceleration";
     public static String str = "deacceleration";
 
     public static void deleteOutput(){
@@ -85,11 +87,17 @@ public class App1
                 double vMax = Double.parseDouble(br.readLine());
                 List<Position> targetList = new ArrayList<>();
             //  TODO: SETEAR TARGET (10,0) SI ES ACELERACION o (d,0) SI ES FRENADO
+
+//                targetList.add(new Position(10,0));
                 targetList.add(new Position(d,0));
             // TODO: SETEAR rMin si es aceleracion o rMax si es desaceleracion (segundo lugar)
+
+//                testPedestrian = new Pedestrian(1,rMin,1,targetList,rMin,rMax,tau,dT,B,d);
                 testPedestrian = new Pedestrian(1,rMax,1,targetList,rMin,rMax,tau,dT,B,d);
                 testPedestrian.setLimitSpeed(vMax);
             //  TODO: SETEAR SPEED EN 0 SI ES ACELERACION o VMAX SI ES FRENADO
+
+//                testPedestrian.setSpeed(0.0);
                 testPedestrian.setSpeed(vMax);
                 testPedestrian.setAngle(0.0);
                 br.close();
