@@ -86,7 +86,8 @@ public class App1
                 List<Position> targetList = new ArrayList<>();
             //  TODO: SETEAR TARGET (10,0) SI ES ACELERACION o (d,0) SI ES FRENADO
                 targetList.add(new Position(d,0));
-                testPedestrian = new Pedestrian(1,rMin,1,targetList,rMin,rMax,tau,dT,B,d);
+            // TODO: SETEAR rMin si es aceleracion o rMax si es desaceleracion (segundo lugar)
+                testPedestrian = new Pedestrian(1,rMax,1,targetList,rMin,rMax,tau,dT,B,d);
                 testPedestrian.setLimitSpeed(vMax);
             //  TODO: SETEAR SPEED EN 0 SI ES ACELERACION o VMAX SI ES FRENADO
                 testPedestrian.setSpeed(vMax);
