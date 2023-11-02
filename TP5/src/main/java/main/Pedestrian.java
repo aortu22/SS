@@ -9,7 +9,8 @@ public class Pedestrian extends Particle{
     private double D;
     private double rMin;
     private double rMax;
-    private double tau;
+    private double tauLlegada;
+    private double tauPartida;
     private double deltaT;
     private double B;
     public Position getCurrentTarget() {
@@ -36,14 +37,15 @@ public class Pedestrian extends Particle{
     }
 
 
-    public Pedestrian(int id, double radio, double M, List<Position> targetList, double rMin, double rMax, double tau, double deltaT, double B,double D) {
+    public Pedestrian(int id, double radio, double M, List<Position> targetList, double rMin, double rMax, double tauPartida, double tauLlegada, double deltaT, double B,double D) {
         super(id, radio, M);
         this.targetList = targetList;
         this.currentTarget = targetList.get(0);
         this.currentTargetIndex = 0;
         this.rMin = rMin;
         this.rMax = rMax;
-        this.tau = tau;
+        this.tauPartida = tauPartida;
+        this.tauLlegada = tauLlegada;
         this.deltaT = deltaT;
         this.B = B;
         this.D = D;
@@ -55,14 +57,14 @@ public class Pedestrian extends Particle{
     }
 
     public void udapteIncreaseR(){
-        if( getRadio() < rMax - (rMax/ (tau/deltaT))){
-            setRadio( getRadio() + rMax/ (tau/deltaT)  );
+        if( getRadio() < rMax - (rMax/ (tauPartida/deltaT))){
+            setRadio( getRadio() + rMax/ (tauPartida/deltaT)  );
         }
     }
 
     public void updateDecreseR(){
-        if(getRadio() > rMin + (rMax/ (tau/deltaT))){
-            setRadio( getRadio() - rMax/ (tau/deltaT)  );
+        if(getRadio() > rMin + (rMax/ (tauLlegada/deltaT))){
+            setRadio( getRadio() - rMax/ (tauLlegada/deltaT)  );
         }
     }
 

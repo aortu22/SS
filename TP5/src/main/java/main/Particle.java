@@ -13,6 +13,10 @@ public class Particle implements Comparable<Particle> {
     private double acceleration = -1;
     private double limitSpeed;
 
+    public int getId() {
+        return id;
+    }
+
     public Position getPosition() {
         return position;
     }

@@ -9,18 +9,22 @@ import java.util.Locale;
 public class PedestrianSim {
 
     private final Pedestrian respondingPedestrian;
-    private final List<Pedestrian> unaffiliatedPedestrian;
+    private final List<Particle> unaffiliatedPedestrian;
     private double nextT;
     private double dTEscritura;
     private double dT;
+    private BufferedReader unaffilatedFIleReader;
+    private int N = 25;
+    private int frame;
 
-
-    public PedestrianSim(Pedestrian respondingPedestrian, List<Pedestrian> unaffiliatedPedestrian, double dTEscritura, double dT){
+    public PedestrianSim(Pedestrian respondingPedestrian, List<Particle> unaffiliatedPedestrian, double dTEscritura, double dT,BufferedReader unaffilatedFIleReader){
         this.respondingPedestrian = respondingPedestrian;
         this.unaffiliatedPedestrian = unaffiliatedPedestrian;
         this.nextT = dTEscritura;
         this.dTEscritura = dTEscritura;
         this.dT = dT;
+        this.unaffilatedFIleReader = unaffilatedFIleReader;
+        this.frame = 2;
     }
 
     public boolean advancePedestrian(double t){
@@ -32,8 +36,6 @@ public class PedestrianSim {
                     return false;
                 }
             }
-
-            updateUnaffilatedPedestrians(t);
             Particle closestImpactParticle = null;
             double smallestCollitionTime = 0;
             for(Particle particle : unaffiliatedPedestrian){
@@ -62,12 +64,27 @@ public class PedestrianSim {
         respondingPedestrian.setSpeed(respondingPedestrian.calculateSpeedWithR());
         respondingPedestrian.updatePosition(dT);
         return true;
-
     }
 
     public void updateUnaffilatedPedestrians(double t){
-        String unaffilatedFile = "src/main/java/.....txt";
-        //actualizar las posiciones y direcciones de los unaffilated
+        int i=0;
+        String line;
+        try{
+            while ((line = unaffilatedFIleReader.readLine()) != null && i < 25) {
+                String[] columns = line.split("\t");
+
+                double x = Double.parseDouble(columns[1]);
+                double y = Double.parseDouble(columns[2]);
+                double speed = Double.parseDouble(columns[5]);
+                double angle = Double.parseDouble(columns[6]);
+                unaffiliatedPedestrian.get(i).setPosition(x,y);
+                unaffiliatedPedestrian.get(i).setAngle(angle);
+                unaffiliatedPedestrian.get(i).setSpeed(speed);
+                i++;
+            }
+        }catch (Exception ex){
+            System.out.println(ex);
+        }
     }
 
 
@@ -81,42 +98,53 @@ public class PedestrianSim {
 
         // Sumar 45 grados al ángulo A si es más cercano ir en sentido horario,
         // de lo contrario, restar 45 grados.
+        double distance = respondingPedestrian.getPosition().calculateDistance(particle.getPosition());
+        double angleToCorrect = 45 * ( (distance - 2 * respondingPedestrian.getRadio())/ (3* respondingPedestrian.getRadio()));
+
         if (diferencia <= 180) {
-            anguloA = (anguloA + 45) % 360;
+            anguloA = (anguloA + angleToCorrect) % 360;
         } else {
-            anguloA = (anguloA - 45 + 360) % 360;
+            anguloA = (anguloA - angleToCorrect + 360) % 360;
         }
         respondingPedestrian.setAngle(anguloA);
     }
 
-    public void updateOutput(int id, double tau, String str){
+    public void updateOutput(double t){
         try {
 
-            DecimalFormat df_time = new DecimalFormat("#.#");
-            String t = df_time.format(tau);
+            String dynamic = "src/main/java/main/simulation_output.txt";
+            Locale locale = new Locale("en", "US");
 
-            String output = "src/main/python/output_"+id+"_"+t+"_"+str+".txt";
-            String dynamic = "src/main/java/main/dynamic_1.txt";
-            File fileOutput = new File(output);
-            if (!fileOutput.exists()) {
-                fileOutput.createNewFile();
+            File file = new File(dynamic);
+            // Si el archivo no existe es creado
+
+            // Parameter false make us write stepping in the information
+            FileWriter fw = new FileWriter(file, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            DecimalFormat df = new DecimalFormat("0.0000", new DecimalFormatSymbols(locale));
+
+            for(Particle particle : unaffiliatedPedestrian){
+                StringBuilder particleInfo = new StringBuilder();
+                particleInfo.append(frame + "\t");
+                particleInfo.append(df.format(particle.getX()) + "\t");
+                particleInfo.append(df.format(particle.getY()) + "\t");
+                particleInfo.append(particle.getId() + "\t");
+                particleInfo.append(t + "\t");
+                particleInfo.append(particle.getSpeed() + "\n");
+
+
+                bw.write(particleInfo.toString());
             }
-            // Parameter true to append to what the file already has
-            FileWriter fwOutput = new FileWriter(fileOutput, true);
-            BufferedWriter bwOutput = new BufferedWriter(fwOutput);
+            StringBuilder particleInfo = new StringBuilder();
+            particleInfo.append(frame + "\t");
+            particleInfo.append(df.format(respondingPedestrian.getX()) + "\t");
+            particleInfo.append(df.format(respondingPedestrian.getY()) + "\t");
+            particleInfo.append("25\t");
+            particleInfo.append(t + "\t");
+            particleInfo.append(respondingPedestrian.getSpeed() + "\n");
+            bw.write(particleInfo.toString());
 
-            BufferedReader reader = new BufferedReader(new FileReader(dynamic));
-            String linea;
-            while ((linea = reader.readLine()) != null) {
-                // Escribir cada línea en el archivo destino
-                bwOutput.write(linea);
-                bwOutput.write(System.lineSeparator()); // Agregar un salto de línea
-            }
-            bwOutput.write('\n');
-
-            // Cerrar archivos
-            reader.close();
-            bwOutput.close();
+            bw.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -128,29 +156,7 @@ public class PedestrianSim {
             return;
         }
         nextT += dTEscritura;
-        Locale locale = new Locale("en", "US");
-        try {
-            String dynamic = "src/main/java/main/dynamic_1.txt";
-            File file = new File(dynamic);
-            // Si el archivo no existe es creado
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            // Parameter false make us write stepping in the information
-            FileWriter fw = new FileWriter(file, false);
-            BufferedWriter bw = new BufferedWriter(fw);
-
-
-            // Imprimo la informacion, este va a ser la posicion y el error respecto a la solucion analitca
-            StringBuilder particleInfo = new StringBuilder();
-            DecimalFormat df = new DecimalFormat("0.0000", new DecimalFormatSymbols(locale));
-            particleInfo.append(df.format(respondingPedestrian.getSpeed()));
-            bw.write(t.toString() + ' ' + particleInfo);
-            bw.close();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        updateOutput(id,tau, str);
+        updateOutput(t);
+        frame++;
     }
 }

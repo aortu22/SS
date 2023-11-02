@@ -1,8 +1,11 @@
 package main;
 
 import java.io.*;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class App2 {
     public static final double maxT = 180.0;
@@ -10,18 +13,61 @@ public class App2 {
     public static int id = 0;
     public static double tau = 0.0;
     public static String str = "acceleration";
+    public static double d = 2.43;
+    public static double vMax = 1.53;
 
 
     public static void deleteOutput() {
-        String output = "src/main/python/output_2.txt";
-        String output_xyz = "src/main/python/output.xyz";
+        String output = "src/main/java/main/simulation_output.txt";
         File fileOutput = new File(output);
-        File fileOutputXYZ = new File(output_xyz);
         if (fileOutput.exists()) {
             fileOutput.delete();
         }
-        if (fileOutputXYZ.exists()) {
-            fileOutputXYZ.delete();
+    }
+
+    public static void initiateOutput(double t,List<Particle> unaffiliatedPedestrian,Pedestrian respondingPedestrian) {
+        Locale locale = new Locale("en", "US");
+        try {
+            String dynamic = "src/main/java/main/simulation_output.txt";
+            File file = new File(dynamic);
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            // Parameter false make us write stepping in the information
+            FileWriter fw = new FileWriter(file, false);
+            BufferedWriter bw = new BufferedWriter(fw);
+
+
+            bw.write("frame\tx\ty\tid\ttime\tvelocity\n");
+
+            DecimalFormat df = new DecimalFormat("0.0000", new DecimalFormatSymbols(locale));
+
+
+            for(Particle particle : unaffiliatedPedestrian){
+                StringBuilder particleInfo = new StringBuilder();
+                particleInfo.append(1 + "\t");
+                particleInfo.append(df.format(particle.getX()) + "\t");
+                particleInfo.append(df.format(particle.getY()) + "\t");
+                particleInfo.append(particle.getId() + "\t");
+                particleInfo.append(t + "\t");
+                particleInfo.append(particle.getSpeed() + "\n");
+
+
+                bw.write(particleInfo.toString());
+            }
+            StringBuilder particleInfo = new StringBuilder();
+            particleInfo.append(1 + "\t");
+            particleInfo.append(df.format(respondingPedestrian.getX()) + "\t");
+            particleInfo.append(df.format(respondingPedestrian.getY()) + "\t");
+            particleInfo.append("25\t");
+            particleInfo.append(t + "\t");
+            particleInfo.append(respondingPedestrian.getSpeed() + "\n");
+            bw.write(particleInfo.toString());
+
+            bw.close();
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -40,17 +86,18 @@ public class App2 {
      }
 
 
-    public static void main( String[] args )
-    {
+    public static void main( String[] args ) throws IOException {
         String jsonFilePathStatic = "src/main/java/main/static_2.txt";
         String jsonFilePathDynamic = "src/main/java/main/dynamic_2.txt";
-        String jsonFilePathUnaffiliated = "src/main/java/main/unaffiliated.txt";
+        String jsonFilePathUnaffiliated = "src/main/python/ej_2b/output_with_angles_order.txt";
 
         reloadDynamicOutput();
         double dTEscritura = 0.0;
         double rMin = 0.0;
         double rMax = 0.0;
         double B = 0.0;
+        double tauSalida = 0.0;
+        double tauLlegada = 0.0;
         try {
             BufferedReader br = new BufferedReader(new FileReader(jsonFilePathStatic));
 
@@ -60,6 +107,8 @@ public class App2 {
             Rmin
             Rmax
             B
+            tauSalida
+            tauLlegada
              */
             // Leer las primeras 3 líneas y guardarlas en variables especiales
             dT = Double.parseDouble(br.readLine());
@@ -67,6 +116,8 @@ public class App2 {
             rMin = Double.parseDouble(br.readLine());
             rMax = Double.parseDouble(br.readLine());
             B = Double.parseDouble(br.readLine());
+            tauSalida = Double.parseDouble(br.readLine());
+            tauLlegada = Double.parseDouble(br.readLine());
             br.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -76,37 +127,55 @@ public class App2 {
             BufferedReader br = new BufferedReader(new FileReader(jsonFilePathDynamic));
             String linea;
 
-            double tau = Double.parseDouble(br.readLine());
-            double x = 0;
-            double y = 0;
-            double d = Double.parseDouble(br.readLine());
+
             List<Position> targetList = new ArrayList<>();
-            targetList.add(new Position(0,0));
-            testPedestrian = new Pedestrian(1,rMin,1,targetList,rMin,rMax,tau,dT,B,d);
+            targetList.add(new Position(-9.75,6.5));
+            targetList.add(new Position(-3.25,-6.6));
+            targetList.add(new Position(3.25,-6.6));
+            targetList.add(new Position(9.75,6.5));
+            testPedestrian = new Pedestrian(1,rMin,1,targetList,rMin,rMax,tauSalida,tauLlegada,dT,B,d);
+            testPedestrian.setPosition(9.75,-6.6);
+            testPedestrian.setLimitSpeed(vMax);
             br.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
         List<Particle> unaffiliatedList = new ArrayList<>();
+        BufferedReader unaffilatedBr = null;
         try {
-            BufferedReader br = new BufferedReader(new FileReader(jsonFilePathUnaffiliated));
+            unaffilatedBr = new BufferedReader(new FileReader(jsonFilePathUnaffiliated));
             String linea;
 
-            br.readLine();
+            unaffilatedBr.readLine();
+            String line;
             int i = 0;
-            while((linea = br.readLine()) != null ){
-                Particle particle = new Particle(i,rMax,1);
-                //NO SE EL ORDEN PERO ACA HAY QUE LEER EL ARCHIVO Y OBTENER LA POSICION Y LA DIRECCION DE CADA UNO
+
+            //PRIMERO LEO CADA PARTICULA, LA INICIALIZO Y CALCULO SU POSICION
+            while ((line = unaffilatedBr.readLine()) != null && i < 25) {
+                String[] columns = line.split("\t");
+
+                double x = Double.parseDouble(columns[1]);
+                double y = Double.parseDouble(columns[2]);
+                int id = Integer.parseInt(columns[3]);
+                double speed = Double.parseDouble(columns[5]);
+                double angle = Double.parseDouble(columns[6]);
+                Particle particle = new Particle(Integer.parseInt(columns[3]),rMax,1);
+                particle.setPosition(x,y);
+                particle.setAngle(angle);
+                particle.setSpeed(speed);
+                unaffiliatedList.add(particle);
                 i++;
             }
-            br.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-        PedestrianSim sim = new PedestrianSim(testPedestrian,null,dTEscritura,dT);
+
+        PedestrianSim sim = new PedestrianSim(testPedestrian,unaffiliatedList,dTEscritura,dT,unaffilatedBr);
         deleteOutput();
-        sim.updateOutput(id, tau,str);
+        initiateOutput(0.00,unaffiliatedList,testPedestrian);
         double t = 0.00;
+        int counter = 1;
         while(t < maxT){
             t += dT;
             if( !sim.advancePedestrian(t)){
@@ -114,7 +183,12 @@ public class App2 {
                 break;  //Se quedo sin targets
             }
             sim.updateDynamicAndOutput(t, id, tau,str);
+            if( counter % 2 == 0){
+                sim.updateUnaffilatedPedestrians(t);
+            }
+            counter++;
         }
+        unaffilatedBr.close();
 
     }
 

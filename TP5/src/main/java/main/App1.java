@@ -93,7 +93,7 @@ public class App1
             // TODO: SETEAR rMin si es aceleracion o rMax si es desaceleracion (segundo lugar)
 
 //                testPedestrian = new Pedestrian(1,rMin,1,targetList,rMin,rMax,tau,dT,B,d);
-                testPedestrian = new Pedestrian(1,rMax,1,targetList,rMin,rMax,tau,dT,B,d);
+                testPedestrian = new Pedestrian(1,rMax,1,targetList,rMin,rMax,2.1,4.0,dT,B,d);
                 testPedestrian.setLimitSpeed(vMax);
             //  TODO: SETEAR SPEED EN 0 SI ES ACELERACION o VMAX SI ES FRENADO
 
@@ -105,9 +105,9 @@ public class App1
                 e.printStackTrace();
             }
 
-            PedestrianSim sim = new PedestrianSim(testPedestrian,null,dTEscritura,dT);
+            PedestrianSim sim = new PedestrianSim(testPedestrian,null,dTEscritura,dT,null);
             deleteOutput();
-            sim.updateOutput(id,tau, str);
+            //sim.updateOutput(id,tau, str);
             double t = 0.00;
             while(t < maxT){
                 t += dT;
