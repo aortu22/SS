@@ -12,6 +12,11 @@ public class Pedestrian extends Particle{
     private double tauLlegada;
     private double tauPartida;
     private double deltaT;
+
+    public double getrMax() {
+        return rMax;
+    }
+
     private double B;
     public Position getCurrentTarget() {
         return currentTarget;

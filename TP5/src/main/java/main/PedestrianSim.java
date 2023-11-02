@@ -31,7 +31,7 @@ public class PedestrianSim {
         // EJERCICIO C
         boolean isCollition = false;
         if(unaffiliatedPedestrian != null){
-            if( respondingPedestrian.getPosition().calculateDistance(respondingPedestrian.getCurrentTarget()) < respondingPedestrian.getRadio()){
+            if( respondingPedestrian.getPosition().calculateDistance(respondingPedestrian.getCurrentTarget()) < respondingPedestrian.getrMax()){
                 if(respondingPedestrian.setNextTarget() == null){
                     return false;
                 }
@@ -53,6 +53,9 @@ public class PedestrianSim {
             }else{
                 respondingPedestrian.setAngleToTarget();
             }
+        }
+        if(t>17){
+            System.out.println("hola");
         }
         if(isCollition){
             respondingPedestrian.setRadio(respondingPedestrian.getrMin());
