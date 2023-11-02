@@ -54,7 +54,7 @@ public class PedestrianSim {
         }
         if(isCollition){
             respondingPedestrian.setRadio(respondingPedestrian.getrMin());
-        }else if( respondingPedestrian.getPosition().calculateDistance(respondingPedestrian.getCurrentTarget()) < respondingPedestrian.getD()){
+        }else if( respondingPedestrian.getPosition().calculateDistance(respondingPedestrian.getCurrentTarget()) <= respondingPedestrian.getD()){
             respondingPedestrian.updateDecreseR();
         }else{
             respondingPedestrian.udapteIncreaseR();

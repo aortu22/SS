@@ -55,13 +55,13 @@ public class Pedestrian extends Particle{
     }
 
     public void udapteIncreaseR(){
-        if( getRadio() < rMax){
+        if( getRadio() < rMax - (rMax/ (tau/deltaT))){
             setRadio( getRadio() + rMax/ (tau/deltaT)  );
         }
     }
 
     public void updateDecreseR(){
-        if(getRadio() > rMin){
+        if(getRadio() > rMin + (rMax/ (tau/deltaT))){
             setRadio( getRadio() - rMax/ (tau/deltaT)  );
         }
     }
