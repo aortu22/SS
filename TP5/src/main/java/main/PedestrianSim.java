@@ -146,7 +146,7 @@ public class PedestrianSim {
     public void updateOutput(double t){
         try {
 
-            String dynamic = "src/main/java/main/simulation_output.txt";
+            String dynamic = "src/main/python/ej_2c/simulation_output.txt";
             Locale locale = new Locale("en", "US");
 
             File file = new File(dynamic);

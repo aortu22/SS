@@ -18,7 +18,7 @@ public class App2 {
 
 
     public static void deleteOutput() {
-        String output = "src/main/java/main/simulation_output.txt";
+        String output = "src/main/python/ej_2c/simulation_output.txt";
         String output2 = "src/main/python/ej_2c/output_pedestrian.txt";
         File fileOutput = new File(output);
         if (fileOutput.exists()) {
@@ -34,7 +34,7 @@ public class App2 {
     public static void initiateOutput(double t,List<Particle> unaffiliatedPedestrian,Pedestrian respondingPedestrian) {
         Locale locale = new Locale("en", "US");
         try {
-            String dynamic = "src/main/java/main/simulation_output.txt";
+            String dynamic = "src/main/python/ej_2c/simulation_output.txt";
             File file = new File(dynamic);
             // Si el archivo no existe es creado
             if (!file.exists()) {
