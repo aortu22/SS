@@ -72,13 +72,14 @@ public class App2 {
     }
 
     public static void reloadDynamicOutput(){
-        try (FileReader reader = new FileReader("src/main/java/main/dynamicOutput_2.txt");
+        try (
+//                FileReader reader = new FileReader("src/main/java/main/dynamicOutput_2.txt");
              FileWriter writer = new FileWriter("src/main/java/main/dynamic_2.txt")) {
 
-            int character;
-            while ((character = reader.read()) != -1) {
-                writer.write(character);
-            }
+//            int character;
+//            while ((character = reader.read()) != -1) {
+                writer.write("0.0 0.0");
+//            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -88,7 +89,7 @@ public class App2 {
 
     public static void main( String[] args ) throws IOException {
         String jsonFilePathStatic = "src/main/java/main/static_2.txt";
-        String jsonFilePathDynamic = "src/main/java/main/dynamic_2.txt";
+        String jsonFilePathDynamic = "src/main/java/main/dynamicOutput_2.txt";
         String jsonFilePathUnaffiliated = "src/main/python/ej_2b/output_with_angles_order.txt";
 
         reloadDynamicOutput();
@@ -126,7 +127,6 @@ public class App2 {
         try {
             BufferedReader br = new BufferedReader(new FileReader(jsonFilePathDynamic));
             String linea;
-
 
             List<Position> targetList = new ArrayList<>();
             targetList.add(new Position(-9.75,6.5));
@@ -174,11 +174,13 @@ public class App2 {
         PedestrianSim sim = new PedestrianSim(testPedestrian,unaffiliatedList,dTEscritura,dT,unaffilatedBr);
         deleteOutput();
         initiateOutput(0.00,unaffiliatedList,testPedestrian);
+        sim.updateOutputPedestrian();
+
         double t = 0.00;
         int counter = 1;
         while(t < maxT){
             t += dT;
-            if( !sim.advancePedestrian(t)){
+            if(!sim.advancePedestrian(t)){
                 sim.updateDynamicAndOutput(t, id, tau,str);
                 break;  //Se quedo sin targets
             }

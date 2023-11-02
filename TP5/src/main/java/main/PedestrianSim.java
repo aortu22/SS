@@ -109,6 +109,37 @@ public class PedestrianSim {
         respondingPedestrian.setAngle(anguloA);
     }
 
+    public void updateOutputPedestrian(){
+        try {
+
+            String output = "src/main/python/ej_2c/output_pedestrian.txt";
+            String dynamic = "src/main/java/main/dynamic_2.txt";
+            File fileOutput = new File(output);
+            if (!fileOutput.exists()) {
+                fileOutput.createNewFile();
+            }
+            // Parameter true to append to what the file already has
+            FileWriter fwOutput = new FileWriter(fileOutput, true);
+            BufferedWriter bwOutput = new BufferedWriter(fwOutput);
+
+            BufferedReader reader = new BufferedReader(new FileReader(dynamic));
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                // Escribir cada línea en el archivo destino
+                bwOutput.write(linea);
+                bwOutput.write(System.lineSeparator()); // Agregar un salto de línea
+            }
+            bwOutput.write('\n');
+
+            // Cerrar archivos
+            reader.close();
+            bwOutput.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     public void updateOutput(double t){
         try {
 
@@ -156,6 +187,30 @@ public class PedestrianSim {
             return;
         }
         nextT += dTEscritura;
+
+        Locale locale = new Locale("en", "US");
+        try {
+            String dynamic = "src/main/java/main/dynamic_2.txt";
+            File file = new File(dynamic);
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            // Parameter false make us write stepping in the information
+            FileWriter fw = new FileWriter(file, false);
+            BufferedWriter bw = new BufferedWriter(fw);
+
+
+            // Imprimo la informacion, este va a ser la posicion y el error respecto a la solucion analitca
+            StringBuilder particleInfo = new StringBuilder();
+            DecimalFormat df = new DecimalFormat("0.0000", new DecimalFormatSymbols(locale));
+            particleInfo.append(df.format(respondingPedestrian.getSpeed()));
+            bw.write(t.toString() + ' ' + particleInfo);
+            bw.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        updateOutputPedestrian();
         updateOutput(t);
         frame++;
     }
