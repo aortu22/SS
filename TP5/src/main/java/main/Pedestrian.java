@@ -6,7 +6,12 @@ public class Pedestrian extends Particle{
     private final List<Position> targetList;
     private Position currentTarget;
     private int currentTargetIndex;
-
+    private double D;
+    private double rMin;
+    private double rMax;
+    private double tau;
+    private double deltaT;
+    private double B;
     public Position getCurrentTarget() {
         return currentTarget;
     }
@@ -20,27 +25,16 @@ public class Pedestrian extends Particle{
         return currentTarget;
     }
 
-    private double rMin;
 
     public double getrMin() {
         return rMin;
     }
 
-    private double rMax;
-    private final double rInteraction = 1.0;
-    private double tau;
-    private double deltaT;
-    private double B;
 
     public double getD() {
         return D;
     }
 
-    private double D;
-
-    public double getrInteraction() {
-        return rInteraction;
-    }
 
     public Pedestrian(int id, double radio, double M, List<Position> targetList, double rMin, double rMax, double tau, double deltaT, double B,double D) {
         super(id, radio, M);
@@ -99,7 +93,7 @@ public class Pedestrian extends Particle{
 
         double distanciaInicial = Math.sqrt(
                 Math.pow(posicionRelativa[0], 2) + Math.pow(posicionRelativa[1], 2)
-        ) - (rInteraction + rInteraction);
+        ) - (getRadio() * 5 * 2);
 
         double velocidadRelativaMagnitud = Math.sqrt(
                 Math.pow(velocidadRelativa[0], 2) + Math.pow(velocidadRelativa[1], 2)
@@ -109,7 +103,7 @@ public class Pedestrian extends Particle{
 
         // Verificar si colisionarán en el tiempo calculado
         double distanciaEnColision = tiempoColision * velocidadRelativaMagnitud;
-        boolean colisionaran = distanciaEnColision <= 2 * rInteraction ;
+        boolean colisionaran = distanciaEnColision <= 2 * getRadio() * 5 ;
 
         if (colisionaran) {
             return tiempoColision;

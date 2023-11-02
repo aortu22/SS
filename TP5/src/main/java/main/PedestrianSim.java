@@ -37,8 +37,8 @@ public class PedestrianSim {
             Particle closestImpactParticle = null;
             double smallestCollitionTime = 0;
             for(Particle particle : unaffiliatedPedestrian){
-                //Esta en rango de choque
-                if(respondingPedestrian.calculateDistance(particle) < 2 * respondingPedestrian.getrInteraction()){
+                //Esta en rango de choque, el radio de interaccion es r *5
+                if(respondingPedestrian.calculateDistance(particle) < 2 * respondingPedestrian.getRadio() * 5){
                     double collitionTime = respondingPedestrian.calcularTiempoColision(particle);
                     if (collitionTime > smallestCollitionTime){
                         closestImpactParticle = particle;
@@ -54,7 +54,7 @@ public class PedestrianSim {
         }
         if(isCollition){
             respondingPedestrian.setRadio(respondingPedestrian.getrMin());
-        }else if(respondingPedestrian.getCurrentTarget().getX() - respondingPedestrian.getPosition().getX() < respondingPedestrian.getD()){
+        }else if( respondingPedestrian.getPosition().calculateDistance(respondingPedestrian.getCurrentTarget()) < respondingPedestrian.getD()){
             respondingPedestrian.updateDecreseR();
         }else{
             respondingPedestrian.udapteIncreaseR();
