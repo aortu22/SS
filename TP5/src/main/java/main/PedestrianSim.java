@@ -14,7 +14,7 @@ public class PedestrianSim {
     private double dTEscritura;
     private double dT;
     private BufferedReader unaffilatedFIleReader;
-    private int N = 25;
+    private int id = 25;
     private int frame;
 
     public PedestrianSim(Pedestrian respondingPedestrian, List<Particle> unaffiliatedPedestrian, double dTEscritura, double dT,BufferedReader unaffilatedFIleReader){
@@ -56,7 +56,7 @@ public class PedestrianSim {
         }
         if(isCollition){
             respondingPedestrian.setRadio(respondingPedestrian.getrMin());
-        }else if( respondingPedestrian.getPosition().calculateDistance(respondingPedestrian.getCurrentTarget()) <= respondingPedestrian.getD()){
+        }else if( respondingPedestrian.getPosition().calculateDistance(respondingPedestrian.getCurrentTarget()) <= respondingPedestrian.getD() && respondingPedestrian.getSpeed() != 0){
             respondingPedestrian.updateDecreseR();
         }else{
             respondingPedestrian.udapteIncreaseR();

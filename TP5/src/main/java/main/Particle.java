@@ -12,15 +12,6 @@ public class Particle implements Comparable<Particle> {
     private double angle;
     private double acceleration = -1;
     private double limitSpeed;
-
-    public int getId() {
-        return id;
-    }
-
-    public Position getPosition() {
-        return position;
-    }
-
     private final double M;
 
     private double radio;
@@ -87,7 +78,6 @@ public class Particle implements Comparable<Particle> {
         position.setPosition(x,y);
     }
 
-
     public double getSpeed() {
         return speed;
     }
@@ -95,7 +85,6 @@ public class Particle implements Comparable<Particle> {
     public void setSpeed(double speed){
         this.speed = speed;
     }
-
 
     public double getX(){
         return position.getX();
@@ -105,8 +94,13 @@ public class Particle implements Comparable<Particle> {
         return position.getY();
     }
 
+    public int getId() {
+        return id;
+    }
 
-
+    public Position getPosition() {
+        return position;
+    }
 
 
     @Override

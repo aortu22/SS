@@ -19,9 +19,15 @@ public class App2 {
 
     public static void deleteOutput() {
         String output = "src/main/java/main/simulation_output.txt";
+        String output2 = "src/main/python/ej_2c/output_pedestrian.txt";
         File fileOutput = new File(output);
         if (fileOutput.exists()) {
             fileOutput.delete();
+        }
+
+        File fileOutput2 = new File(output2);
+        if (fileOutput2.exists()) {
+            fileOutput2.delete();
         }
     }
 
@@ -91,6 +97,7 @@ public class App2 {
         String jsonFilePathStatic = "src/main/java/main/static_2.txt";
         String jsonFilePathDynamic = "src/main/java/main/dynamicOutput_2.txt";
         String jsonFilePathUnaffiliated = "src/main/python/ej_2b/output_with_angles_order.txt";
+        deleteOutput();
 
         reloadDynamicOutput();
         double dTEscritura = 0.0;
@@ -129,12 +136,12 @@ public class App2 {
             String linea;
 
             List<Position> targetList = new ArrayList<>();
-            targetList.add(new Position(-9.75,6.5));
-            targetList.add(new Position(-3.25,-6.6));
-            targetList.add(new Position(3.25,-6.6));
-            targetList.add(new Position(9.75,6.5));
-            testPedestrian = new Pedestrian(1,rMin,1,targetList,rMin,rMax,tauSalida,tauLlegada,dT,B,d);
-            testPedestrian.setPosition(9.75,-6.6);
+            targetList.add(new Position(-9.75,-6.5));
+            targetList.add(new Position(-3.25,6.6));
+            targetList.add(new Position(3.25,6.6));
+            targetList.add(new Position(9.75,-6.5));
+            testPedestrian = new Pedestrian(1,rMin,1.0,targetList,rMin,rMax,tauSalida,tauLlegada,dT,B,d);
+            testPedestrian.setPosition(9.75,6.6);
             testPedestrian.setLimitSpeed(vMax);
             br.close();
         } catch (IOException e) {
@@ -153,13 +160,14 @@ public class App2 {
             //PRIMERO LEO CADA PARTICULA, LA INICIALIZO Y CALCULO SU POSICION
             while ((line = unaffilatedBr.readLine()) != null && i < 25) {
                 String[] columns = line.split("\t");
+                System.out.println(columns);
 
                 double x = Double.parseDouble(columns[1]);
                 double y = Double.parseDouble(columns[2]);
                 int id = Integer.parseInt(columns[3]);
                 double speed = Double.parseDouble(columns[5]);
                 double angle = Double.parseDouble(columns[6]);
-                Particle particle = new Particle(Integer.parseInt(columns[3]),rMax,1);
+                Particle particle = new Particle(id,rMax,1);
                 particle.setPosition(x,y);
                 particle.setAngle(angle);
                 particle.setSpeed(speed);
@@ -172,7 +180,6 @@ public class App2 {
         }
 
         PedestrianSim sim = new PedestrianSim(testPedestrian,unaffiliatedList,dTEscritura,dT,unaffilatedBr);
-        deleteOutput();
         initiateOutput(0.00,unaffiliatedList,testPedestrian);
         sim.updateOutputPedestrian();
 
