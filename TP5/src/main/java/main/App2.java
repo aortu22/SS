@@ -158,7 +158,7 @@ public class App2 {
             int i = 0;
 
             //PRIMERO LEO CADA PARTICULA, LA INICIALIZO Y CALCULO SU POSICION
-            while ((line = unaffilatedBr.readLine()) != null && i < 25) {
+            while (i < 25 && (line = unaffilatedBr.readLine()) != null ) {
                 String[] columns = line.split("\t");
                 System.out.println(columns);
 

@@ -87,6 +87,7 @@ public class Pedestrian extends Particle{
 
     public double calcularTiempoColision(Particle particle) {
         double angleToParticle = (getAngleToOtherParticle(particle) + 360) % 360;
+
         //PRIMERO CHEQUEO QUE EL ANGULO LA PARTICULA Q LO CHOQUE NO VENGA DE A ATRAS
         if ((getAngle() - angleToParticle + 360) % 360 > 90 && (angleToParticle - getAngle() + 360) % 360 > 90) {
             return -1;

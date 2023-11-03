@@ -40,7 +40,7 @@ public class PedestrianSim {
             double smallestCollitionTime = 0;
             for(Particle particle : unaffiliatedPedestrian){
                 //Esta en rango de choque, el radio de interaccion es r *5
-                if(respondingPedestrian.calculateDistance(particle) < 2 * respondingPedestrian.getRadio() * 5){
+                if(respondingPedestrian.calculateDistance(particle) < respondingPedestrian.getRadio() * 5){
                     double collitionTime = respondingPedestrian.calcularTiempoColision(particle);
                     if (collitionTime > smallestCollitionTime){
                         closestImpactParticle = particle;
@@ -73,7 +73,7 @@ public class PedestrianSim {
         int i=0;
         String line;
         try{
-            while ((line = unaffilatedFIleReader.readLine()) != null && i < 25) {
+            while (i < 25 && (line = unaffilatedFIleReader.readLine()) != null) {
                 String[] columns = line.split("\t");
 
                 double x = Double.parseDouble(columns[1]);
@@ -81,7 +81,7 @@ public class PedestrianSim {
                 double speed = Double.parseDouble(columns[5]);
                 double angle = Double.parseDouble(columns[6]);
                 unaffiliatedPedestrian.get(i).setPosition(x,y);
-                unaffiliatedPedestrian.get(i).setAngle(angle);
+                unaffiliatedPedestrian.get(i).setAngle((angle + 360)%360);
                 unaffiliatedPedestrian.get(i).setSpeed(speed);
                 i++;
             }
