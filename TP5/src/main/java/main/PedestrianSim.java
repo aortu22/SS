@@ -127,7 +127,8 @@ public class PedestrianSim {
             while ((linea = reader.readLine()) != null) {
                 String[] parts = linea.split(" "); // Split the line by space and store in an array
                 // Escribo el tiempo
-                bwOutput.write(parts[0] + " " + getMinD());
+                List<Double> min = getMinD();
+                bwOutput.write(parts[0] + " " + min.get(0) + " " + min.get(1));
                 bwOutput.write(System.lineSeparator()); // Agregar un salto de línea
             }
             bwOutput.write('\n');
@@ -175,7 +176,8 @@ public class PedestrianSim {
 
     }
 
-    public double getMinD(){
+    public List<Double> getMinD(){
+        double id = 0.0;
         double min = Double.MAX_VALUE;
         double x = respondingPedestrian.getX();
         double y = respondingPedestrian.getY();
@@ -183,9 +185,10 @@ public class PedestrianSim {
             double d = Math.sqrt(Math.pow(x- particle.getX(),2) + Math.pow(y - particle.getY(), 2));
             if(d < min){
                 min = d;
+                id = particle.getId();
             }
         }
-        return min;
+        return List.of(min,id);
     }
 
     public void updateOutput(double t){
