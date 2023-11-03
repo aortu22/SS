@@ -28,10 +28,9 @@ public class PedestrianSim {
     }
 
     public boolean advancePedestrian(double t){
-        // EJERCICIO C
         boolean isCollition = false;
         if(unaffiliatedPedestrian != null){
-            if( respondingPedestrian.getPosition().calculateDistance(respondingPedestrian.getCurrentTarget()) < respondingPedestrian.getrMax()){
+            if( respondingPedestrian.getPosition().calculateDistance(respondingPedestrian.getCurrentTarget()) < respondingPedestrian.getRadio()*2){
                 if(respondingPedestrian.setNextTarget() == null){
                     return false;
                 }
@@ -47,16 +46,14 @@ public class PedestrianSim {
                     }
                 }
             }
-            if(closestImpactParticle != null){
+            if(closestImpactParticle != null && respondingPedestrian.getPosition().calculateDistance(respondingPedestrian.getCurrentTarget()) > respondingPedestrian.getD() + respondingPedestrian.getRadio()){
                 colitionHeuristic(closestImpactParticle);
                 isCollition = respondingPedestrian.collidesWith(closestImpactParticle);
             }else{
                 respondingPedestrian.setAngleToTarget();
             }
         }
-        if(t>17){
-            System.out.println("hola");
-        }
+
         if(isCollition){
             respondingPedestrian.setRadio(respondingPedestrian.getrMin());
         }else if( respondingPedestrian.getPosition().calculateDistance(respondingPedestrian.getCurrentTarget()) <= respondingPedestrian.getD() && respondingPedestrian.getSpeed() != 0){

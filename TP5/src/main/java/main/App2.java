@@ -13,7 +13,7 @@ public class App2 {
     public static int id = 0;
     public static double tau = 0.0;
     public static String str = "acceleration";
-    public static double d = 2.43;
+    public static double d = 2.0;
     public static double vMax = 1.53;
 
 

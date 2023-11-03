@@ -82,7 +82,7 @@ public class Pedestrian extends Particle{
     }
 
     public void updatePosition(double dt){
-        setPosition( getPosition().getX() + getSpeed() * Math.cos(getAngle()) * dt, getPosition().getY() + getSpeed() * Math.sin(getAngle()) * dt );
+        setPosition( getPosition().getX() + getSpeed() * Math.cos(Math.toRadians(getAngle())) * dt, getPosition().getY() + getSpeed() * Math.sin(Math.toRadians(getAngle())) * dt );
     }
 
     public double calcularTiempoColision(Particle particle) {
@@ -93,15 +93,16 @@ public class Pedestrian extends Particle{
             return -1;
         }
 
-        double[] velocidadRelativa = new double[]{getSpeed()*Math.cos(getAngle()) - particle.getSpeed()*Math.cos(getAngle()) ,
-                getSpeed()*Math.sin(getAngle()) - particle.getSpeed()*Math.sin(getAngle())};
+        double[] velocidadRelativa = new double[]{getSpeed()*Math.cos(Math.toRadians(getAngle())) - particle.getSpeed()*Math.cos(Math.toRadians(getAngle())) ,
+                getSpeed()*Math.sin(Math.toRadians(getAngle())) - particle.getSpeed()*Math.sin(Math.toRadians(getAngle()))};
 
         double[] posicionRelativa = new double[]{getPosition().getX() - particle.getPosition().getX(),
                 getPosition().getY() - particle.getPosition().getY()};
 
-        double distanciaInicial = Math.sqrt(
+        double distanciaInicialRaiz = Math.sqrt(
                 Math.pow(posicionRelativa[0], 2) + Math.pow(posicionRelativa[1], 2)
-        ) - (getRadio() * 5 * 2);
+        );
+        double distanciaInicial = distanciaInicialRaiz - (getRadio() * 3);
 
         double velocidadRelativaMagnitud = Math.sqrt(
                 Math.pow(velocidadRelativa[0], 2) + Math.pow(velocidadRelativa[1], 2)
@@ -111,7 +112,7 @@ public class Pedestrian extends Particle{
 
         // Verificar si colisionarán en el tiempo calculado
         double distanciaEnColision = tiempoColision * velocidadRelativaMagnitud;
-        boolean colisionaran = distanciaEnColision <= 2 * getRadio() * 5 ;
+        boolean colisionaran = distanciaEnColision <= 2 * getRadio() ;
 
         if (colisionaran) {
             return tiempoColision;
