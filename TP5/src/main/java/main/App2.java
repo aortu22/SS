@@ -20,6 +20,8 @@ public class App2 {
     public static void deleteOutput() {
         String output = "src/main/python/ej_2c/simulation_output.txt";
         String output2 = "src/main/python/ej_2c/output_pedestrian.txt";
+        String output_neighbours = "src/main/python/ej_2c/output_pedestrian_neighbours.txt";
+
         File fileOutput = new File(output);
         if (fileOutput.exists()) {
             fileOutput.delete();
@@ -28,6 +30,11 @@ public class App2 {
         File fileOutput2 = new File(output2);
         if (fileOutput2.exists()) {
             fileOutput2.delete();
+        }
+
+        File fileOutputN = new File(output_neighbours);
+        if (fileOutputN.exists()) {
+            fileOutputN.delete();
         }
     }
 

@@ -54,9 +54,7 @@ public class PedestrianSim {
                 respondingPedestrian.setAngleToTarget();
             }
         }
-        if(t>17){
-            System.out.println("hola");
-        }
+
         if(isCollition){
             respondingPedestrian.setRadio(respondingPedestrian.getrMin());
         }else if( respondingPedestrian.getPosition().calculateDistance(respondingPedestrian.getCurrentTarget()) <= respondingPedestrian.getD() && respondingPedestrian.getSpeed() != 0){
@@ -112,6 +110,39 @@ public class PedestrianSim {
         respondingPedestrian.setAngle(anguloA);
     }
 
+    public void updateOutputPedestrianNeighbours(){
+        try {
+
+            String output = "src/main/python/ej_2c/output_pedestrian_neighbours.txt";
+            File fileOutput = new File(output);
+            if (!fileOutput.exists()) {
+                fileOutput.createNewFile();
+            }
+            // Parameter true to append to what the file already has
+            FileWriter fwOutput = new FileWriter(fileOutput, true);
+            BufferedWriter bwOutput = new BufferedWriter(fwOutput);
+
+            String dynamic = "src/main/java/main/dynamic_2.txt";
+            BufferedReader reader = new BufferedReader(new FileReader(dynamic));
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                String[] parts = linea.split(" "); // Split the line by space and store in an array
+                // Escribo el tiempo
+                bwOutput.write(parts[0] + " " + getMinD());
+                bwOutput.write(System.lineSeparator()); // Agregar un salto de línea
+            }
+            bwOutput.write('\n');
+
+            // Cerrar archivos
+            reader.close();
+            bwOutput.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
     public void updateOutputPedestrian(){
         try {
 
@@ -141,6 +172,21 @@ public class PedestrianSim {
             throw new RuntimeException(e);
         }
 
+        updateOutputPedestrianNeighbours();
+
+    }
+
+    public double getMinD(){
+        double min = Double.MAX_VALUE;
+        double x = respondingPedestrian.getX();
+        double y = respondingPedestrian.getY();
+        for(Particle particle : unaffiliatedPedestrian){
+            double d = Math.sqrt(Math.pow(x- particle.getX(),2) + Math.pow(y - particle.getY(), 2));
+            if(d < min){
+                min = d;
+            }
+        }
+        return min;
     }
 
     public void updateOutput(double t){
